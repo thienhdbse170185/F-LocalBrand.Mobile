@@ -1,0 +1,29 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "f_localbrand_mobile",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "f_localbrand_mobile (profile mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "f_localbrand_mobile (release mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release"
+    },
+    {
+      "name": "Flutter (SM J610F)",
+      "program": "lib/main.dart",
+      "deviceId": "514ed28a",
+      "request": "launch",
+      "type": "dart",
+    }
+  ]
+}

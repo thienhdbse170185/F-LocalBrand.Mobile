@@ -1,10 +1,14 @@
-import 'package:f_localbrand/themes/theme.dart';
+import 'package:f_localbrand/auth/signup.dart';
+import 'package:f_localbrand/themes/custom_themes/index.dart';
+import 'package:f_localbrand/themes/material_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'auth/login.dart';
 import 'home.dart';
 
-void main() {
+Future<void> main() async {
+  await dotenv.load(fileName: '.env');
   runApp(const MyApp());
 }
 
@@ -14,16 +18,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final MaterialTheme materialTheme =
+        MaterialTheme(FTextTheme.light, FButtonTheme.lightElevatedButtonTheme);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'F-LocalBrand',
-      theme: FAppTheme.lightTheme,
-      darkTheme: FAppTheme.darkTheme,
-      themeMode: ThemeMode.system,
-      initialRoute: '/',
+      theme: materialTheme.light(),
+      darkTheme: materialTheme.dark(),
+      themeMode: ThemeMode.light,
+      initialRoute: '/login',
       routes: {
         '/': (context) => const HomeScreen(),
-        '/login': (context) => const LoginScreen()
+        '/login': (context) => const LoginScreen(),
+        '/signup': (context) => const SignupScreen()
       },
     );
   }
