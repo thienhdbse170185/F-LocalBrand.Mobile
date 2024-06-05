@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:f_localbrand/themes/custom_themes/button_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ionicons/ionicons.dart';
@@ -16,38 +17,100 @@ class _SignupScreenState extends State<SignupScreen> {
   bool _obscureConfirm = true;
   bool _obscurePassword = true;
   bool _isLoading = false;
+  String? _emailErrorMessage, _passwordErrorMessage, _confirmErrorMessage;
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmController = TextEditingController();
 
-  Future<void> _login() async {
-    _setLoadingTrue();
-    final String email = _emailController.text.trim();
-    final String password = _passwordController.text.trim();
-    final String confirm = _confirmController.text.trim();
+  final _formKey = GlobalKey<FormState>();
 
-    try {
-      final response = await http.post(
-        Uri.parse('${dotenv.env['API_URL']}/Auth/Login'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'email': email, 'password': password}),
-      );
+  void _dismissSnackbar() {
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+  }
 
-      _setLoadingFalse();
-      if (response.statusCode == 200) {
-        // Login successful, handle the response data
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        // You can save the user token or other relevant data here
-        print('Login successful: $data');
-        await Navigator.pushReplacementNamed(context, '/');
+  bool validateInput(String? email, String? password, String? confirm) {
+    if (email == null || email.isEmpty) {
+      setState(() {
+        _emailErrorMessage = '(!) Email cannot be empty.';
+      });
+      return false;
+    } else if (password == null || password.isEmpty) {
+      setState(() {
+        _passwordErrorMessage = '(!) Password cannot be empty.';
+      });
+      return false;
+    } else if (confirm == null || confirm.isEmpty) {
+      setState(() {
+        _confirmErrorMessage = '(!) Confirm cannot be empty.';
+      });
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> _signup() async {
+    if (_formKey.currentState!.validate()) {
+      final String email = _emailController.text.trim();
+      final String password = _passwordController.text.trim();
+      final String confirm = _confirmController.text.trim();
+
+      if (!validateInput(email, password, confirm)) {
+        return;
       } else {
-        // Login failed, handle the error
-        print('Login failed: ${response.statusCode} - ${response.body}');
+        _setLoadingTrue();
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Processing...')));
+
+        try {
+          /* Uncomment when API is ready
+          final response = await http.post(
+            Uri.parse('${dotenv.env['API_URL']}/Auth/Signup'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({'email': email, 'password': password}),
+          );
+
+          _dismissSnackbar();
+          _setLoadingFalse();
+          if (response.statusCode == 200) {
+            // Login successful, handle the response data
+            final Map<String, dynamic> data = jsonDecode(response.body);
+            // You can save the user token or other relevant data here
+            print('Signup successful: $data');
+            // Production use this
+            // Dev env pop keep data not remove like replace
+            // await Navigator.pushReplacementNamed(context, '/');
+            await Navigator.pushNamed(context, '/');
+          } else {
+            // Login failed, handle the error
+            print('Signup failed: ${response.statusCode} - ${response.body}');
+            final Map<String, dynamic> data = jsonDecode(response.body);
+            print(data['result']['message']);
+            setState(() {
+              _emailErrorMessage = '(!) ${data['result']['message']}.';
+            });
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Signup failed: ${data['result']['message']}'),
+                duration: const Duration(seconds: 3),
+                backgroundColor: Theme.of(context).colorScheme.error,
+              ),
+            );
+          } */
+
+          _setLoadingFalse();
+          _dismissSnackbar();
+        } catch (e) {
+          // Handle any exceptions that occurred during the API call
+          print('Error: $e');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('An error occurred during signup'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
       }
-    } catch (e) {
-      // Handle any exceptions that occurred during the API call
-      print('Error: $e');
     }
   }
 
@@ -77,10 +140,26 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _resetSignupState();
+  }
+
+  void _resetSignupState() {
+    setState(() {
+      _emailController.clear();
+      _passwordController.clear();
+      _obscurePassword = true;
+      _obscureConfirm = true;
+      _isLoading = false;
+    });
   }
 
   @override
@@ -93,8 +172,7 @@ class _SignupScreenState extends State<SignupScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Padding(
-        padding:
-            const EdgeInsets.only(top: 72, right: 36, bottom: 36, left: 36),
+        padding: const EdgeInsets.only(top: 72, right: 36, left: 36),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -115,101 +193,136 @@ class _SignupScreenState extends State<SignupScreen> {
                 ],
               ),
             ),
-            TextFormField(
-              autocorrect: false,
-              autofocus: false,
-              keyboardType: TextInputType.emailAddress,
-              controller: _emailController,
-              decoration: InputDecoration(
-                hintText: "Email",
-                contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-                focusedBorder: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-                prefixIcon: const Icon(Ionicons.mail),
-              ),
-              style: textTheme.bodyLarge,
-            ),
-            const SizedBox(height: 28),
-            TextFormField(
-              autocorrect: false,
-              autofocus: false,
-              controller: _passwordController,
-              decoration: InputDecoration(
-                hintText: 'Password',
-                contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-                focusedBorder: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-                prefixIcon: const Icon(Ionicons.lock_closed),
-                suffixIcon: IconButton(
-                  onPressed: _togglePasswordVisibility,
-                  icon: Icon(
-                    _obscurePassword
-                        ? Ionicons.eye_off_outline
-                        : Ionicons.eye_outline,
-                  ),
-                ),
-              ),
-              obscureText: _obscurePassword,
-              style: textTheme.bodyLarge,
-            ),
-            const SizedBox(height: 28),
-            TextFormField(
-              autocorrect: false,
-              autofocus: false,
-              controller: _confirmController,
-              decoration: InputDecoration(
-                hintText: 'Confirm Password',
-                contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-                focusedBorder: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-                prefixIcon: const Icon(Ionicons.lock_closed),
-                suffixIcon: IconButton(
-                  onPressed: _toggleConfirmVisibility,
-                  icon: Icon(
-                    _obscureConfirm
-                        ? Ionicons.eye_off_outline
-                        : Ionicons.eye_outline,
-                  ),
-                ),
-              ),
-              obscureText: _obscureConfirm,
-              style: textTheme.bodyLarge,
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: _isLoading ? null : _login,
-                  style: elevatedButtonTheme.style,
-                  child: _isLoading
-                      ? const CircularProgressIndicator()
-                      : Text(
-                          'Register',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineMedium
-                              ?.copyWith(color: Colors.white),
+            Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.disabled,
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 96,
+                    child: TextFormField(
+                      autocorrect: false,
+                      autofocus: false,
+                      keyboardType: TextInputType.emailAddress,
+                      controller: _emailController,
+                      onChanged: (value) {
+                        setState(() {
+                          _emailErrorMessage = null;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        hintText: "Email",
+                        errorText: _emailErrorMessage,
+                        contentPadding:
+                            const EdgeInsets.symmetric(vertical: 20),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
-                )),
+                        focusedBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        prefixIcon: const Icon(Ionicons.mail),
+                      ),
+                      style: textTheme.bodyLarge,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 96,
+                    child: TextFormField(
+                      autocorrect: false,
+                      autofocus: false,
+                      controller: _passwordController,
+                      onChanged: (value) {
+                        setState(() {
+                          _passwordErrorMessage = null;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'Password',
+                        errorText: _passwordErrorMessage,
+                        contentPadding:
+                            const EdgeInsets.symmetric(vertical: 20),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        prefixIcon: const Icon(Ionicons.lock_closed),
+                        suffixIcon: IconButton(
+                          onPressed: _togglePasswordVisibility,
+                          icon: Icon(
+                            _obscurePassword
+                                ? Ionicons.eye_off_outline
+                                : Ionicons.eye_outline,
+                          ),
+                        ),
+                      ),
+                      obscureText: _obscurePassword,
+                      style: textTheme.bodyLarge,
+                    ),
+                  ),
+                  SizedBox(
+                      height: 96,
+                      child: TextFormField(
+                        autocorrect: false,
+                        autofocus: false,
+                        controller: _confirmController,
+                        onChanged: (value) {
+                          setState(() {
+                            _confirmErrorMessage = null;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Confirm Password',
+                          errorText: _confirmErrorMessage,
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 19),
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                          focusedBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                          prefixIcon: const Icon(Ionicons.lock_closed),
+                          suffixIcon: IconButton(
+                            onPressed: _toggleConfirmVisibility,
+                            icon: Icon(
+                              _obscureConfirm
+                                  ? Ionicons.eye_off_outline
+                                  : Ionicons.eye_outline,
+                            ),
+                          ),
+                        ),
+                        obscureText: _obscureConfirm,
+                        style: textTheme.bodyLarge,
+                      )),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    child: SizedBox(
+                        width: double.infinity,
+                        height: 55,
+                        child: ElevatedButton(
+                          onPressed: _isLoading ? null : _signup,
+                          style: elevatedButtonTheme.style,
+                          child: _isLoading
+                              ? const CircularProgressIndicator()
+                              : Text(
+                                  'Register',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium
+                                      ?.copyWith(color: Colors.white),
+                                ),
+                        )),
+                  ),
+                ],
+              ),
+            ),
             Container(
               alignment: Alignment.center,
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 40),
+                padding: EdgeInsets.only(top: 36),
                 child: Column(
                   children: [
                     Text(
@@ -217,29 +330,39 @@ class _SignupScreenState extends State<SignupScreen> {
                       style: textTheme.bodyMedium
                           ?.copyWith(color: colorScheme.onSurface),
                     ),
-                    SizedBox(height: 16),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: colorScheme.inversePrimary,
-                            width: 1.0,
-                          ),
-                        ),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 24.0,
-                          child: Image.asset(
-                            'assets/icon/google.png',
-                            width: 32.0,
-                            height: 32.0,
-                          ),
-                        ),
-                      ),
+                    SizedBox(
+                      height: 80,
+                      child: Padding(
+                          padding: EdgeInsets.only(top: 24, bottom: 8),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 40),
+                            child: OutlinedButton(
+                              onPressed: () {},
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: Colors.transparent,
+                                    radius: 10.0,
+                                    child: Image.asset(
+                                      'assets/icon/google.png',
+                                      width: 32.0,
+                                      height: 32.0,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      'Login with Google',
+                                      style: textTheme.headlineSmall
+                                          ?.copyWith(fontSize: 10),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          )),
                     ),
-                    SizedBox(height: 4),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

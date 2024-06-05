@@ -18,8 +18,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final MaterialTheme materialTheme =
-        MaterialTheme(FTextTheme.light, FButtonTheme.lightElevatedButtonTheme);
+    final MaterialTheme materialTheme = MaterialTheme(
+        FTextTheme.light,
+        FButtonTheme.lightElevatedButtonTheme,
+        FButtonTheme.lightOutlinedButtonTheme);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
