@@ -3,8 +3,10 @@ import "package:flutter/material.dart";
 class MaterialTheme {
   final TextTheme textTheme;
   final ElevatedButtonThemeData elevatedButtonTheme;
+  final OutlinedButtonThemeData outlinedButtonThemeData;
 
-  const MaterialTheme(this.textTheme, this.elevatedButtonTheme);
+  const MaterialTheme(
+      this.textTheme, this.elevatedButtonTheme, this.outlinedButtonThemeData);
 
   static MaterialScheme lightScheme() {
     return const MaterialScheme(
@@ -366,6 +368,7 @@ class MaterialTheme {
         colorScheme: colorScheme,
         textTheme: textTheme,
         elevatedButtonTheme: elevatedButtonTheme,
+        outlinedButtonTheme: outlinedButtonThemeData,
         scaffoldBackgroundColor: colorScheme.surface,
         canvasColor: colorScheme.surface,
       );
