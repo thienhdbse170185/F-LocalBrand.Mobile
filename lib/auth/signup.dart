@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:f_localbrand/themes/custom_themes/button_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ionicons/ionicons.dart';
@@ -171,8 +172,7 @@ class _SignupScreenState extends State<SignupScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Padding(
-        padding:
-            const EdgeInsets.only(top: 72, right: 36, bottom: 36, left: 36),
+        padding: const EdgeInsets.only(top: 72, right: 36, left: 36),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -279,10 +279,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           contentPadding:
                               const EdgeInsets.symmetric(vertical: 19),
                           border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(9)),
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
                           ),
                           focusedBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(9)),
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
                           ),
                           prefixIcon: const Icon(Ionicons.lock_closed),
                           suffixIcon: IconButton(
@@ -297,29 +297,32 @@ class _SignupScreenState extends State<SignupScreen> {
                         obscureText: _obscureConfirm,
                         style: textTheme.bodyLarge,
                       )),
-                  SizedBox(
-                      width: double.infinity,
-                      height: 55,
-                      child: ElevatedButton(
-                        onPressed: _isLoading ? null : _signup,
-                        style: elevatedButtonTheme.style,
-                        child: _isLoading
-                            ? const CircularProgressIndicator()
-                            : Text(
-                                'Register',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineMedium
-                                    ?.copyWith(color: Colors.white),
-                              ),
-                      )),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    child: SizedBox(
+                        width: double.infinity,
+                        height: 55,
+                        child: ElevatedButton(
+                          onPressed: _isLoading ? null : _signup,
+                          style: elevatedButtonTheme.style,
+                          child: _isLoading
+                              ? const CircularProgressIndicator()
+                              : Text(
+                                  'Register',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium
+                                      ?.copyWith(color: Colors.white),
+                                ),
+                        )),
+                  ),
                 ],
               ),
             ),
             Container(
               alignment: Alignment.center,
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 40),
+                padding: EdgeInsets.only(top: 36),
                 child: Column(
                   children: [
                     Text(
@@ -327,29 +330,39 @@ class _SignupScreenState extends State<SignupScreen> {
                       style: textTheme.bodyMedium
                           ?.copyWith(color: colorScheme.onSurface),
                     ),
-                    SizedBox(height: 16),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: colorScheme.inversePrimary,
-                            width: 1.0,
-                          ),
-                        ),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 24.0,
-                          child: Image.asset(
-                            'assets/icon/google.png',
-                            width: 32.0,
-                            height: 32.0,
-                          ),
-                        ),
-                      ),
+                    SizedBox(
+                      height: 80,
+                      child: Padding(
+                          padding: EdgeInsets.only(top: 24, bottom: 8),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 40),
+                            child: OutlinedButton(
+                              onPressed: () {},
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: Colors.transparent,
+                                    radius: 10.0,
+                                    child: Image.asset(
+                                      'assets/icon/google.png',
+                                      width: 32.0,
+                                      height: 32.0,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 10),
+                                    child: Text(
+                                      'Login with Google',
+                                      style: textTheme.headlineSmall
+                                          ?.copyWith(fontSize: 10),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          )),
                     ),
-                    SizedBox(height: 4),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
