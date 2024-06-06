@@ -15,6 +15,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool _obscureText = true;
   bool _isLoading = false;
+  String? _emailErrorMessage = null, _passwordErrorMessage = null;
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -25,36 +26,77 @@ class _LoginScreenState extends State<LoginScreen> {
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
   }
 
+  bool validateInput(String? email, String? password) {
+    if (email == null || email.isEmpty) {
+      setState(() {
+        _emailErrorMessage = '(!) Email cannot be empty.';
+      });
+      return false;
+    } else if (password == null || password.isEmpty) {
+      setState(() {
+        _passwordErrorMessage = '(!) Password cannot be empty.';
+      });
+      return false;
+    }
+    return true;
+  }
+
   Future<void> _login() async {
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Processing...')));
-      _setLoadingTrue();
       final String email = _emailController.text.trim();
       final String password = _passwordController.text.trim();
 
-      try {
-        final response = await http.post(
-          Uri.parse('${dotenv.env['API_URL']}/Auth/Login'),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({'email': email, 'password': password}),
-        );
+      if (!validateInput(email, password)) {
+        return;
+      } else {
+        _setLoadingTrue();
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Processing...')));
 
-        if (response.statusCode == 200) {
-          // Login successful, handle the response data
-          final Map<String, dynamic> data = jsonDecode(response.body);
-          // You can save the user token or other relevant data here
-          print('Login successful: $data');
-          _setLoadingFalse();
+        try {
+          final response = await http.post(
+            Uri.parse('${dotenv.env['API_URL']}/Auth/Login'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({'email': email, 'password': password}),
+          );
+
           _dismissSnackbar();
-          await Navigator.pushNamed(context, '/');
-        } else {
-          // Login failed, handle the error
-          print('Login failed: ${response.statusCode} - ${response.body}');
+          _setLoadingFalse();
+          if (response.statusCode == 200) {
+            // Login successful, handle the response data
+            final Map<String, dynamic> data = jsonDecode(response.body);
+            // You can save the user token or other relevant data here
+            print('Login successful: $data');
+            // Production use this
+            // Dev env pop keep data not remove like replace
+            // await Navigator.pushReplacementNamed(context, '/');
+            await Navigator.pushNamed(context, '/');
+          } else {
+            // Login failed, handle the error
+            print('Login failed: ${response.statusCode} - ${response.body}');
+            final Map<String, dynamic> data = jsonDecode(response.body);
+            print(data['result']['message']);
+            setState(() {
+              _emailErrorMessage = '(!) ${data['result']['message']}.';
+            });
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Login failed: ${data['result']['message']}'),
+                duration: const Duration(seconds: 3),
+                backgroundColor: Theme.of(context).colorScheme.error,
+              ),
+            );
+          }
+        } catch (e) {
+          // Handle any exceptions that occurred during the API call
+          print('Error: $e');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('An error occurred during login'),
+              duration: Duration(seconds: 3),
+            ),
+          );
         }
-      } catch (e) {
-        // Handle any exceptions that occurred during the API call
-        print('Error: $e');
       }
     }
   }
@@ -75,6 +117,13 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isLoading = false;
     });
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -126,6 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Form(
                 key: _formKey,
+                autovalidateMode: AutovalidateMode.disabled,
                 child: Column(
                   children: <Widget>[
                     SizedBox(
@@ -135,14 +185,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         autofocus: false,
                         keyboardType: TextInputType.emailAddress,
                         controller: _emailController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '*Please enter an email address';
-                          }
-                          return null;
+                        onChanged: (value) {
+                          setState(() {
+                            _emailErrorMessage = null;
+                          });
                         },
                         decoration: InputDecoration(
                           hintText: "Email",
+                          errorText: _emailErrorMessage,
                           contentPadding:
                               const EdgeInsets.symmetric(vertical: 20),
                           border: const OutlineInputBorder(
@@ -162,14 +212,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         autocorrect: false,
                         autofocus: false,
                         controller: _passwordController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '*Please enter a password';
-                          }
-                          return null;
+                        onChanged: (value) {
+                          setState(() {
+                            _passwordErrorMessage = null;
+                          });
                         },
                         decoration: InputDecoration(
                           hintText: 'Password',
+                          errorText: _passwordErrorMessage,
                           contentPadding:
                               const EdgeInsets.symmetric(vertical: 20),
                           border: const OutlineInputBorder(
