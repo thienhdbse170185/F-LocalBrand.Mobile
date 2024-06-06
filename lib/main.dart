@@ -1,10 +1,10 @@
-import 'package:f_localbrand/auth/signup.dart';
+import 'package:f_localbrand/screens/auth/signup.dart';
 import 'package:f_localbrand/themes/custom_themes/index.dart';
 import 'package:f_localbrand/themes/material_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'auth/login.dart';
+import 'screens/auth/login.dart';
 import 'home.dart';
 
 Future<void> main() async {
