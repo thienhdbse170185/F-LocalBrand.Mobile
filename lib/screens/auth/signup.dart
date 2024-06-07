@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:f_localbrand/screens/components/buttons/google_login.dart';
 import 'package:f_localbrand/themes/custom_themes/button_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -330,39 +331,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       style: textTheme.bodyMedium
                           ?.copyWith(color: colorScheme.onSurface),
                     ),
-                    SizedBox(
-                      height: 80,
-                      child: Padding(
-                          padding: EdgeInsets.only(top: 24, bottom: 8),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 40),
-                            child: OutlinedButton(
-                              onPressed: () {},
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  CircleAvatar(
-                                    backgroundColor: Colors.transparent,
-                                    radius: 10.0,
-                                    child: Image.asset(
-                                      'assets/icon/google.png',
-                                      width: 32.0,
-                                      height: 32.0,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      'Login with Google',
-                                      style: textTheme.headlineSmall
-                                          ?.copyWith(fontSize: 10),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )),
-                    ),
+                    GoogleLoginButton(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

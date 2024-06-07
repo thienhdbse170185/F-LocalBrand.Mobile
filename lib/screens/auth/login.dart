@@ -1,7 +1,11 @@
 import 'dart:convert';
 
+import 'package:f_localbrand/screens/components/buttons/google_login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,7 +19,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool _obscureText = true;
   bool _isLoading = false;
-  String? _emailErrorMessage = null, _passwordErrorMessage = null;
+  String? _emailErrorMessage, _passwordErrorMessage;
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -290,28 +294,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: textTheme.bodyMedium
                           ?.copyWith(color: colorScheme.onSurface),
                     ),
-                    SizedBox(height: 16),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: colorScheme.inversePrimary,
-                            width: 1.0,
-                          ),
-                        ),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 24.0,
-                          child: Image.asset(
-                            'assets/icon/google.png',
-                            width: 32.0,
-                            height: 32.0,
-                          ),
-                        ),
-                      ),
-                    ),
+                    GoogleLoginButton(),
                     SizedBox(height: 4),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
