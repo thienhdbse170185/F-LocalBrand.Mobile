@@ -1,24 +1,28 @@
 import 'dart:convert';
 
+import 'package:f_localbrand/screens/components/buttons/google_login.dart';
+import 'package:f_localbrand/themes/custom_themes/button_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:http/http.dart' as http;
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<StatefulWidget> createState() => _LoginScreenState();
+  State<StatefulWidget> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  bool _obscureText = true;
+class _SignupScreenState extends State<SignupScreen> {
+  bool _obscureConfirm = true;
+  bool _obscurePassword = true;
   bool _isLoading = false;
-  String? _emailErrorMessage = null, _passwordErrorMessage = null;
+  String? _emailErrorMessage, _passwordErrorMessage, _confirmErrorMessage;
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -26,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
   }
 
-  bool validateInput(String? email, String? password) {
+  bool validateInput(String? email, String? password, String? confirm) {
     if (email == null || email.isEmpty) {
       setState(() {
         _emailErrorMessage = '(!) Email cannot be empty.';
@@ -37,16 +41,22 @@ class _LoginScreenState extends State<LoginScreen> {
         _passwordErrorMessage = '(!) Password cannot be empty.';
       });
       return false;
+    } else if (confirm == null || confirm.isEmpty) {
+      setState(() {
+        _confirmErrorMessage = '(!) Confirm cannot be empty.';
+      });
+      return false;
     }
     return true;
   }
 
-  Future<void> _login() async {
+  Future<void> _signup() async {
     if (_formKey.currentState!.validate()) {
       final String email = _emailController.text.trim();
       final String password = _passwordController.text.trim();
+      final String confirm = _confirmController.text.trim();
 
-      if (!validateInput(email, password)) {
+      if (!validateInput(email, password, confirm)) {
         return;
       } else {
         _setLoadingTrue();
@@ -54,8 +64,9 @@ class _LoginScreenState extends State<LoginScreen> {
             .showSnackBar(const SnackBar(content: Text('Processing...')));
 
         try {
+          /* Uncomment when API is ready
           final response = await http.post(
-            Uri.parse('${dotenv.env['API_URL']}/Auth/Login'),
+            Uri.parse('${dotenv.env['API_URL']}/Auth/Signup'),
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({'email': email, 'password': password}),
           );
@@ -66,14 +77,14 @@ class _LoginScreenState extends State<LoginScreen> {
             // Login successful, handle the response data
             final Map<String, dynamic> data = jsonDecode(response.body);
             // You can save the user token or other relevant data here
-            print('Login successful: $data');
+            print('Signup successful: $data');
             // Production use this
             // Dev env pop keep data not remove like replace
             // await Navigator.pushReplacementNamed(context, '/');
             await Navigator.pushNamed(context, '/');
           } else {
             // Login failed, handle the error
-            print('Login failed: ${response.statusCode} - ${response.body}');
+            print('Signup failed: ${response.statusCode} - ${response.body}');
             final Map<String, dynamic> data = jsonDecode(response.body);
             print(data['result']['message']);
             setState(() {
@@ -81,18 +92,21 @@ class _LoginScreenState extends State<LoginScreen> {
             });
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Login failed: ${data['result']['message']}'),
+                content: Text('Signup failed: ${data['result']['message']}'),
                 duration: const Duration(seconds: 3),
                 backgroundColor: Theme.of(context).colorScheme.error,
               ),
             );
-          }
+          } */
+
+          _setLoadingFalse();
+          _dismissSnackbar();
         } catch (e) {
           // Handle any exceptions that occurred during the API call
           print('Error: $e');
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('An error occurred during login'),
+              content: Text('An error occurred during signup'),
               duration: Duration(seconds: 3),
             ),
           );
@@ -103,7 +117,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _togglePasswordVisibility() {
     setState(() {
-      _obscureText = !_obscureText;
+      _obscurePassword = !_obscurePassword;
+    });
+  }
+
+  void _toggleConfirmVisibility() {
+    setState(() {
+      _obscureConfirm = !_obscureConfirm;
     });
   }
 
@@ -123,20 +143,22 @@ class _LoginScreenState extends State<LoginScreen> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmController.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
-    _resetLoginState();
+    _resetSignupState();
   }
 
-  void _resetLoginState() {
+  void _resetSignupState() {
     setState(() {
       _emailController.clear();
       _passwordController.clear();
-      _obscureText = true;
+      _obscurePassword = true;
+      _obscureConfirm = true;
       _isLoading = false;
     });
   }
@@ -151,138 +173,157 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Padding(
-        padding:
-            const EdgeInsets.only(top: 72, right: 36, bottom: 48, left: 36),
+        padding: const EdgeInsets.only(top: 72, right: 36, left: 36),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             SizedBox(
-              height: 150,
+              height: 130,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(_isLoading ? 'Logging in...' : 'Welcome back,',
+                  Text(_isLoading ? 'Submitting...' : 'Register',
                       style: textTheme.titleMedium),
                   const SizedBox(height: 5),
                   Text(
                       _isLoading
-                          ? 'Please wait...'
-                          : 'Discover Limitless Choices and Unmatched Convenience.',
+                          ? 'Your account is being created...'
+                          : 'Please enter your details',
                       style: textTheme.displayMedium),
                   const SizedBox(height: 48),
                 ],
               ),
             ),
             Form(
-                key: _formKey,
-                autovalidateMode: AutovalidateMode.disabled,
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.disabled,
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 96,
+                    child: TextFormField(
+                      autocorrect: false,
+                      autofocus: false,
+                      keyboardType: TextInputType.emailAddress,
+                      controller: _emailController,
+                      onChanged: (value) {
+                        setState(() {
+                          _emailErrorMessage = null;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        hintText: "Email",
+                        errorText: _emailErrorMessage,
+                        contentPadding:
+                            const EdgeInsets.symmetric(vertical: 20),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        prefixIcon: const Icon(Ionicons.mail),
+                      ),
+                      style: textTheme.bodyLarge,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 96,
+                    child: TextFormField(
+                      autocorrect: false,
+                      autofocus: false,
+                      controller: _passwordController,
+                      onChanged: (value) {
+                        setState(() {
+                          _passwordErrorMessage = null;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'Password',
+                        errorText: _passwordErrorMessage,
+                        contentPadding:
+                            const EdgeInsets.symmetric(vertical: 20),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        prefixIcon: const Icon(Ionicons.lock_closed),
+                        suffixIcon: IconButton(
+                          onPressed: _togglePasswordVisibility,
+                          icon: Icon(
+                            _obscurePassword
+                                ? Ionicons.eye_off_outline
+                                : Ionicons.eye_outline,
+                          ),
+                        ),
+                      ),
+                      obscureText: _obscurePassword,
+                      style: textTheme.bodyLarge,
+                    ),
+                  ),
+                  SizedBox(
                       height: 96,
                       child: TextFormField(
                         autocorrect: false,
                         autofocus: false,
-                        keyboardType: TextInputType.emailAddress,
-                        controller: _emailController,
+                        controller: _confirmController,
                         onChanged: (value) {
                           setState(() {
-                            _emailErrorMessage = null;
+                            _confirmErrorMessage = null;
                           });
                         },
                         decoration: InputDecoration(
-                          hintText: "Email",
-                          errorText: _emailErrorMessage,
+                          hintText: 'Confirm Password',
+                          errorText: _confirmErrorMessage,
                           contentPadding:
-                              const EdgeInsets.symmetric(vertical: 20),
+                              const EdgeInsets.symmetric(vertical: 19),
                           border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
                           ),
                           focusedBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          prefixIcon: const Icon(Ionicons.mail),
-                        ),
-                        style: textTheme.bodyLarge,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 90,
-                      child: TextFormField(
-                        autocorrect: false,
-                        autofocus: false,
-                        controller: _passwordController,
-                        onChanged: (value) {
-                          setState(() {
-                            _passwordErrorMessage = null;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          errorText: _passwordErrorMessage,
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 20),
-                          border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
                           ),
                           prefixIcon: const Icon(Ionicons.lock_closed),
                           suffixIcon: IconButton(
-                            onPressed: _togglePasswordVisibility,
+                            onPressed: _toggleConfirmVisibility,
                             icon: Icon(
-                              _obscureText
+                              _obscureConfirm
                                   ? Ionicons.eye_off_outline
                                   : Ionicons.eye_outline,
                             ),
                           ),
                         ),
-                        obscureText: _obscureText,
+                        obscureText: _obscureConfirm,
                         style: textTheme.bodyLarge,
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.centerRight,
-                      child: GestureDetector(
-                        onTap: () {
-                          print('tapped');
-                        },
-                        child: Text(
-                          'Forgot Password?',
-                          textAlign: TextAlign.right,
-                          style: textTheme.displaySmall?.copyWith(
-                              color: Theme.of(context).primaryColor,
-                              decoration: TextDecoration.underline,
-                              decorationColor: Theme.of(context).primaryColor),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    SizedBox(
+                      )),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    child: SizedBox(
                         width: double.infinity,
-                        height: 56,
+                        height: 55,
                         child: ElevatedButton(
-                          onPressed: _isLoading ? null : _login,
+                          onPressed: _isLoading ? null : _signup,
                           style: elevatedButtonTheme.style,
                           child: _isLoading
                               ? const CircularProgressIndicator()
                               : Text(
-                                  'Login',
+                                  'Register',
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineMedium
                                       ?.copyWith(color: Colors.white),
                                 ),
                         )),
-                  ],
-                )),
+                  ),
+                ],
+              ),
+            ),
             Container(
               alignment: Alignment.center,
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 40),
+                padding: EdgeInsets.only(top: 36),
                 child: Column(
                   children: [
                     Text(
@@ -290,42 +331,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: textTheme.bodyMedium
                           ?.copyWith(color: colorScheme.onSurface),
                     ),
-                    SizedBox(height: 16),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: colorScheme.inversePrimary,
-                            width: 1.0,
-                          ),
-                        ),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 24.0,
-                          child: Image.asset(
-                            'assets/icon/google.png',
-                            width: 32.0,
-                            height: 32.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 4),
+                    GoogleLoginButton(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Don\'t have an account?',
+                          'Already have an account?',
                           style: textTheme.displaySmall,
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/signup');
+                            Navigator.popAndPushNamed(context, '/login');
                           },
                           child: Text(
-                            'Sign Up',
+                            'Login',
                             style: textTheme.displaySmall?.copyWith(
                                 color: Theme.of(context).primaryColor,
                                 decoration: TextDecoration.underline,
