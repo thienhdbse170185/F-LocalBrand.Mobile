@@ -1,4 +1,5 @@
 import 'package:f_localbrand/firebase_options.dart';
+import 'package:f_localbrand/screens/auth/forgot_pw.dart';
 import 'package:f_localbrand/screens/auth/signup.dart';
 import 'package:f_localbrand/themes/custom_themes/index.dart';
 import 'package:f_localbrand/themes/material_theme.dart';
@@ -39,7 +40,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const HomeScreen(),
         '/login': (context) => const LoginScreen(),
-        '/signup': (context) => const SignupScreen()
+        '/signup': (context) => const SignupScreen(),
+        '/forgot_pw': (context) => const ForgotPasswordScreen()
       },
     );
   }
