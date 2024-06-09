@@ -198,6 +198,7 @@ class _SignupScreenState extends State<SignupScreen> {
               key: _formKey,
               autovalidateMode: AutovalidateMode.disabled,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   SizedBox(
                     height: 96,
@@ -298,6 +299,21 @@ class _SignupScreenState extends State<SignupScreen> {
                         obscureText: _obscureConfirm,
                         style: textTheme.bodyLarge,
                       )),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 24),
+                    child: Text.rich(TextSpan(children: [
+                      TextSpan(
+                          text: 'By clicking the ',
+                          style: textTheme.bodyMedium),
+                      TextSpan(
+                          text: 'Register',
+                          style: textTheme.bodyMedium
+                              ?.copyWith(color: colorScheme.error)),
+                      TextSpan(
+                          text: ' button, you agree \nto the public offer',
+                          style: textTheme.bodyMedium)
+                    ])),
+                  ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 8),
                     child: SizedBox(

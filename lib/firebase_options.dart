@@ -53,9 +53,9 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'Saomabietduoc:>>',
-    appId: 'Bietchiz:33',
-    messagingSenderId: 'Nonono:*',
+    apiKey: 'AIzaSyA-v6Li7ik7H9QD870b9bR-B1V5ypB0U1g',
+    appId: '1:585901900513:android:1272401f10f3042db0eda0',
+    messagingSenderId: '585901900513',
     projectId: 'f-localbrand',
     storageBucket: 'f-localbrand.appspot.com',
   );
