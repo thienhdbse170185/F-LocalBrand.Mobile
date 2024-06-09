@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ionicons/ionicons.dart';
@@ -23,6 +24,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       if (email.isEmpty) {
         setState(() {
           _emailErrorMessage = '(!) Email cannot be empty.';
+        });
+        return;
+      } else if (!EmailValidator.validate(email)) {
+        setState(() {
+          _emailErrorMessage = '(!) Invalid email address.';
         });
         return;
       }
@@ -87,7 +93,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
               Form(
                   key: _formKey,
+                  autovalidateMode: AutovalidateMode.disabled,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
                         height: 96,
