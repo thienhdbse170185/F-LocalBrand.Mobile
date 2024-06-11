@@ -30,7 +30,7 @@ class _GoogleLoginButtonState extends State<GoogleLoginButton> {
     final UserCredential userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
     setState(() => _isLoading = false);
-    print(userCredential);
+    print(userCredential.credential);
   }
 
   @override
@@ -38,35 +38,32 @@ class _GoogleLoginButtonState extends State<GoogleLoginButton> {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
     return SizedBox(
-      height: 80,
+      height: 48,
       child: Padding(
-        padding: const EdgeInsets.only(top: 24, bottom: 8),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: OutlinedButton(
-            onPressed: _loginWithGoogle,
-            child: _isLoading
-                ? CircularProgressIndicator()
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        radius: 10.0,
-                        child: Image(
-                          image: AssetImage('assets/icon/google.png'),
-                          width: 32.0,
-                          height: 32.0,
-                        ),
+        padding: const EdgeInsets.symmetric(horizontal: 40),
+        child: OutlinedButton(
+          onPressed: _loginWithGoogle,
+          child: _isLoading
+              ? CircularProgressIndicator()
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      radius: 10.0,
+                      child: Image(
+                        image: AssetImage('assets/icon/google.png'),
+                        width: 32.0,
+                        height: 32.0,
                       ),
-                      const SizedBox(width: 10),
-                      Text(
-                        'Login with Google',
-                        style: textTheme.headlineSmall?.copyWith(fontSize: 10),
-                      ),
-                    ],
-                  ),
-          ),
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      'Login with Google',
+                      style: textTheme.headlineSmall?.copyWith(fontSize: 10),
+                    ),
+                  ],
+                ),
         ),
       ),
     );
