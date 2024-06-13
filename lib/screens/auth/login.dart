@@ -208,7 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 90,
+                      height: 86,
                       child: TextFormField(
                         autocorrect: false,
                         autofocus: false,
@@ -247,22 +247,22 @@ class _LoginScreenState extends State<LoginScreen> {
                       alignment: Alignment.centerRight,
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.popAndPushNamed(context, '/forgot_pw');
+                          Navigator.pushNamed(context, '/forgot_pw');
                         },
-                        child: Text(
-                          'Forgot Password?',
-                          textAlign: TextAlign.right,
-                          style: textTheme.displaySmall?.copyWith(
-                              color: Theme.of(context).primaryColor,
-                              decoration: TextDecoration.underline,
-                              decorationColor: Theme.of(context).primaryColor),
+                        child: SizedBox(
+                          height: 24,
+                          child: Text(
+                            'Forgot Password?',
+                            textAlign: TextAlign.right,
+                            style: textTheme.displaySmall?.copyWith(
+                                color: Theme.of(context).primaryColor,
+                                decoration: TextDecoration.underline,
+                                decorationColor: Theme.of(context).primaryColor),
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    SizedBox(
+                    Padding(padding: EdgeInsets.only(top: 32), child: SizedBox(
                         width: double.infinity,
                         height: 56,
                         child: ElevatedButton(
@@ -271,19 +271,19 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: _isLoading
                               ? const CircularProgressIndicator()
                               : Text(
-                                  'Login',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium
-                                      ?.copyWith(color: Colors.white),
-                                ),
-                        )),
+                            'Login',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium
+                                ?.copyWith(color: Colors.white),
+                          ),
+                        ))),
                   ],
                 )),
             Container(
               alignment: Alignment.center,
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 40),
+                padding: EdgeInsets.only(top: 32),
                 child: Column(
                   children: [
                     Text(
@@ -291,9 +291,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: textTheme.bodyMedium
                           ?.copyWith(color: colorScheme.onSurface),
                     ),
-                    GoogleLoginButton(),
-                    SizedBox(height: 4),
-                    Row(
+                    Padding(padding: EdgeInsets.only(top: 32),child: GoogleLoginButton()),
+                    Padding(padding: EdgeInsets.only(top: 16), child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
@@ -310,11 +309,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 color: Theme.of(context).primaryColor,
                                 decoration: TextDecoration.underline,
                                 decorationColor:
-                                    Theme.of(context).primaryColor),
+                                Theme.of(context).primaryColor),
                           ),
                         )
                       ],
-                    )
+                    )),
                   ],
                 ),
               ),
