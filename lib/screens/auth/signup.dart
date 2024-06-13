@@ -265,7 +265,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                   SizedBox(
-                      height: 96,
+                      height: 86,
                       child: TextFormField(
                         autocorrect: false,
                         autofocus: false,
@@ -300,7 +300,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         style: textTheme.bodyLarge,
                       )),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 24),
+                    padding: EdgeInsets.only(bottom: 24),
                     child: Text.rich(TextSpan(children: [
                       TextSpan(
                           text: 'By clicking the ',
@@ -314,9 +314,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           style: textTheme.bodyMedium)
                     ])),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8),
-                    child: SizedBox(
+                    SizedBox(
                         width: double.infinity,
                         height: 55,
                         child: ElevatedButton(
@@ -331,7 +329,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       .headlineMedium
                                       ?.copyWith(color: Colors.white),
                                 ),
-                        )),
+                        ),
                   ),
                 ],
               ),
@@ -339,7 +337,7 @@ class _SignupScreenState extends State<SignupScreen> {
             Container(
               alignment: Alignment.center,
               child: Padding(
-                padding: EdgeInsets.only(top: 36),
+                padding: EdgeInsets.only(top: 24),
                 child: Column(
                   children: [
                     Text(

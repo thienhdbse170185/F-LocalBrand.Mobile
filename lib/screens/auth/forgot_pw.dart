@@ -75,21 +75,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 130,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                height: 120,
+                child:
                     Text(_isLoading ? 'Sending...' : 'Forgot \npassword?',
                         style: textTheme.titleMedium),
-                    const SizedBox(height: 5),
-                    Text(
-                        _isLoading
-                            ? 'Sending to your recovery email...'
-                            : 'Please enter your \nrecovery email address',
-                        style: textTheme.displayMedium),
-                    const SizedBox(height: 48),
-                  ],
+
                 ),
+              SizedBox(
+                height: 70,
+                child: Text(
+                    _isLoading
+                        ? 'Sending to your recovery email...'
+                        : 'Please enter your \nrecovery email address',
+                    style: textTheme.displayMedium),
               ),
               Form(
                   key: _formKey,
@@ -112,6 +110,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           decoration: InputDecoration(
                             hintText: "Email",
                             errorText: _emailErrorMessage,
+                            errorStyle: textTheme.displayMedium?.copyWith(
+                              color: colorScheme.error,
+                              fontSize: 10
+                            ),
                             contentPadding:
                                 const EdgeInsets.symmetric(vertical: 20),
                             border: const OutlineInputBorder(
@@ -128,7 +130,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: 24),
+                        padding: EdgeInsets.only(bottom: 24),
                         child: Text.rich(TextSpan(children: [
                           TextSpan(
                               text: '*',
@@ -136,7 +138,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                   ?.copyWith(color: colorScheme.error)),
                           TextSpan(
                               text:
-                                  'We will send you a message to set or reset \nyour new password',
+                                  ' We will send you a message to set or reset \nyour new password',
                               style: textTheme.bodyMedium)
                         ])),
                       ),
