@@ -1,13 +1,10 @@
 import 'package:f_localbrand/firebase_options.dart';
-import 'package:f_localbrand/screens/auth/forgot_pw.dart';
-import 'package:f_localbrand/screens/auth/signup.dart';
+import 'package:f_localbrand/screens/auth/index.dart';
 import 'package:f_localbrand/themes/custom_themes/index.dart';
 import 'package:f_localbrand/themes/material_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
-import 'screens/auth/login.dart';
 import 'home.dart';
 
 Future<void> main() async {
@@ -41,7 +38,9 @@ class MyApp extends StatelessWidget {
         '/': (context) => const HomeScreen(),
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignupScreen(),
-        '/forgot_pw': (context) => const ForgotPasswordScreen()
+        '/forgot_pw': (context) => const ForgotPasswordScreen(),
+        '/otp': (context) => const OTPScreen(),
+        '/reset_pw': (context) => const ResetPasswordScreen(),
       },
     );
   }
