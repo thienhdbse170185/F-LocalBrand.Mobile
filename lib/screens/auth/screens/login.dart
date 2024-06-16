@@ -257,27 +257,30 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: textTheme.displaySmall?.copyWith(
                                 color: Theme.of(context).primaryColor,
                                 decoration: TextDecoration.underline,
-                                decorationColor: Theme.of(context).primaryColor),
+                                decorationColor:
+                                    Theme.of(context).primaryColor),
                           ),
                         ),
                       ),
                     ),
-                    Padding(padding: EdgeInsets.only(top: 32), child: SizedBox(
-                        width: double.infinity,
-                        height: 56,
-                        child: ElevatedButton(
-                          onPressed: _isLoading ? null : _login,
-                          style: elevatedButtonTheme.style,
-                          child: _isLoading
-                              ? const CircularProgressIndicator()
-                              : Text(
-                            'Login',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium
-                                ?.copyWith(color: Colors.white),
-                          ),
-                        ))),
+                    Padding(
+                        padding: EdgeInsets.only(top: 32),
+                        child: SizedBox(
+                            width: double.infinity,
+                            height: 56,
+                            child: ElevatedButton(
+                              onPressed: _isLoading ? null : _login,
+                              style: elevatedButtonTheme.style,
+                              child: _isLoading
+                                  ? const CircularProgressIndicator()
+                                  : Text(
+                                      'Login',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium
+                                          ?.copyWith(color: Colors.white),
+                                    ),
+                            ))),
                   ],
                 )),
             Container(
@@ -291,29 +294,33 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: textTheme.bodyMedium
                           ?.copyWith(color: colorScheme.onSurface),
                     ),
-                    Padding(padding: EdgeInsets.only(top: 32),child: GoogleLoginButton()),
-                    Padding(padding: EdgeInsets.only(top: 16), child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Don\'t have an account?',
-                          style: textTheme.displaySmall,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/signup');
-                          },
-                          child: Text(
-                            'Sign Up',
-                            style: textTheme.displaySmall?.copyWith(
-                                color: Theme.of(context).primaryColor,
-                                decoration: TextDecoration.underline,
-                                decorationColor:
-                                Theme.of(context).primaryColor),
-                          ),
-                        )
-                      ],
-                    )),
+                    Padding(
+                        padding: EdgeInsets.only(top: 32),
+                        child: GoogleLoginButton()),
+                    Padding(
+                        padding: EdgeInsets.only(top: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Don\'t have an account?',
+                              style: textTheme.displaySmall,
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/signup');
+                              },
+                              child: Text(
+                                'Sign Up',
+                                style: textTheme.displaySmall?.copyWith(
+                                    color: Theme.of(context).primaryColor,
+                                    decoration: TextDecoration.underline,
+                                    decorationColor:
+                                        Theme.of(context).primaryColor),
+                              ),
+                            )
+                          ],
+                        )),
                   ],
                 ),
               ),
