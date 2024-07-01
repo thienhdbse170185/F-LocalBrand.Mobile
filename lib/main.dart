@@ -1,48 +1,103 @@
+import 'package:f_localbrand/config/http_client.dart';
+import 'package:f_localbrand/config/router.dart';
+import 'package:f_localbrand/features/auth/bloc/auth_bloc.dart';
+import 'package:f_localbrand/features/auth/data/auth_api_client.dart';
+import 'package:f_localbrand/features/auth/data/auth_local_data_source.dart';
+import 'package:f_localbrand/features/auth/data/auth_repository.dart';
+import 'package:f_localbrand/features/user/bloc/user_cubit.dart';
+import 'package:f_localbrand/features/user/data/user_api_client.dart';
+import 'package:f_localbrand/features/user/data/user_local_data_source.dart';
+import 'package:f_localbrand/features/user/data/user_repository.dart';
 import 'package:f_localbrand/firebase_options.dart';
-import 'package:f_localbrand/screens/auth/forgot_pw.dart';
-import 'package:f_localbrand/screens/auth/signup.dart';
-import 'package:f_localbrand/themes/custom_themes/index.dart';
-import 'package:f_localbrand/themes/material_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'screens/auth/login.dart';
-import 'home.dart';
+import 'config/themes/custom_themes/button_theme.dart';
+import 'config/themes/custom_themes/text_theme.dart';
+import 'config/themes/material_theme.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: '.env');
   WidgetsFlutterBinding.ensureInitialized();
+  final sf = await SharedPreferences.getInstance();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MyApp(
+    sharedPreferences: sf,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.sharedPreferences});
+
+  final SharedPreferences sharedPreferences;
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(
+          create: (context) => AuthRepository(
+              authApiClient: AuthApiClient(dio),
+              authLocalDataSource: AuthLocalDataSource(sharedPreferences)),
+        ),
+        RepositoryProvider(
+            create: (context) => UserRepository(
+                userApiClient: UserApiClient(dio),
+                userLocalDataSource: UserLocalDataSource(sharedPreferences),
+                authLocalDataSource: AuthLocalDataSource(sharedPreferences)))
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+              create: (context) => AuthBloc(context.read<AuthRepository>())),
+          BlocProvider(
+              create: (context) => UserCubit(context.read<UserRepository>())),
+        ],
+        child: AppContent(),
+      ),
+    );
+  }
+}
+
+class AppContent extends StatefulWidget {
+  const AppContent({
+    super.key,
+  });
+
+  @override
+  State<AppContent> createState() => _AppContentState();
+}
+
+class _AppContentState extends State<AppContent> {
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   context.read<AuthBloc>().add(AuthAuthenticateStarted());
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    // final authState = context.watch<AuthBloc>().state;
+    // if (authState is AuthInitial) {
+    //   return Container();
+    // }
     final MaterialTheme materialTheme = MaterialTheme(
         FTextTheme.light,
         FButtonTheme.lightElevatedButtonTheme,
         FButtonTheme.lightOutlinedButtonTheme);
-
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'F-LocalBrand',
       theme: materialTheme.light(),
       darkTheme: materialTheme.dark(),
       themeMode: ThemeMode.light,
-      initialRoute: '/login',
-      routes: {
-        '/': (context) => const HomeScreen(),
-        '/login': (context) => const LoginScreen(),
-        '/signup': (context) => const SignupScreen(),
-        '/forgot_pw': (context) => const ForgotPasswordScreen()
-      },
+      routerConfig: router,
     );
   }
 }

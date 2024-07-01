@@ -1,46 +1,69 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:f_localbrand/features/auth/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../config/router.dart';
 
 class GoogleLoginButton extends StatefulWidget {
   const GoogleLoginButton({super.key});
 
   @override
-  State<StatefulWidget> createState() => _GoogleLoginButtonState();
+  State<GoogleLoginButton> createState() => _GoogleLoginButtonState();
 }
 
 class _GoogleLoginButtonState extends State<GoogleLoginButton> {
   bool _isLoading = false;
 
   Future<void> _loginWithGoogle() async {
-    setState(() => _isLoading = true);
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    // Once signed in, return the UserCredential
-    final UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    setState(() => _isLoading = false);
-    print(userCredential.credential);
+    context.read<AuthBloc>().add(AuthLoginGoogleStarted());
   }
 
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    return SizedBox(
-      height: 48,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40),
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        switch (state) {
+          case AuthLoginFailure(message: final msg):
+            setState(() {
+              _isLoading = false;
+            });
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Login failed: $msg'),
+                duration: const Duration(seconds: 3),
+                backgroundColor: Theme.of(context).colorScheme.error,
+              ),
+            );
+            break;
+          // TODO: Handle this case.
+          case AuthLoginInProgress():
+            setState(() {
+              _isLoading = true;
+            });
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text('Progressing...')));
+            break;
+          case AuthLoginSuccess():
+            // TODO: Handle this case.
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Login successfully!"),
+              duration: const Duration(seconds: 3),
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+            ));
+            context.read<AuthBloc>().add(AuthAuthenticateStarted());
+            break;
+          case AuthAuthenticateSuccess():
+            context.go(RouteName.home);
+            break;
+          default:
+            break;
+        }
+      },
+      child: SizedBox(
+        height: 48,
         child: OutlinedButton(
           onPressed: _loginWithGoogle,
           child: _isLoading
@@ -57,10 +80,10 @@ class _GoogleLoginButtonState extends State<GoogleLoginButton> {
                         height: 32.0,
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 20),
                     Text(
-                      'Login with Google',
-                      style: textTheme.headlineSmall?.copyWith(fontSize: 10),
+                      'CONTINUE WITH GOOGLE',
+                      style: textTheme.headlineSmall?.copyWith(fontSize: 14),
                     ),
                   ],
                 ),
