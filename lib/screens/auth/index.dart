@@ -1,5 +1,5 @@
-export 'screens/login.dart';
-export 'screens/signup.dart';
-export 'screens/forgot_pw.dart';
-export 'screens/otp.dart';
-export 'screens/reset_pw.dart';
+export 'forgot_pw//reset_pw.dart';
+export 'forgot_pw/forgot_pw.dart';
+export 'forgot_pw/otp.dart';
+export 'login/login.dart';
+export 'register/register.dart';

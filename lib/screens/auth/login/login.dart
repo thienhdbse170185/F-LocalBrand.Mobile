@@ -29,10 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  void _dismissSnackbar() {
-    ScaffoldMessenger.of(context).removeCurrentSnackBar();
-  }
-
   bool validateInput(String? email, String? password) {
     if (email == null || email.isEmpty) {
       setState(() {
