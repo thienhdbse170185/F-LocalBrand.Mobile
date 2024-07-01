@@ -1,10 +1,11 @@
+import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:f_localbrand/screens/cart.dart';
 import 'package:f_localbrand/screens/favourite.dart';
-import 'package:f_localbrand/screens/home.dart';
-import 'package:f_localbrand/screens/profile.dart';
+import 'package:f_localbrand/screens/home/home.dart';
+import 'package:f_localbrand/screens/profile/profile.dart';
 import 'package:f_localbrand/screens/shop.dart';
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,30 +26,60 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      body: screens[selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: selectedIndex,
-          onTap: (index) {
-            selectedIndex = index;
-            setState(() {});
-          },
-          selectedItemColor: Colors.black,
-          unselectedLabelStyle: const TextStyle(color: Colors.grey),
-          showUnselectedLabels: true,
-          unselectedItemColor: Colors.grey,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-                icon: Icon(Ionicons.home_outline), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Ionicons.search), label: 'Shop'),
-            BottomNavigationBarItem(
-                icon: Icon(Ionicons.cart_outline), label: 'Cart'),
-            BottomNavigationBarItem(
-                icon: Icon(Ionicons.heart_outline), label: 'Favourites'),
-            BottomNavigationBarItem(
-                icon: Icon(Ionicons.person_outline), label: 'Profile'),
-          ]),
-    );
+        resizeToAvoidBottomInset: false,
+        body: screens[selectedIndex],
+        extendBody: true,
+        bottomNavigationBar: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 20),
+            child: DotNavigationBar(
+              currentIndex: selectedIndex,
+              onTap: (index) {
+                setState(() {
+                  selectedIndex = index;
+                });
+              },
+              items: [
+                DotNavigationBarItem(icon: FaIcon(FontAwesomeIcons.house)),
+                DotNavigationBarItem(
+                    icon: FaIcon(FontAwesomeIcons.magnifyingGlass)),
+                DotNavigationBarItem(
+                    icon: FaIcon(FontAwesomeIcons.cartShopping)),
+                DotNavigationBarItem(icon: FaIcon(FontAwesomeIcons.solidHeart)),
+                DotNavigationBarItem(icon: FaIcon(FontAwesomeIcons.solidUser)),
+              ],
+              selectedItemColor: colorScheme.onSurface,
+              unselectedItemColor: Colors.black.withOpacity(0.4),
+              dotIndicatorColor: Colors.white,
+              enableFloatingNavBar: true,
+              enablePaddingAnimation: false,
+              marginR: const EdgeInsets.symmetric(horizontal: 8),
+              paddingR: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+              borderRadius: 100,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  offset: Offset(0, 4),
+                  blurRadius: 12,
+                  spreadRadius: 0,
+                ),
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.14),
+                  offset: Offset(0, 2),
+                  blurRadius: 8,
+                  spreadRadius: 0,
+                ),
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.12),
+                  offset: Offset(0, 1),
+                  blurRadius: 5,
+                  spreadRadius: 0,
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 }
