@@ -1,4 +1,4 @@
-import 'package:f_localbrand/screens/components/inputs/inline_input.dart';
+import 'package:f_localbrand/screens/widgets/inputs/inline_input.dart';
 import 'package:flutter/material.dart';
 
 class IconInput extends StatelessWidget {

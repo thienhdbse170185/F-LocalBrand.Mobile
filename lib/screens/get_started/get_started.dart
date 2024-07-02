@@ -1,6 +1,6 @@
 import 'package:f_localbrand/config/router.dart';
 import 'package:f_localbrand/config/themes/custom_themes/index.dart';
-import 'package:f_localbrand/screens/components/buttons/google_login.dart';
+import 'package:f_localbrand/screens/widgets/buttons/google_login.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

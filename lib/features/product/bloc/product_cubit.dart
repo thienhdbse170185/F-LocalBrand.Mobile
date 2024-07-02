@@ -12,6 +12,7 @@ class ProductCubit extends Cubit<ProductState> {
     emit(ProductLoading());
     try {
       // Call the API or any async operation here
+      filter = filter.toLowerCase();
       final products = await productRepository.getProductsByFilter(filter);
       emit(ProductLoaded(products));
     } catch (e) {

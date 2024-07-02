@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../components/icons/icon_input.dart';
+import '../widgets/icons/icon_input.dart';
 
 class HomeItemScreen extends StatefulWidget {
   const HomeItemScreen({super.key});
@@ -111,8 +111,8 @@ class _HomeItemScreenState extends State<HomeItemScreen> {
                         child: ClipOval(
                           child: Image(
                             image: NetworkImage(state.user.image),
-                            height: 64,
-                            width: 64,
+                            height: 48,
+                            width: 48,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -156,18 +156,23 @@ class _HomeItemScreenState extends State<HomeItemScreen> {
                     ),
                   ),
                   const SizedBox(width: 20),
-                  Container(
-                    height: 64,
-                    width: 64,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: colorScheme.primaryFixed,
-                    ),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: FaIcon(
-                        FontAwesomeIcons.filter,
-                        color: Colors.white,
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      height: 64,
+                      width: 64,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.transparent,
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.outline,
+                          width: 1,
+                        ),
+                      ),
+                      child: Center(
+                        child: FaIcon(
+                          FontAwesomeIcons.filter,
+                        ),
                       ),
                     ),
                   )
@@ -273,9 +278,29 @@ class _HomeItemScreenState extends State<HomeItemScreen> {
                           padding: EdgeInsets.only(top: 50),
                           child: Column(
                             children: [
-                              Text(
-                                'Shopping',
-                                style: textTheme.headlineMedium,
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Shopping',
+                                    style: textTheme.headlineMedium,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      // Xử lý khi nhấn vào nút "All"
+                                    },
+                                    child: Text(
+                                      'All',
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 12,
+                                        decoration: TextDecoration.underline,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                               Padding(
                                 padding: EdgeInsets.only(top: 20),
