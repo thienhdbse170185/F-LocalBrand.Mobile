@@ -1,5 +1,5 @@
-import 'package:f_localbrand/screens/components/buttons/suffix_icon_button.dart';
-import 'package:f_localbrand/screens/components/icons/icon_input.dart';
+import 'package:f_localbrand/screens/widgets/buttons/suffix_icon_button.dart';
+import 'package:f_localbrand/screens/widgets/icons/icon_input.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';

@@ -4,6 +4,9 @@ import 'package:f_localbrand/features/auth/bloc/auth_bloc.dart';
 import 'package:f_localbrand/features/auth/data/auth_api_client.dart';
 import 'package:f_localbrand/features/auth/data/auth_local_data_source.dart';
 import 'package:f_localbrand/features/auth/data/auth_repository.dart';
+import 'package:f_localbrand/features/product/bloc/product_cubit.dart';
+import 'package:f_localbrand/features/product/data/product_api_client.dart';
+import 'package:f_localbrand/features/product/data/product_repository.dart';
 import 'package:f_localbrand/features/user/bloc/user_cubit.dart';
 import 'package:f_localbrand/features/user/data/user_api_client.dart';
 import 'package:f_localbrand/features/user/data/user_local_data_source.dart';
@@ -50,7 +53,10 @@ class MyApp extends StatelessWidget {
             create: (context) => UserRepository(
                 userApiClient: UserApiClient(dio),
                 userLocalDataSource: UserLocalDataSource(sharedPreferences),
-                authLocalDataSource: AuthLocalDataSource(sharedPreferences)))
+                authLocalDataSource: AuthLocalDataSource(sharedPreferences))),
+        RepositoryProvider(
+            create: (context) =>
+                ProductRepository(productApiClient: ProductApiClient(dio)))
       ],
       child: MultiBlocProvider(
         providers: [
@@ -58,6 +64,9 @@ class MyApp extends StatelessWidget {
               create: (context) => AuthBloc(context.read<AuthRepository>())),
           BlocProvider(
               create: (context) => UserCubit(context.read<UserRepository>())),
+          BlocProvider(
+              create: (context) => ProductCubit(
+                  productRepository: context.read<ProductRepository>())),
         ],
         child: AppContent(),
       ),

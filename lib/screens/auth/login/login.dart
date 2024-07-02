@@ -1,6 +1,6 @@
 import 'package:f_localbrand/config/router.dart';
-import 'package:f_localbrand/screens/components/buttons/suffix_icon_button.dart';
-import 'package:f_localbrand/screens/components/icons/icon_input.dart';
+import 'package:f_localbrand/screens/widgets/buttons/suffix_icon_button.dart';
+import 'package:f_localbrand/screens/widgets/icons/icon_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -43,68 +43,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     return true;
   }
-
-  /*Login without bloc
-  // Future<void> _login() async {
-  //   if (_formKey.currentState!.validate()) {
-  //     final String username = _usernameController.text.trim();
-  //     final String password = _passwordController.text.trim();
-  //
-  //     if (!validateInput(username, password)) {
-  //       return;
-  //     } else {
-  //       _setLoadingTrue();
-  //       ScaffoldMessenger.of(context)
-  //           .showSnackBar(const SnackBar(content: Text('Processing...')));
-  //
-  //       try {
-  //         final response = await http.post(
-  //           Uri.parse('${dotenv.env['API_URL']}/Auth/Login'),
-  //           headers: {'Content-Type': 'application/json'},
-  //           body: jsonEncode({'username': username, 'password': password}),
-  //         );
-  //
-  //         _dismissSnackbar();
-  //         _setLoadingFalse();
-  //         if (response.statusCode == 200) {
-  //           // Login successful, handle the response data
-  //           final Map<String, dynamic> data = jsonDecode(response.body);
-  //           // You can save the user token or other relevant data here
-  //           print('Login successful: $data');
-  //           // Production use this
-  //           // Dev env pop keep data not remove like replace
-  //           // await Navigator.pushReplacementNamed(context, '/');
-  //           await Navigator.pushNamed(context, '/');
-  //         } else {
-  //           // Login failed, handle the error
-  //           print('Login failed: ${response.statusCode} - ${response.body}');
-  //           final Map<String, dynamic> data = jsonDecode(response.body);
-  //           print(data['result']['message']);
-  //           setState(() {
-  //             _usernameErrorMessage = '(!) ${data['result']['message']}.';
-  //           });
-  //           ScaffoldMessenger.of(context).showSnackBar(
-  //             SnackBar(
-  //               content: Text('Login failed: ${data['result']['message']}'),
-  //               duration: const Duration(seconds: 3),
-  //               backgroundColor: Theme.of(context).colorScheme.error,
-  //             ),
-  //           );
-  //         }
-  //       } catch (e) {
-  //         // Handle any exceptions that occurred during the API call
-  //         print('Error: $e');
-  //         ScaffoldMessenger.of(context).showSnackBar(
-  //           const SnackBar(
-  //             content: Text('An error occurred during login'),
-  //             duration: Duration(seconds: 3),
-  //           ),
-  //         );
-  //       }
-  //     }
-  //   }
-  // }
-  */
 
   /*Login with bloc*/
   void _handleLogin(BuildContext context) {
@@ -180,14 +118,12 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             );
             break;
-          // TODO: Handle this case.
           case AuthLoginInProgress():
             _setLoadingTrue();
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text('Progressing...')));
             break;
           case AuthLoginSuccess():
-            // TODO: Handle this case.
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(loginSuccessMessage),
               duration: const Duration(seconds: 3),
