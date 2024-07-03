@@ -24,7 +24,7 @@ class SubSection extends StatelessWidget {
             title,
             style: textTheme.headlineSmall,
           ),
-          Padding(
+          Container(
             padding: EdgeInsets.only(top: 15),
             child: widget,
           )

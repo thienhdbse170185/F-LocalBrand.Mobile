@@ -3,7 +3,7 @@ import 'package:f_localbrand/config/themes/custom_themes/index.dart';
 import 'package:f_localbrand/config/themes/material_theme.dart';
 import 'package:f_localbrand/features/auth/bloc/auth_bloc.dart';
 import 'package:f_localbrand/features/user/bloc/user_cubit.dart';
-import 'package:f_localbrand/screens/profile/widgets/profile_nav.dart';
+import 'package:f_localbrand/screens/profile/widgets/profile_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -43,7 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     {
       'route': '/help-center',
       'title': 'Help Center',
-      'icon': FontAwesomeIcons.infoCircle,
+      'icon': FontAwesomeIcons.circleInfo,
     },
     {
       'route': '/privacy-policy',
@@ -56,7 +56,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<UserCubit>().getUserProfile();
   }
 
   @override
@@ -75,7 +74,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }
         }),
         BlocListener<UserCubit, UserState>(listener: (context, state) {
-          if (state is GetUserProfileSuccess) {
+          if (state is GetUserInfoSuccess) {
             print(state.user.image);
           }
         })
@@ -92,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 BlocBuilder<UserCubit, UserState>(
                   builder: (context, state) {
-                    if (state is GetUserProfileSuccess) {
+                    if (state is GetUserInfoSuccess) {
                       return Padding(
                         padding: EdgeInsets.only(top: 10),
                         child: Column(
@@ -137,7 +136,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       physics: ClampingScrollPhysics(),
                       shrinkWrap: true,
                       children: [
-                        ...navigationItems.map((item) => ProfileNavigation(
+                        ...navigationItems.map((item) => ProfileItem(
                               route: item['route'],
                               title: item['title'],
                               icon: item['icon'],
@@ -157,7 +156,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           child: ListTile(
                             onTap: () async {
-                              // context.read<AuthBloc>().add(AuthLogoutStarted());
                               await showModalBottomSheet<void>(
                                 context: context,
                                 builder: (BuildContext context) {
