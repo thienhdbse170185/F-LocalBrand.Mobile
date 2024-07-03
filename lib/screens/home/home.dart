@@ -18,12 +18,6 @@ class HomeItemScreen extends StatefulWidget {
 
 class _HomeItemScreenState extends State<HomeItemScreen> {
   @override
-  void initState() {
-    super.initState();
-    context.read<UserCubit>().getUserInfo();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final TextEditingController _searchController = TextEditingController();
