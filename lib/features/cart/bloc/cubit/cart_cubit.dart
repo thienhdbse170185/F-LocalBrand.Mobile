@@ -12,8 +12,7 @@ class CartCubit extends Cubit<CartState> {
 
   Future<void> getCart() async {
     emit(CartLoading());
-    List<ProductCartDto> cart = [];
-    cart = await cartRepository.getCart();
+    List<ProductCartDto> cart = await cartRepository.getCart();
     if (cart.isEmpty) {
       emit(CartIsEmpty());
       return;
