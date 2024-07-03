@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:f_localbrand/features/cart/data/cart_repository.dart';
 import 'package:f_localbrand/features/cart/dto/cart_product.dart';
-import 'package:f_localbrand/screens/cart/components/cart_empty.dart';
 
 part 'cart_state.dart';
 
