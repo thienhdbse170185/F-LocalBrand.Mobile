@@ -27,7 +27,7 @@ class _CartItemState extends State<CartItem> {
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Container(
-      margin: EdgeInsets.only(bottom: 20),
+      margin: EdgeInsets.only(bottom: 10),
       child: Dismissible(
         key: UniqueKey(),
         background: Container(
@@ -97,7 +97,7 @@ class _CartItemState extends State<CartItem> {
               Image.asset(
                 'assets/images/shirt_demo.png',
                 width: 80,
-                height: 80,
+                height: 120,
                 fit: BoxFit.cover,
               ),
               SizedBox(width: 16.0),
