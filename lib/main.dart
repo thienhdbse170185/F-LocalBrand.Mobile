@@ -4,6 +4,9 @@ import 'package:f_localbrand/features/auth/bloc/auth_bloc.dart';
 import 'package:f_localbrand/features/auth/data/auth_api_client.dart';
 import 'package:f_localbrand/features/auth/data/auth_local_data_source.dart';
 import 'package:f_localbrand/features/auth/data/auth_repository.dart';
+import 'package:f_localbrand/features/cart/bloc/cubit/cart_cubit.dart';
+import 'package:f_localbrand/features/cart/data/cart_api_client.dart';
+import 'package:f_localbrand/features/cart/data/cart_repository.dart';
 import 'package:f_localbrand/features/product/bloc/product_cubit.dart';
 import 'package:f_localbrand/features/product/data/product_api_client.dart';
 import 'package:f_localbrand/features/product/data/product_repository.dart';
@@ -56,7 +59,10 @@ class MyApp extends StatelessWidget {
                 authLocalDataSource: AuthLocalDataSource(sharedPreferences))),
         RepositoryProvider(
             create: (context) =>
-                ProductRepository(productApiClient: ProductApiClient(dio)))
+                ProductRepository(productApiClient: ProductApiClient(dio))),
+        RepositoryProvider(
+            create: (context) =>
+                CartRepository(cartApiClient: CartApiClient(dio)))
       ],
       child: MultiBlocProvider(
         providers: [
@@ -67,6 +73,9 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               create: (context) => ProductCubit(
                   productRepository: context.read<ProductRepository>())),
+          BlocProvider(
+              create: (context) =>
+                  CartCubit(cartRepository: context.read<CartRepository>()))
         ],
         child: AppContent(),
       ),
@@ -84,18 +93,8 @@ class AppContent extends StatefulWidget {
 }
 
 class _AppContentState extends State<AppContent> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   context.read<AuthBloc>().add(AuthAuthenticateStarted());
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // final authState = context.watch<AuthBloc>().state;
-    // if (authState is AuthInitial) {
-    //   return Container();
-    // }
     final MaterialTheme materialTheme = MaterialTheme(
         FTextTheme.light,
         FButtonTheme.lightElevatedButtonTheme,

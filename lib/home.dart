@@ -1,10 +1,13 @@
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
+import 'package:f_localbrand/features/cart/bloc/cubit/cart_cubit.dart';
+import 'package:f_localbrand/features/user/bloc/user_cubit.dart';
 import 'package:f_localbrand/screens/cart/cart.dart';
 import 'package:f_localbrand/screens/favourite.dart';
 import 'package:f_localbrand/screens/home/home.dart';
 import 'package:f_localbrand/screens/profile/profile.dart';
 import 'package:f_localbrand/screens/shop.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,6 +26,12 @@ class _HomeScreenState extends State<HomeScreen> {
     const FavouriteScreen(),
     const ProfileScreen()
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<UserCubit>().getUserInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
               DotNavigationBarItem(icon: FaIcon(FontAwesomeIcons.solidHeart)),
               DotNavigationBarItem(icon: FaIcon(FontAwesomeIcons.solidUser)),
             ],
-            selectedItemColor: colorScheme.onSurface,
+            selectedItemColor: colorScheme.primary,
             unselectedItemColor: Colors.black.withOpacity(0.4),
             dotIndicatorColor: Colors.white,
             enableFloatingNavBar: true,
