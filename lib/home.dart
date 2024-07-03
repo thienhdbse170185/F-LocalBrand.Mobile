@@ -28,58 +28,61 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: screens[selectedIndex],
-        extendBody: true,
-        bottomNavigationBar: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.only(bottom: 20),
-            child: DotNavigationBar(
-              currentIndex: selectedIndex,
-              onTap: (index) {
-                setState(() {
-                  selectedIndex = index;
-                });
-              },
-              items: [
-                DotNavigationBarItem(icon: FaIcon(FontAwesomeIcons.house)),
-                DotNavigationBarItem(
-                    icon: FaIcon(FontAwesomeIcons.magnifyingGlass)),
-                DotNavigationBarItem(
-                    icon: FaIcon(FontAwesomeIcons.cartShopping)),
-                DotNavigationBarItem(icon: FaIcon(FontAwesomeIcons.solidHeart)),
-                DotNavigationBarItem(icon: FaIcon(FontAwesomeIcons.solidUser)),
-              ],
-              selectedItemColor: colorScheme.onSurface,
-              unselectedItemColor: Colors.black.withOpacity(0.4),
-              dotIndicatorColor: Colors.white,
-              enableFloatingNavBar: true,
-              enablePaddingAnimation: false,
-              marginR: const EdgeInsets.symmetric(horizontal: 8),
-              paddingR: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-              borderRadius: 100,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  offset: Offset(0, 4),
-                  blurRadius: 12,
-                  spreadRadius: 0,
-                ),
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.14),
-                  offset: Offset(0, 2),
-                  blurRadius: 8,
-                  spreadRadius: 0,
-                ),
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.12),
-                  offset: Offset(0, 1),
-                  blurRadius: 5,
-                  spreadRadius: 0,
-                ),
-              ],
-            ),
+      resizeToAvoidBottomInset: false,
+      body: IndexedStack(
+        index: selectedIndex,
+        children: screens,
+      ),
+      extendBody: true,
+      bottomNavigationBar: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(bottom: 20),
+          child: DotNavigationBar(
+            currentIndex: selectedIndex,
+            onTap: (index) {
+              setState(() {
+                selectedIndex = index;
+              });
+            },
+            items: [
+              DotNavigationBarItem(icon: FaIcon(FontAwesomeIcons.house)),
+              DotNavigationBarItem(
+                  icon: FaIcon(FontAwesomeIcons.magnifyingGlass)),
+              DotNavigationBarItem(icon: FaIcon(FontAwesomeIcons.cartShopping)),
+              DotNavigationBarItem(icon: FaIcon(FontAwesomeIcons.solidHeart)),
+              DotNavigationBarItem(icon: FaIcon(FontAwesomeIcons.solidUser)),
+            ],
+            selectedItemColor: colorScheme.onSurface,
+            unselectedItemColor: Colors.black.withOpacity(0.4),
+            dotIndicatorColor: Colors.white,
+            enableFloatingNavBar: true,
+            enablePaddingAnimation: false,
+            marginR: const EdgeInsets.symmetric(horizontal: 8),
+            paddingR: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+            borderRadius: 100,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                offset: Offset(0, 4),
+                blurRadius: 12,
+                spreadRadius: 0,
+              ),
+              BoxShadow(
+                color: Colors.black.withOpacity(0.14),
+                offset: Offset(0, 2),
+                blurRadius: 8,
+                spreadRadius: 0,
+              ),
+              BoxShadow(
+                color: Colors.black.withOpacity(0.12),
+                offset: Offset(0, 1),
+                blurRadius: 5,
+                spreadRadius: 0,
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

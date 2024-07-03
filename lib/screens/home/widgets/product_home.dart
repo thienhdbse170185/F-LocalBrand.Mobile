@@ -52,69 +52,66 @@ class _ProductHomeState extends State<ProductHome> {
         // context.go('${RouteName.productDetail}/${widget.product.id}');
         context.push(RouteName.productDetail, extra: widget.product.id);
       },
-      child: SizedBox(
-        height: 300, // Adjust height if necessary
-        child: Card(
-          elevation: 2.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(10.0)),
-                    // Adjust the image height
-                    child: Image.asset(
-                      'assets/images/shirt_demo.png',
-                      height: 160, // Adjust height to fit the card
-                      width: double.infinity,
-                      fit: BoxFit.cover,
+      child: Card(
+        elevation: 2.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(10.0)),
+                  // Adjust the image height
+                  child: Image.asset(
+                    'assets/images/shirt_demo.png',
+                    height: 160, // Adjust height to fit the card
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Positioned(
+                  top: 10,
+                  right: 10,
+                  child: GestureDetector(
+                    onTap: () {
+                      _onFavoritePressed();
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: FaIcon(
+                          _isFavorite
+                              ? FontAwesomeIcons.solidHeart
+                              : FontAwesomeIcons.heart,
+                          color: colorScheme.primary),
                     ),
                   ),
-                  Positioned(
-                    top: 10,
-                    right: 10,
-                    child: GestureDetector(
-                      onTap: () {
-                        _onFavoritePressed();
-                      },
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: FaIcon(
-                            _isFavorite
-                                ? FontAwesomeIcons.solidHeart
-                                : FontAwesomeIcons.heart,
-                            color: colorScheme.primary),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8, top: 8),
-                child: Text(
-                  widget.product.name,
-                  style: textTheme.headlineSmall?.copyWith(fontSize: 14),
-                  maxLines: 1, // Prevent text overflow
-                  overflow: TextOverflow.ellipsis,
                 ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8, top: 8),
+              child: Text(
+                widget.product.name,
+                style: textTheme.headlineSmall?.copyWith(fontSize: 14),
+                maxLines: 1, // Prevent text overflow
+                overflow: TextOverflow.ellipsis,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8, top: 8),
-                child: Text(
-                  '${widget.product.price}\$',
-                  style: textTheme.headlineMedium
-                      ?.copyWith(color: colorScheme.primary),
-                  maxLines: 1, // Prevent text overflow
-                  overflow: TextOverflow.ellipsis,
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8, top: 8),
+              child: Text(
+                '${widget.product.price}\$',
+                style: textTheme.headlineMedium
+                    ?.copyWith(color: colorScheme.primary),
+                maxLines: 1, // Prevent text overflow
+                overflow: TextOverflow.ellipsis,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

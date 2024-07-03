@@ -56,7 +56,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<UserCubit>().getUserProfile();
   }
 
   @override
@@ -75,7 +74,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }
         }),
         BlocListener<UserCubit, UserState>(listener: (context, state) {
-          if (state is GetUserProfileSuccess) {
+          if (state is GetUserInfoSuccess) {
             print(state.user.image);
           }
         })
@@ -92,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 BlocBuilder<UserCubit, UserState>(
                   builder: (context, state) {
-                    if (state is GetUserProfileSuccess) {
+                    if (state is GetUserInfoSuccess) {
                       return Padding(
                         padding: EdgeInsets.only(top: 10),
                         child: Column(

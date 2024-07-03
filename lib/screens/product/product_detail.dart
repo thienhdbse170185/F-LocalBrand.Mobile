@@ -84,7 +84,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       body: Stack(
         children: [
           Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               AnimatedContainer(
                 duration: Duration(milliseconds: 600),
@@ -123,147 +122,160 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
               ),
               Expanded(
-                child: MediaQuery.removePadding(
-                  context: context,
-                  removeTop: true,
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 30, left: 20, right: 20),
-                    child: ListView(
-                      padding: EdgeInsets.only(bottom: 100),
-                      controller: _scrollController,
-                      shrinkWrap: true,
-                      children: [
-                        // Product Title and Rating
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Home Shirt', // Replace with product name
-                              style: textTheme.headlineMedium,
-                            ),
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  slivers: [
+                    SliverPadding(
+                      padding: EdgeInsets.only(
+                          top: 30, left: 20, right: 20, bottom: 90),
+                      sliver: SliverList(
+                        delegate: SliverChildListDelegate(
+                          [
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('\$100.0', style: textTheme.displayMedium),
-                                const SizedBox(width: 8),
-                                FaIcon(FontAwesomeIcons.circleDollarToSlot,
-                                    color: colorScheme.primary, size: 28),
+                                Text(
+                                  'Home Shirt', // Replace with product name
+                                  style: textTheme.headlineMedium,
+                                ),
+                                Row(
+                                  children: [
+                                    Text('\$100.0',
+                                        style: textTheme.displayMedium),
+                                    const SizedBox(width: 8),
+                                    FaIcon(FontAwesomeIcons.circleDollarToSlot,
+                                        color: colorScheme.primary, size: 28),
+                                  ],
+                                ),
                               ],
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 8),
+                              child: Text('Female\'s Style',
+                                  style: textTheme.displaySmall),
+                            ),
+                            SubSection(
+                              title: 'Description',
+                              widget: Text(
+                                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                                style: textTheme.displaySmall
+                                    ?.copyWith(color: colorScheme.outline),
+                              ),
+                            ),
+                            SubSection(
+                              title: 'Select Size',
+                              widget: Wrap(
+                                spacing: 8.0,
+                                children: ['S', 'M', 'L', 'XL', 'XXL'].map(
+                                  (size) {
+                                    return ChoiceChip(
+                                      label: Text(size),
+                                      padding: EdgeInsets.all(8),
+                                      showCheckmark: false,
+                                      selected: _selectedSize == size,
+                                      labelStyle:
+                                          textTheme.displaySmall?.copyWith(
+                                        color: _selectedSize == size
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                      onSelected: (bool selected) {
+                                        setState(() {
+                                          _selectedSize = selected ? size : '';
+                                        });
+                                      },
+                                      selectedColor:
+                                          Theme.of(context).primaryColor,
+                                    );
+                                  },
+                                ).toList(),
+                              ),
+                            ),
+                            SubSection(
+                              title: 'Select Color: Brown',
+                              widget: Wrap(
+                                spacing: 16.0,
+                                children: [
+                                  Colors.brown,
+                                  Colors.black,
+                                  Colors.grey,
+                                  Colors.white,
+                                ].map((color) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _selectedColor = color;
+                                      });
+                                    },
+                                    child: Container(
+                                      decoration: ShapeDecoration(
+                                        shape: CircleBorder(
+                                          side: BorderSide(
+                                            color: colorScheme.outline,
+                                            width: 1.0,
+                                          ),
+                                        ),
+                                        color: color,
+                                      ),
+                                      width: 40.0,
+                                      height: 40.0,
+                                      child: Center(
+                                        child: Container(
+                                          width: 24.0,
+                                          height: 24.0,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: _selectedColor == color
+                                                ? (color == Colors.white
+                                                    ? Colors.black
+                                                    : Colors.white)
+                                                : null,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                            SubSection(
+                              title: 'Recommended products',
+                              widget: Container(
+                                height: 250,
+                                child: CustomScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  slivers: [
+                                    SliverPadding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      sliver: SliverList(
+                                        delegate: SliverChildBuilderDelegate(
+                                          (context, index) {
+                                            final product = _products[index];
+                                            return ConstrainedBox(
+                                              constraints: BoxConstraints(
+                                                minHeight: 300,
+                                                maxHeight: 500,
+                                                minWidth: 0,
+                                                maxWidth: 200,
+                                              ),
+                                              child:
+                                                  ProductHome(product: product),
+                                            );
+                                          },
+                                          childCount: _products.length,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 8),
-                          child: Text('Female\'s Style',
-                              style: textTheme.displaySmall),
-                        ),
-                        SubSection(
-                          title: 'Description',
-                          widget: Text(
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                            style: textTheme.displaySmall
-                                ?.copyWith(color: colorScheme.outline),
-                          ),
-                        ),
-                        SubSection(
-                          title: 'Select Size',
-                          widget: Wrap(
-                            spacing: 8.0,
-                            children: ['S', 'M', 'L', 'XL', 'XXL'].map((size) {
-                              return ChoiceChip(
-                                label: Text(size),
-                                padding: EdgeInsets.all(8),
-                                showCheckmark: false,
-                                selected: _selectedSize == size,
-                                labelStyle: textTheme.displaySmall?.copyWith(
-                                  color: _selectedSize == size
-                                      ? Colors.white
-                                      : Colors.black,
-                                ),
-                                onSelected: (bool selected) {
-                                  setState(() {
-                                    _selectedSize = selected ? size : '';
-                                  });
-                                },
-                                selectedColor: Theme.of(context).primaryColor,
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                        // Select Color
-                        SubSection(
-                          title: 'Select Color: Brown',
-                          widget: Wrap(
-                            spacing: 16.0,
-                            children: [
-                              Colors.brown,
-                              Colors.black,
-                              Colors.grey,
-                              Colors.white,
-                            ].map((color) {
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _selectedColor = color;
-                                  });
-                                },
-                                child: Container(
-                                  decoration: ShapeDecoration(
-                                    shape: CircleBorder(
-                                      side: BorderSide(
-                                        color: colorScheme.outline,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                    color: color,
-                                  ),
-                                  width: 40.0,
-                                  height: 40.0,
-                                  child: Center(
-                                    child: Container(
-                                      width: 24.0,
-                                      height: 24.0,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: _selectedColor == color
-                                            ? (color == Colors.white
-                                                ? Colors.black
-                                                : Colors.white)
-                                            : null,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                        // SubSection(
-                        //   title: 'Recommend products',
-                        //   widget: Column(
-                        //     mainAxisSize: MainAxisSize.min,
-                        //     children: [
-                        //       SingleChildScrollView(
-                        //         child: Expanded(
-                        //           child: ListView.builder(
-                        //             scrollDirection: Axis.horizontal,
-                        //             itemCount: _products.length,
-                        //             itemBuilder: (context, index) {
-                        //               final product = _products[index];
-                        //               return Padding(
-                        //                 padding: const EdgeInsets.symmetric(
-                        //                     horizontal: 8.0),
-                        //                 child: ProductHome(product: product),
-                        //               );
-                        //             },
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ],
@@ -299,8 +311,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment
-                              .center, // Align content center vertically
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               'Total price', // Replace with actual total
