@@ -1,5 +1,5 @@
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
-import 'package:f_localbrand/screens/cart.dart';
+import 'package:f_localbrand/screens/cart/cart.dart';
 import 'package:f_localbrand/screens/favourite.dart';
 import 'package:f_localbrand/screens/home/home.dart';
 import 'package:f_localbrand/screens/profile/profile.dart';

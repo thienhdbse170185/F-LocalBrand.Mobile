@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
-class ProfileNavigation extends StatelessWidget {
-  const ProfileNavigation(
+class ProfileItem extends StatelessWidget {
+  const ProfileItem(
       {super.key,
       required this.route,
       required this.title,

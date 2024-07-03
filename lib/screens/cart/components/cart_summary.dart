@@ -1,0 +1,62 @@
+import 'package:flutter/material.dart';
+
+class CartSummary extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(color: Colors.black12, blurRadius: 10.0),
+          ],
+          borderRadius: BorderRadius.circular(12.0)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Sub-Total'),
+              Text('\$407.94'),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Delivery Fee'),
+              Text('\$25.00'),
+            ],
+          ),
+          Divider(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Total Cost', style: TextStyle(fontWeight: FontWeight.bold)),
+              Text('\$397.94', style: TextStyle(fontWeight: FontWeight.bold)),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 16.0),
+            child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  padding: EdgeInsets.symmetric(horizontal: 64, vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  elevation: 4,
+                  shadowColor: Colors.grey,
+                ),
+                child: Text(
+                  'Proceed to Checkout',
+                  style: textTheme.displaySmall?.copyWith(color: Colors.white),
+                )),
+          ),
+        ],
+      ),
+    );
+  }
+}
