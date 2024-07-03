@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
               DotNavigationBarItem(icon: FaIcon(FontAwesomeIcons.solidHeart)),
               DotNavigationBarItem(icon: FaIcon(FontAwesomeIcons.solidUser)),
             ],
-            selectedItemColor: colorScheme.onSurface,
+            selectedItemColor: colorScheme.primary,
             unselectedItemColor: Colors.black.withOpacity(0.4),
             dotIndicatorColor: Colors.white,
             enableFloatingNavBar: true,

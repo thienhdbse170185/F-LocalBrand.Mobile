@@ -30,34 +30,52 @@ class _CartScreenState extends State<CartScreen> {
         ),
         centerTitle: true,
       ),
-      body: BlocBuilder<CartCubit, CartState>(builder: (context, state) {
-        if (state is CartLoading) {
-          return CircularProgressIndicator();
-        } else if (state is CartLoaded) {
-          return Container(
-            padding: EdgeInsets.only(top: 20, left: 8, right: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 20, bottom: 10),
-                  child: Text(
-                    'Item List',
-                    style: textTheme.displayMedium,
-                  ),
-                ),
-                CartBody(),
-                CartSummary(),
-                // CartEmpty()
-              ],
+      // body: BlocBuilder<CartCubit, CartState>(builder: (context, state) {
+      //   if (state is CartLoading) {
+      //     return CircularProgressIndicator();
+      //   } else if (state is CartLoaded) {
+      //     return Container(
+      //       padding: EdgeInsets.only(top: 20, left: 8, right: 8),
+      //       child: Column(
+      //         crossAxisAlignment: CrossAxisAlignment.start,
+      //         children: [
+      //           Padding(
+      //             padding: EdgeInsets.only(left: 20, bottom: 10),
+      //             child: Text(
+      //               'Item List',
+      //               style: textTheme.displayMedium,
+      //             ),
+      //           ),
+      //           CartBody(),
+      //           CartSummary(),
+      //           // CartEmpty()
+      //         ],
+      //       ),
+      //     );
+      //   } else if (state is CartIsEmpty) {
+      //     return CartEmpty();
+      //   } else {
+      //     return Text('Something error in here...Oops!');
+      //   }
+      // }),
+      body: Container(
+        padding: EdgeInsets.only(top: 20, left: 8, right: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 20, bottom: 10),
+              child: Text(
+                'Item List',
+                style: textTheme.displayMedium,
+              ),
             ),
-          );
-        } else if (state is CartIsEmpty) {
-          return CartEmpty();
-        } else {
-          return Text('Something error in here...Oops!');
-        }
-      }),
+            CartBody(),
+            CartSummary(),
+            // CartEmpty()
+          ],
+        ),
+      ),
     );
   }
 }

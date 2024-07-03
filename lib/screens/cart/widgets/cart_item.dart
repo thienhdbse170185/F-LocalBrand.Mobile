@@ -1,3 +1,4 @@
+import 'package:f_localbrand/config/themes/custom_themes/index.dart';
 import 'package:f_localbrand/screens/widgets/buttons/icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -40,6 +41,50 @@ class _CartItemState extends State<CartItem> {
           ),
         ),
         direction: DismissDirection.endToStart,
+        confirmDismiss: (direction) async {
+          return await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text("Remove from Cart"),
+                content: Text('Are you sure?'),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+                actions: <Widget>[
+                  OutlinedButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    style: OutlinedButton.styleFrom(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
+                    child: Text("Cancel",
+                        style: FTextTheme.light.displaySmall
+                            ?.copyWith(color: colorScheme.primary)),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
+                    child: Text(
+                      "Yes, Remove",
+                      style: FTextTheme.light.displaySmall
+                          ?.copyWith(color: Colors.white),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
         onDismissed: (direction) {
           // Handle item dismissal, e.g., remove item from the cart
         },
