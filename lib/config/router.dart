@@ -1,3 +1,4 @@
+import 'package:f_localbrand/screens/checkout/checkout.dart';
 import 'package:f_localbrand/screens/get_started/get_started.dart';
 import 'package:f_localbrand/screens/product/product_detail.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +20,7 @@ class RouteName {
   static const String profile = '/profile';
   static const String getStarted = '/get-started';
   static const String productDetail = '/product-detail';
+  static const String checkout = '/checkout';
 
   static const publicRoutes = [
     login,
@@ -68,5 +70,7 @@ final router = GoRouter(
         return ProductDetailScreen(id: id);
       },
     ),
+    GoRoute(
+        path: RouteName.checkout, builder: (context, state) => CheckoutScreen())
   ],
 );

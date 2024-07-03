@@ -1,9 +1,16 @@
+import 'package:f_localbrand/config/router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CartSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
+
+    Future<void> _onSubmitCheckout() async {
+      context.push(RouteName.checkout);
+    }
+
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -40,7 +47,9 @@ class CartSummary extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(top: 16.0),
             child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  _onSubmitCheckout();
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).primaryColor,
                   padding: EdgeInsets.symmetric(horizontal: 64, vertical: 16),
