@@ -1,6 +1,7 @@
 import 'package:f_localbrand/screens/checkout/checkout.dart';
 import 'package:f_localbrand/screens/get_started/get_started.dart';
 import 'package:f_localbrand/screens/product/product_detail.dart';
+import 'package:f_localbrand/screens/search/search.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -21,6 +22,7 @@ class RouteName {
   static const String getStarted = '/get-started';
   static const String productDetail = '/product-detail';
   static const String checkout = '/checkout';
+  static const String search = '/search';
 
   static const publicRoutes = [
     login,
@@ -71,6 +73,9 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-        path: RouteName.checkout, builder: (context, state) => CheckoutScreen())
+        path: RouteName.checkout,
+        builder: (context, state) => CheckoutScreen()),
+    GoRoute(
+        path: RouteName.search, builder: (context, state) => SearchScreen()),
   ],
 );

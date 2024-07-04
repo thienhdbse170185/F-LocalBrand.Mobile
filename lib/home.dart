@@ -1,11 +1,10 @@
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
-import 'package:f_localbrand/features/cart/bloc/cubit/cart_cubit.dart';
 import 'package:f_localbrand/features/user/bloc/user_cubit.dart';
 import 'package:f_localbrand/screens/cart/cart.dart';
-import 'package:f_localbrand/screens/favourite.dart';
+import 'package:f_localbrand/screens/favourite/favourite.dart';
 import 'package:f_localbrand/screens/home/home.dart';
 import 'package:f_localbrand/screens/profile/profile.dart';
-import 'package:f_localbrand/screens/shop.dart';
+import 'package:f_localbrand/screens/search/search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -19,13 +18,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int selectedIndex = 0;
-  List<Widget> screens = [
-    const HomeItemScreen(),
-    const ShopScreen(),
-    const CartScreen(),
-    const FavouriteScreen(),
-    const ProfileScreen()
-  ];
 
   @override
   void initState() {
@@ -35,7 +27,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
+    List<Widget> screens = [
+      const HomeItemScreen(),
+      const SearchScreen(),
+      const CartScreen(),
+      FavouriteScreen(textTheme: textTheme, colorScheme: colorScheme),
+      const ProfileScreen()
+    ];
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: IndexedStack(
@@ -67,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
             enableFloatingNavBar: true,
             enablePaddingAnimation: false,
             marginR: const EdgeInsets.symmetric(horizontal: 8),
-            paddingR: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+            paddingR: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             borderRadius: 100,
             boxShadow: [
               BoxShadow(

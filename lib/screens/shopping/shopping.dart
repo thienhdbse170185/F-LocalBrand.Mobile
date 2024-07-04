@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ShopScreen extends StatefulWidget {
-  const ShopScreen({super.key});
+class ShoppingScreen extends StatefulWidget {
+  const ShoppingScreen({super.key});
 
   @override
-  State<ShopScreen> createState() => _ShopScreenState();
+  State<ShoppingScreen> createState() => _ShoppingScreenState();
 }
 
-class _ShopScreenState extends State<ShopScreen> {
+class _ShoppingScreenState extends State<ShoppingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

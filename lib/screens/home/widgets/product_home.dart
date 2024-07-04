@@ -1,4 +1,5 @@
 import 'package:f_localbrand/config/router.dart';
+import 'package:f_localbrand/screens/widgets/snackbar/snackbar_util.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:f_localbrand/features/product/dto/product_home_dto.dart';
@@ -21,24 +22,9 @@ class _ProductHomeState extends State<ProductHome> {
       _isFavorite = !_isFavorite;
     });
     if (_isFavorite) {
-      ScaffoldMessenger.of(context).removeCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          content: Text(
-            'Added to favorites',
-            style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
-          ),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      SnackbarUtil.showSnackbarSuccess(context, 'Added to your favourites');
     } else {
-      ScaffoldMessenger.of(context).removeCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: Theme.of(context).colorScheme.error,
-        content: Text('Removed from favorites'),
-        duration: Duration(seconds: 2),
-      ));
+      SnackbarUtil.showSnackbarError(context, 'Removed from your favourites');
     }
   }
 

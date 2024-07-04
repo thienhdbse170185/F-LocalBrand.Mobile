@@ -1,6 +1,7 @@
 import 'package:f_localbrand/features/product/bloc/product_cubit.dart';
 import 'package:f_localbrand/features/product/dto/product_home_dto.dart';
 import 'package:f_localbrand/screens/home/widgets/product_home.dart';
+import 'package:f_localbrand/screens/widgets/list/category_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -43,40 +44,12 @@ class _HotProductState extends State<HotProduct> {
     return Column(
       children: [
         Center(
-          child: SizedBox(
-            height: 40,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                final category = categories[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: OutlinedButton(
-                    onPressed: () => _onCategoryPressed(category),
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                        color: _selectedCategory == category
-                            ? colorScheme.primary
-                            : Colors.grey,
-                      ),
-                      backgroundColor: _selectedCategory == category
-                          ? colorScheme.primary.withOpacity(0.1)
-                          : Colors.transparent,
-                    ),
-                    child: Text(
-                      category,
-                      style: textTheme.displayMedium?.copyWith(
-                        color: _selectedCategory == category
-                            ? colorScheme.primary
-                            : Colors.black,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
+          child: CategoryList(
+              colorScheme: colorScheme,
+              textTheme: textTheme,
+              categories: categories,
+              selectedCategory: _selectedCategory,
+              onCategoryPressed: _onCategoryPressed),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 30.0),
