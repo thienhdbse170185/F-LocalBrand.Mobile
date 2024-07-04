@@ -3,6 +3,7 @@ import 'package:f_localbrand/config/themes/custom_themes/index.dart';
 import 'package:f_localbrand/features/user/bloc/user_cubit.dart';
 import 'package:f_localbrand/screens/home/hot_product.dart';
 import 'package:f_localbrand/screens/home/widgets/category_image.dart';
+import 'package:f_localbrand/screens/widgets/inputs/expanded_rounded_icon_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -123,32 +124,10 @@ class _HomeItemScreenState extends State<HomeItemScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: SizedBox(
-                      width: 200,
-                      child: TextFormField(
-                        autocorrect: false,
-                        autofocus: false,
-                        keyboardType: TextInputType.text,
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          hintText: "Search",
-                          border: const OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(100)),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(100)),
-                          ),
-                          prefixIcon: IconInput(
-                            icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
-                          ),
-                        ),
-                        style: textTheme.bodyLarge,
-                      ),
-                    ),
-                  ),
+                  ExpandedRoundedIconInput(
+                      textController: _searchController,
+                      hintText: "Search",
+                      icon: FontAwesomeIcons.magnifyingGlass),
                   const SizedBox(width: 20),
                   GestureDetector(
                     onTap: () {},
