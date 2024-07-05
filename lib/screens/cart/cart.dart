@@ -1,4 +1,4 @@
-import 'package:f_localbrand/features/cart/bloc/cubit/cart_cubit.dart';
+import 'package:f_localbrand/features/cart/cubit/cart_cubit.dart';
 import 'package:f_localbrand/screens/cart/components/cart_body.dart';
 import 'package:f_localbrand/screens/cart/components/cart_empty.dart';
 import 'package:f_localbrand/screens/cart/components/cart_summary.dart';

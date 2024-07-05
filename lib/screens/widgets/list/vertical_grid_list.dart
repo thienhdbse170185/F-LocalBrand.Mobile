@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class VerticalGridList extends StatefulWidget {
   const VerticalGridList(
@@ -19,8 +16,8 @@ class _VerticalGridListState extends State<VerticalGridList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: widget.padding ?? EdgeInsets.only(top: 20, bottom: 170),
-      height: widget.height ?? 700, // if height is null, set it to 700
+      padding: widget.padding ?? EdgeInsets.only(top: 20, bottom: 150),
+      height: widget.height ?? 650, // if height is null, set it to 700
       child: CustomScrollView(
         slivers: [
           SliverGrid(

@@ -1,16 +1,17 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:f_localbrand/config/router.dart';
 import 'package:f_localbrand/config/themes/custom_themes/index.dart';
+import 'package:f_localbrand/features/category/cubit/category_cubit.dart';
+import 'package:f_localbrand/features/product/bloc/product_cubit.dart';
 import 'package:f_localbrand/features/user/bloc/user_cubit.dart';
 import 'package:f_localbrand/screens/home/hot_product.dart';
 import 'package:f_localbrand/screens/home/widgets/category_image.dart';
+import 'package:f_localbrand/screens/home/widgets/hot_product_item.dart';
 import 'package:f_localbrand/screens/widgets/inputs/expanded_rounded_icon_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-
-import '../widgets/icons/icon_input.dart';
 
 class HomeItemScreen extends StatefulWidget {
   const HomeItemScreen({super.key});
@@ -20,6 +21,14 @@ class HomeItemScreen extends StatefulWidget {
 }
 
 class _HomeItemScreenState extends State<HomeItemScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // await context.read<ProductCubit>().fetchProductsNewest();
+    // await context.read<ProductCubit>().fetchProductsBestseller();
+    // context.read<CategoryCubit>().getCategories();
+  }
+
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
@@ -52,10 +61,10 @@ class _HomeItemScreenState extends State<HomeItemScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Good morning,',
+                              'Good evening,',
                               style: FTextTheme.light.headlineSmall,
                             ),
-                            Text('Thiên'),
+                            Text(state.user.fullName),
                           ],
                         ),
                       ),
@@ -128,7 +137,7 @@ class _HomeItemScreenState extends State<HomeItemScreen> {
                 children: [
                   ExpandedRoundedIconInput(
                       textController: _searchController,
-                      hintText: "Search",
+                      hintText: "Search shirt, pant, sneaker...",
                       icon: FontAwesomeIcons.magnifyingGlass),
                   const SizedBox(width: 20),
                   GestureDetector(
@@ -227,7 +236,7 @@ class _HomeItemScreenState extends State<HomeItemScreen> {
                                   children: [
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
                                         CategoryImage(
                                           image: AssetImage(

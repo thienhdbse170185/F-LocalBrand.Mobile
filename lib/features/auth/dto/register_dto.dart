@@ -6,7 +6,7 @@ class RegisterDto {
   final String email;
   final String phone;
   final String address;
-  final String image;
+  final String? image;
 
   const RegisterDto({
     required this.username,
@@ -16,7 +16,7 @@ class RegisterDto {
     required this.email,
     required this.phone,
     required this.address,
-    required this.image,
+    this.image,
   });
 
   Map<String, dynamic> toJson() => {
@@ -27,6 +27,6 @@ class RegisterDto {
         'Email': email,
         'Phone': phone,
         'Address': address,
-        'ImageURL': image,
+        'Image': image,
       };
 }
