@@ -56,7 +56,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                     onPressed: () {
                       context.go(RouteName.login);
                     },
-                    child: Text('CONTINUE WITH EMAIL',
+                    child: Text('CONTINUE WITH USERNAME',
                         style: FTextTheme.light.headlineSmall
                             ?.copyWith(color: Colors.white, fontSize: 14)),
                   ),

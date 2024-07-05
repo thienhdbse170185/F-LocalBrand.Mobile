@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:f_localbrand/config/router.dart';
 import 'package:f_localbrand/config/themes/custom_themes/index.dart';
 import 'package:f_localbrand/features/user/bloc/user_cubit.dart';
 import 'package:f_localbrand/screens/home/hot_product.dart';
@@ -7,6 +8,7 @@ import 'package:f_localbrand/screens/widgets/inputs/expanded_rounded_icon_input.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 import '../widgets/icons/icon_input.dart';
 
@@ -130,7 +132,9 @@ class _HomeItemScreenState extends State<HomeItemScreen> {
                       icon: FontAwesomeIcons.magnifyingGlass),
                   const SizedBox(width: 20),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      context.push(RouteName.filter);
+                    },
                     child: Container(
                       height: 64,
                       width: 64,
@@ -226,19 +230,34 @@ class _HomeItemScreenState extends State<HomeItemScreen> {
                                           MainAxisAlignment.center,
                                       children: [
                                         CategoryImage(
-                                            image: AssetImage(
-                                                "assets/icon/shirt.png"),
-                                            title: 'Shirt'),
+                                          image: AssetImage(
+                                              "assets/icon/shirt.png"),
+                                          title: 'Shirt',
+                                          onPressed: () {
+                                            context.push(RouteName.category,
+                                                extra: 'Shirts');
+                                          },
+                                        ),
                                         const SizedBox(width: 30),
                                         CategoryImage(
-                                            image: AssetImage(
-                                                "assets/icon/pant.png"),
-                                            title: 'Pant'),
+                                          image: AssetImage(
+                                              "assets/icon/pant.png"),
+                                          title: 'Pant',
+                                          onPressed: () {
+                                            context.push(RouteName.category,
+                                                extra: 'Pants');
+                                          },
+                                        ),
                                         const SizedBox(width: 30),
                                         CategoryImage(
-                                            image: AssetImage(
-                                                "assets/icon/sneakers.png"),
-                                            title: 'Sneaker'),
+                                          image: AssetImage(
+                                              "assets/icon/sneakers.png"),
+                                          title: 'Sneaker',
+                                          onPressed: () {
+                                            context.push(RouteName.category,
+                                                extra: 'Sneakers');
+                                          },
+                                        ),
                                       ],
                                     ),
                                   ],

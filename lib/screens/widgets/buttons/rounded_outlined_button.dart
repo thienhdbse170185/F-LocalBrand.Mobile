@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class RoundedElevatedButton extends StatelessWidget {
-  const RoundedElevatedButton(
+class RoundedOutlinedButton extends StatelessWidget {
+  const RoundedOutlinedButton(
       {super.key, required this.title, required this.onPressed, this.padding});
 
   final String title;
@@ -11,23 +11,22 @@ class RoundedElevatedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return ElevatedButton(
+    return OutlinedButton(
         onPressed: () {
           onPressed();
         },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(context).primaryColor,
+        style: OutlinedButton.styleFrom(
+          backgroundColor: Colors.transparent,
           padding:
               padding ?? EdgeInsets.symmetric(horizontal: 64, vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(100),
           ),
-          elevation: 4,
-          shadowColor: Colors.grey,
         ),
         child: Text(
           title,
-          style: textTheme.displaySmall?.copyWith(color: Colors.white),
+          style: textTheme.displaySmall
+              ?.copyWith(color: Theme.of(context).primaryColor),
         ));
   }
 }

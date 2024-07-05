@@ -3,10 +3,15 @@ import 'package:flutter/material.dart';
 import '../../../config/themes/custom_themes/text_theme.dart';
 
 class CategoryImage extends StatelessWidget {
-  const CategoryImage({super.key, required this.image, required this.title});
+  const CategoryImage(
+      {super.key,
+      required this.image,
+      required this.title,
+      required this.onPressed});
 
   final ImageProvider<Object> image;
   final String title;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +24,9 @@ class CategoryImage extends StatelessWidget {
           decoration: BoxDecoration(
               shape: BoxShape.circle, color: colorScheme.inversePrimary),
           child: GestureDetector(
-            onTap: () {},
+            onTap: () {
+              onPressed();
+            },
             child: Image(
               image: image,
             ),
