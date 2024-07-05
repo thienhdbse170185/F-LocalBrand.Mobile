@@ -20,7 +20,7 @@ class SnackbarUtil {
         duration: Duration(seconds: 5),
         showCloseIcon: true,
         behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.only(bottom: 100, left: 16, right: 16),
+        margin: EdgeInsets.only(left: 16, right: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );
@@ -39,7 +39,7 @@ class SnackbarUtil {
           duration: Duration(seconds: 5),
           showCloseIcon: true,
           behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.only(bottom: 100, left: 16, right: 16),
+          margin: EdgeInsets.only(left: 16, right: 16),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
     );

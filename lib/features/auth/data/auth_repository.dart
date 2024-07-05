@@ -6,7 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../result_type.dart';
 import '../dto/login_dto.dart';
-import '../dto/register_dto..dart';
+import '../dto/register_dto.dart';
 import 'auth_exception.dart';
 import 'auth_local_data_source.dart';
 
@@ -40,14 +40,9 @@ class AuthRepository {
     return Success(null);
   }
 
-  Future<Result<void>> register(
-      {required String username,
-      required String password,
-      required String confirm}) async {
+  Future<Result<void>> register(RegisterDto user) async {
     try {
-      await authApiClient.register(
-        RegisterDto(username: username, password: password, confirm: confirm),
-      );
+      await authApiClient.register(user);
     } catch (e) {
       log('$e');
       return Failure('$e');

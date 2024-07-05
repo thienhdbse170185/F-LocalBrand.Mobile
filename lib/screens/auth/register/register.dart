@@ -61,13 +61,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return true;
   }
 
+  String? _validateEmail(String? value) {
+    // Regular expression for basic email validation
+    // You can modify this regex as per your specific validation rules
+    final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (value == null || value.isEmpty) {
+      return 'Email is required';
+    } else if (!emailRegExp.hasMatch(value)) {
+      return 'Enter a valid email address';
+    }
+    return null;
+  }
+
   Future<void> _signup() async {
-    /*Comment for implement UI Register UserProfile
     if (_formKey.currentState!.validate()) {
       final String email = _emailController.text.trim();
+      final String username = _usernameController.text.trim();
       final String password = _passwordController.text.trim();
       final String confirm = _confirmController.text.trim();
-      final String username = _usernameController.text.trim();
 
       if (!validateInput(username, email, password, confirm)) {
         return;
@@ -79,6 +90,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
         try {
           _setLoadingFalse();
           _dismissSnackbar();
+          context.push(RouteName.registerUserProfile, extra: {
+            'username': username,
+            'email': email,
+            'password': password,
+            'confirm': confirm
+          });
         } catch (e) {
           print('Error: $e');
           ScaffoldMessenger.of(context).showSnackBar(
@@ -89,8 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           );
         }
       }
-    }*/
-    context.push(RouteName.registerUserProfile);
+    }
   }
 
   void _togglePasswordVisibility() {
@@ -149,211 +165,224 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         leading: CustomBackButton(),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 36),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: SizedBox(
-                height: 130,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(_isLoading ? 'Submitting...' : 'Register',
-                        style: textTheme.titleMedium),
-                    const SizedBox(height: 4),
-                    Text(
-                        _isLoading
-                            ? 'Your account is being created...'
-                            : 'Please enter your details',
-                        style: textTheme.displayMedium),
-                    const SizedBox(height: 32),
-                  ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 36),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: SizedBox(
+                    height: 130,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(_isLoading ? 'Submitting...' : 'Register',
+                            style: textTheme.titleMedium),
+                        const SizedBox(height: 4),
+                        Text(
+                            _isLoading
+                                ? 'Your account is being created...'
+                                : 'Please enter your details',
+                            style: textTheme.displayMedium),
+                        const SizedBox(height: 32),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Form(
-              key: _formKey,
-              autovalidateMode: AutovalidateMode.disabled,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    height: 96,
-                    child: TextFormField(
-                      autocorrect: false,
-                      autofocus: false,
-                      keyboardType: TextInputType.text,
-                      controller: _usernameController,
-                      onChanged: (value) {
-                        setState(() {
-                          _usernameErrorMessage = null;
-                        });
-                      },
-                      decoration: InputDecoration(
-                          hintText: "Username",
-                          errorText: _usernameErrorMessage,
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 20),
-                          border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          prefixIcon: IconInput(
-                            icon: FaIcon(FontAwesomeIcons.solidUser),
-                          )),
-                      style: textTheme.bodyLarge,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 96,
-                    child: TextFormField(
-                      autocorrect: false,
-                      autofocus: false,
-                      keyboardType: TextInputType.emailAddress,
-                      controller: _emailController,
-                      onChanged: (value) {
-                        setState(() {
-                          _emailErrorMessage = null;
-                        });
-                      },
-                      decoration: InputDecoration(
-                          hintText: "Email",
-                          errorText: _emailErrorMessage,
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 20),
-                          border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          prefixIcon: IconInput(
-                            icon: FaIcon(FontAwesomeIcons.solidEnvelope),
-                          )),
-                      style: textTheme.bodyLarge,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 96,
-                    child: TextFormField(
-                      autocorrect: false,
-                      autofocus: false,
-                      controller: _passwordController,
-                      onChanged: (value) {
-                        setState(() {
-                          _passwordErrorMessage = null;
-                        });
-                      },
-                      decoration: InputDecoration(
-                          hintText: 'Password',
-                          errorText: _passwordErrorMessage,
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 20),
-                          border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          prefixIcon: IconInput(
-                            icon: FaIcon(FontAwesomeIcons.lock),
-                          ),
-                          suffixIcon: SuffixIconButton(
-                            onPressed: _togglePasswordVisibility,
-                            icon: FaIcon(
-                              _obscurePassword
-                                  ? FontAwesomeIcons.eye
-                                  : FontAwesomeIcons.eyeSlash,
-                              color: MaterialTheme.lightScheme().outline,
-                            ),
-                          )),
-                      obscureText: _obscurePassword,
-                      style: textTheme.bodyLarge,
-                    ),
-                  ),
-                  SizedBox(
-                      height: 86,
-                      child: TextFormField(
-                        autocorrect: false,
-                        autofocus: false,
-                        controller: _confirmController,
-                        onChanged: (value) {
-                          setState(() {
-                            _confirmErrorMessage = null;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          hintText: 'Confirm Password',
-                          errorText: _confirmErrorMessage,
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 19),
-                          border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                          ),
-                          prefixIcon: IconInput(
-                            icon: FaIcon(FontAwesomeIcons.lock),
-                          ),
-                          suffixIcon: SuffixIconButton(
-                            onPressed: _toggleConfirmVisibility,
-                            icon: FaIcon(
-                              _obscureConfirm
-                                  ? FontAwesomeIcons.eye
-                                  : FontAwesomeIcons.eyeSlash,
-                              color: MaterialTheme.lightScheme().outline,
-                            ),
-                          ),
+                Form(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 96,
+                        child: TextFormField(
+                          autocorrect: false,
+                          autofocus: false,
+                          keyboardType: TextInputType.text,
+                          controller: _usernameController,
+                          onChanged: (value) {
+                            setState(() {
+                              _usernameErrorMessage = null;
+                            });
+                          },
+                          decoration: InputDecoration(
+                              hintText: "Username",
+                              errorText: _usernameErrorMessage,
+                              contentPadding:
+                                  const EdgeInsets.symmetric(vertical: 20),
+                              border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              prefixIcon: IconInput(
+                                icon: FaIcon(FontAwesomeIcons.solidUser),
+                              )),
+                          style: textTheme.bodyLarge,
                         ),
-                        obscureText: _obscureConfirm,
-                        style: textTheme.bodyLarge,
-                      )),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 36, top: 10),
-                    child: Text.rich(TextSpan(children: [
-                      TextSpan(
-                          text: 'By clicking the ',
-                          style: textTheme.bodyMedium),
-                      TextSpan(
-                          text: 'Register',
-                          style: textTheme.bodyMedium
-                              ?.copyWith(color: colorScheme.error)),
-                      TextSpan(
-                          text: ' button, you agree \nto the public offer',
-                          style: textTheme.bodyMedium)
-                    ])),
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 55,
-                    child: ElevatedButton(
-                      onPressed: _isLoading ? null : _signup,
-                      style: elevatedButtonTheme.style,
-                      child: _isLoading
-                          ? const CircularProgressIndicator()
-                          : Text(
-                              'Register',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineMedium
-                                  ?.copyWith(color: Colors.white),
+                      ),
+                      SizedBox(
+                        height: 96,
+                        child: TextFormField(
+                          autocorrect: false,
+                          autofocus: false,
+                          keyboardType: TextInputType.emailAddress,
+                          controller: _emailController,
+                          onChanged: (value) {
+                            setState(() {
+                              _emailErrorMessage = null;
+                            });
+                          },
+                          validator: _validateEmail,
+                          decoration: InputDecoration(
+                              hintText: "Email",
+                              errorText: _emailErrorMessage,
+                              contentPadding:
+                                  const EdgeInsets.symmetric(vertical: 20),
+                              border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              prefixIcon: IconInput(
+                                icon: FaIcon(FontAwesomeIcons.solidEnvelope),
+                              )),
+                          style: textTheme.bodyLarge,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 96,
+                        child: TextFormField(
+                          autocorrect: false,
+                          autofocus: false,
+                          controller: _passwordController,
+                          onChanged: (value) {
+                            setState(() {
+                              _passwordErrorMessage = null;
+                            });
+                          },
+                          decoration: InputDecoration(
+                              hintText: 'Password',
+                              errorText: _passwordErrorMessage,
+                              contentPadding:
+                                  const EdgeInsets.symmetric(vertical: 20),
+                              border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              prefixIcon: IconInput(
+                                icon: FaIcon(FontAwesomeIcons.lock),
+                              ),
+                              suffixIcon: SuffixIconButton(
+                                onPressed: _togglePasswordVisibility,
+                                icon: FaIcon(
+                                  _obscurePassword
+                                      ? FontAwesomeIcons.eye
+                                      : FontAwesomeIcons.eyeSlash,
+                                  color: MaterialTheme.lightScheme().outline,
+                                ),
+                              )),
+                          obscureText: _obscurePassword,
+                          style: textTheme.bodyLarge,
+                        ),
+                      ),
+                      SizedBox(
+                          height: 86,
+                          child: TextFormField(
+                            autocorrect: false,
+                            autofocus: false,
+                            controller: _confirmController,
+                            onChanged: (value) {
+                              setState(() {
+                                _confirmErrorMessage = null;
+                              });
+                            },
+                            decoration: InputDecoration(
+                              hintText: 'Confirm Password',
+                              errorText: _confirmErrorMessage,
+                              contentPadding:
+                                  const EdgeInsets.symmetric(vertical: 19),
+                              border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                              ),
+                              prefixIcon: IconInput(
+                                icon: FaIcon(FontAwesomeIcons.lock),
+                              ),
+                              suffixIcon: SuffixIconButton(
+                                onPressed: _toggleConfirmVisibility,
+                                icon: FaIcon(
+                                  _obscureConfirm
+                                      ? FontAwesomeIcons.eye
+                                      : FontAwesomeIcons.eyeSlash,
+                                  color: MaterialTheme.lightScheme().outline,
+                                ),
+                              ),
                             ),
-                    ),
+                            obscureText: _obscureConfirm,
+                            style: textTheme.bodyLarge,
+                          )),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 36, top: 10),
+                        child: Text.rich(TextSpan(children: [
+                          TextSpan(
+                              text: 'By clicking the ',
+                              style: textTheme.bodyMedium),
+                          TextSpan(
+                              text: 'Register',
+                              style: textTheme.bodyMedium
+                                  ?.copyWith(color: colorScheme.error)),
+                          TextSpan(
+                              text: ' button, you agree \nto the public offer',
+                              style: textTheme.bodyMedium)
+                        ])),
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 55,
+                        child: ElevatedButton(
+                          onPressed: _isLoading ? null : _signup,
+                          style: elevatedButtonTheme.style,
+                          child: _isLoading
+                              ? const CircularProgressIndicator()
+                              : Text(
+                                  'Register',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium
+                                      ?.copyWith(color: Colors.white),
+                                ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

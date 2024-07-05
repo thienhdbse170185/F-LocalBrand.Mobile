@@ -27,12 +27,9 @@ class AuthLoginPrefilled extends AuthEvent {
 }
 
 class AuthRegisterStarted extends AuthEvent {
-  AuthRegisterStarted(
-      {required this.username, required this.password, required this.confirm});
+  AuthRegisterStarted(this.user);
 
-  final String username;
-  final String password;
-  final String confirm;
+  final RegisterDto user;
 }
 
 class AuthAuthenticateStarted extends AuthEvent {}

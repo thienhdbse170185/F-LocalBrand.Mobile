@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:f_localbrand/features/auth/dto/login_dto.dart';
 
 import '../dto/login_success.dart';
-import '../dto/register_dto..dart';
+import '../dto/register_dto.dart';
 
 class AuthApiClient {
   AuthApiClient(this.dio);
@@ -28,7 +28,7 @@ class AuthApiClient {
   Future<void> register(RegisterDto registerDto) async {
     try {
       await dio.post(
-        '/auth/register',
+        '/auth/customer/register-customer',
         data: registerDto.toJson(),
       );
     } on DioException catch (e) {

@@ -70,7 +70,21 @@ final router = GoRouter(
     ),
     GoRoute(
       path: RouteName.registerUserProfile,
-      builder: (context, state) => RegisterUserProfile(),
+      builder: (context, state) {
+        final Map<String, String> extraData =
+            state.extra as Map<String, String>;
+        final String username = extraData['username'] ?? '';
+        final String email = extraData['email'] ?? '';
+        final String password = extraData['password'] ?? '';
+        final String confirm = extraData['confirm'] ?? '';
+
+        return RegisterUserProfile(
+          username: username,
+          email: email,
+          password: password,
+          confirm: confirm,
+        );
+      },
     ),
     GoRoute(
       path: RouteName.getStarted,

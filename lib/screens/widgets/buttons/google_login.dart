@@ -80,7 +80,7 @@ class _GoogleLoginButtonState extends State<GoogleLoginButton> {
                         height: 32.0,
                       ),
                     ),
-                    const SizedBox(width: 20),
+                    const SizedBox(width: 10),
                     Text(
                       'CONTINUE WITH GOOGLE',
                       style: textTheme.headlineSmall?.copyWith(fontSize: 14),
