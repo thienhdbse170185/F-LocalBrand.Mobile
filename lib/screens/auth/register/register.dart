@@ -1,3 +1,4 @@
+import 'package:f_localbrand/screens/widgets/buttons/back_button.dart';
 import 'package:f_localbrand/screens/widgets/buttons/suffix_icon_button.dart';
 import 'package:f_localbrand/screens/widgets/icons/icon_input.dart';
 import 'package:flutter/material.dart';
@@ -36,9 +37,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool validateInput(
       String? username, String? email, String? password, String? confirm) {
-    if (email == null || email.isEmpty) {
+    if (username == null || username.isEmpty) {
       setState(() {
-        _emailErrorMessage = '(!) Email cannot be empty.';
+        _usernameErrorMessage = '(!) Email cannot be empty.';
+      });
+      return false;
+    } else if (email == null || email.isEmpty) {
+      setState(() {
+        _emailErrorMessage = '(!) Username cannot be empty.';
       });
       return false;
     } else if (password == null || password.isEmpty) {
@@ -51,15 +57,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _confirmErrorMessage = '(!) Confirm cannot be empty.';
       });
       return false;
-    } else if (username == null || username.isEmpty) {
-      setState(() {
-        _usernameErrorMessage = '(!) Username cannot be empty.';
-      });
     }
     return true;
   }
 
   Future<void> _signup() async {
+    /*Comment for implement UI Register UserProfile
     if (_formKey.currentState!.validate()) {
       final String email = _emailController.text.trim();
       final String password = _passwordController.text.trim();
@@ -74,45 +77,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             .showSnackBar(const SnackBar(content: Text('Processing...')));
 
         try {
-          /* Uncomment when API is ready
-          final response = await http.post(
-            Uri.parse('${dotenv.env['API_URL']}/Auth/Signup'),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode({'email': email, 'password': password}),
-          );
-
-          _dismissSnackbar();
-          _setLoadingFalse();
-          if (response.statusCode == 200) {
-            // Login successful, handle the response data
-            final Map<String, dynamic> data = jsonDecode(response.body);
-            // You can save the user token or other relevant data here
-            print('Signup successful: $data');
-            // Production use this
-            // Dev env pop keep data not remove like replace
-            // await Navigator.pushReplacementNamed(context, '/');
-            await Navigator.pushNamed(context, '/');
-          } else {
-            // Login failed, handle the error
-            print('Signup failed: ${response.statusCode} - ${response.body}');
-            final Map<String, dynamic> data = jsonDecode(response.body);
-            print(data['result']['message']);
-            setState(() {
-              _emailErrorMessage = '(!) ${data['result']['message']}.';
-            });
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Signup failed: ${data['result']['message']}'),
-                duration: const Duration(seconds: 3),
-                backgroundColor: Theme.of(context).colorScheme.error,
-              ),
-            );
-          } */
-
           _setLoadingFalse();
           _dismissSnackbar();
         } catch (e) {
-          // Handle any exceptions that occurred during the API call
           print('Error: $e');
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -122,7 +89,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           );
         }
       }
-    }
+    }*/
+    context.push(RouteName.registerUserProfile);
   }
 
   void _togglePasswordVisibility() {
@@ -182,24 +150,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        leading: CustomBackButton(),
+      ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 56, right: 36, left: 36),
+        padding: const EdgeInsets.symmetric(horizontal: 36),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            IconButton(
-              onPressed: () {
-                context.go(RouteName.getStarted);
-              },
-              icon: FaIcon(FontAwesomeIcons.arrowLeft),
-              style: IconButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                side: BorderSide(
-                    color: MaterialTheme.lightScheme().outline, width: 1),
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.only(top: 20),
               child: SizedBox(

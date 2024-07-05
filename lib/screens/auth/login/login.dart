@@ -32,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool validateInput(String? email, String? password) {
     if (email == null || email.isEmpty) {
       setState(() {
-        _usernameErrorMessage = '(!) Email cannot be empty.';
+        _usernameErrorMessage = '(!) Username cannot be empty.';
       });
       return false;
     } else if (password == null || password.isEmpty) {

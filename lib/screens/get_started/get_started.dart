@@ -56,7 +56,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                     onPressed: () {
                       context.go(RouteName.login);
                     },
-                    child: Text('CONTINUE WITH EMAIL',
+                    child: Text('CONTINUE WITH USERNAME',
                         style: FTextTheme.light.headlineSmall
                             ?.copyWith(color: Colors.white, fontSize: 14)),
                   ),
@@ -76,7 +76,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
               padding: EdgeInsets.only(top: 36),
               child: GestureDetector(
                 onTap: () {
-                  context.go(RouteName.register);
+                  context.push(RouteName.register);
                 },
                 child: Text('Create an account',
                     style: FTextTheme.light.headlineSmall

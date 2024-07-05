@@ -35,7 +35,7 @@ class _CategoryListState extends State<CategoryList> {
                 (context, index) {
                   final category = widget.categories[index];
                   return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
                     child: OutlinedButton(
                       onPressed: () => widget.onCategoryPressed(category),
                       style: OutlinedButton.styleFrom(
