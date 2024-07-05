@@ -1,3 +1,4 @@
+import 'package:f_localbrand/screens/auth/register/register_user_profile.dart';
 import 'package:f_localbrand/screens/checkout/checkout.dart';
 import 'package:f_localbrand/screens/get_started/get_started.dart';
 import 'package:f_localbrand/screens/product/product_detail.dart';
@@ -23,10 +24,12 @@ class RouteName {
   static const String productDetail = '/product-detail';
   static const String checkout = '/checkout';
   static const String search = '/search';
+  static const String registerUserProfile = '/register-user-profile';
 
   static const publicRoutes = [
     login,
     register,
+    registerUserProfile,
     getStarted,
     forgotPw,
     verifyOtp,
@@ -60,6 +63,10 @@ final router = GoRouter(
     GoRoute(
       path: RouteName.register,
       builder: (context, state) => RegisterScreen(),
+    ),
+    GoRoute(
+      path: RouteName.registerUserProfile,
+      builder: (context, state) => RegisterUserProfile(),
     ),
     GoRoute(
       path: RouteName.getStarted,

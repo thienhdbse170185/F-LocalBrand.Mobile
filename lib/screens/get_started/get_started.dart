@@ -76,7 +76,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
               padding: EdgeInsets.only(top: 36),
               child: GestureDetector(
                 onTap: () {
-                  context.go(RouteName.register);
+                  context.push(RouteName.register);
                 },
                 child: Text('Create an account',
                     style: FTextTheme.light.headlineSmall
