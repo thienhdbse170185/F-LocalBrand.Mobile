@@ -1,4 +1,5 @@
 import 'package:f_localbrand/features/auth/data/auth_repository.dart';
+import 'package:f_localbrand/features/auth/dto/register_dto.dart';
 import 'package:f_localbrand/features/result_type.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -51,10 +52,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _onRegisterStarted(
       AuthRegisterStarted event, Emitter<AuthState> emit) async {
     emit(AuthRegisterInProgress());
-    final result = await authRepository.register(
-        username: event.username,
-        password: event.password,
-        confirm: event.confirm);
+    final result = await authRepository.register(event.user);
     return (switch (result) {
       Success() => emit(AuthRegisterSuccess()),
       Failure() => emit(AuthRegisterFailure(result.message)),
