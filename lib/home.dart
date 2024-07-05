@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
             enableFloatingNavBar: true,
             enablePaddingAnimation: false,
             marginR: const EdgeInsets.symmetric(horizontal: 8),
-            paddingR: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            paddingR: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
             borderRadius: 100,
             boxShadow: [
               BoxShadow(

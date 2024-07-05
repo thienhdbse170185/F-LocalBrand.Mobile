@@ -44,7 +44,7 @@ class _SearchScreenState extends State<SearchScreen> {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text('Search', style: textTheme.headlineSmall),
         centerTitle: true,
@@ -125,7 +125,7 @@ class _SearchScreenState extends State<SearchScreen> {
             )
           ] else ...[
             Container(
-              height: 700,
+              height: 650,
               padding: EdgeInsets.only(top: 20, left: 15, right: 15),
               child: Column(
                 children: [
@@ -140,7 +140,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               style: textTheme.headlineSmall,
                             ),
                             Text(
-                              '6,245 founds',
+                              '8 founds',
                               style: textTheme.headlineSmall
                                   ?.copyWith(fontSize: 13),
                             )

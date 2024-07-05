@@ -1,5 +1,11 @@
 import 'dart:convert';
 
+import 'package:f_localbrand/features/campaign/cubit/campaign_cubit.dart';
+import 'package:f_localbrand/features/campaign/data/campaign_api_client.dart';
+import 'package:f_localbrand/features/campaign/data/campaign_repository.dart';
+import 'package:f_localbrand/features/category/cubit/category_cubit.dart';
+import 'package:f_localbrand/features/category/data/category_api_client.dart';
+import 'package:f_localbrand/features/category/data/category_repository.dart';
 import 'package:f_localbrand/service/notification_service.dart';
 import 'package:f_localbrand/config/http_client.dart';
 import 'package:f_localbrand/config/router.dart';
@@ -7,7 +13,7 @@ import 'package:f_localbrand/features/auth/bloc/auth_bloc.dart';
 import 'package:f_localbrand/features/auth/data/auth_api_client.dart';
 import 'package:f_localbrand/features/auth/data/auth_local_data_source.dart';
 import 'package:f_localbrand/features/auth/data/auth_repository.dart';
-import 'package:f_localbrand/features/cart/bloc/cubit/cart_cubit.dart';
+import 'package:f_localbrand/features/cart/cubit/cart_cubit.dart';
 import 'package:f_localbrand/features/cart/data/cart_api_client.dart';
 import 'package:f_localbrand/features/cart/data/cart_repository.dart';
 import 'package:f_localbrand/features/product/bloc/product_cubit.dart';
@@ -65,11 +71,8 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // initialize firebase messaging
   await PushNotifications.init();
 
-  // initialize local notifications
-  // dont use local notifications for web platform
   if (!kIsWeb) {
     await PushNotifications.localNotiInit();
   }
@@ -144,7 +147,13 @@ class MyApp extends StatelessWidget {
                 ProductRepository(productApiClient: ProductApiClient(dio))),
         RepositoryProvider(
             create: (context) =>
-                CartRepository(cartApiClient: CartApiClient(dio)))
+                CartRepository(cartApiClient: CartApiClient(dio))),
+        RepositoryProvider(
+            create: (context) =>
+                CategoryRepository(categoryApiClient: CategoryApiClient(dio))),
+        RepositoryProvider(
+            create: (context) =>
+                CampaignRepository(campaignApiClient: CampaignApiClient(dio)))
       ],
       child: MultiBlocProvider(
         providers: [
@@ -157,7 +166,13 @@ class MyApp extends StatelessWidget {
                   productRepository: context.read<ProductRepository>())),
           BlocProvider(
               create: (context) =>
-                  CartCubit(cartRepository: context.read<CartRepository>()))
+                  CartCubit(cartRepository: context.read<CartRepository>())),
+          BlocProvider(
+              create: (context) => CategoryCubit(
+                  categoryRepository: context.read<CategoryRepository>())),
+          BlocProvider(
+              create: (context) => CampaignCubit(
+                  campaignRepository: context.read<CampaignRepository>()))
         ],
         child: AppContent(),
       ),

@@ -37,6 +37,8 @@ class _RegisterUserProfileState extends State<RegisterUserProfile> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
 
+  bool _isLoading = false;
+
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -78,10 +80,8 @@ class _RegisterUserProfileState extends State<RegisterUserProfile> {
 
       String imagePath = '';
       if (_imageFile != null) {
-        // Đọc dữ liệu của file ảnh và chuyển thành dạng phù hợp (ví dụ: base64)
         List<int> imageBytes = await _imageFile!.readAsBytes();
         String base64Image = base64Encode(imageBytes);
-        // Gán base64Image vào imagePath
         imagePath = base64Image;
         print(base64Image);
       }
@@ -98,16 +98,9 @@ class _RegisterUserProfileState extends State<RegisterUserProfile> {
       );
 
       try {
-        // Gọi API và xử lý kết quả ở đây
         context.read<AuthBloc>().add(AuthRegisterStarted(user));
-
-        // Chuyển hướng đến màn hình tiếp theo sau khi tạo thành công
-        // Ví dụ:
-        // goRouter.go('/profile');
       } catch (e) {
-        // Xử lý lỗi nếu cần thiết
         print('Error creating user profile: $e');
-        // Hiển thị thông báo lỗi cho người dùng nếu cần thiết
         SnackbarUtil.showSnackbarError(
             context, 'Failed to create user profile');
       }
@@ -122,11 +115,21 @@ class _RegisterUserProfileState extends State<RegisterUserProfile> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthRegisterSuccess) {
+          setState(() {
+            _isLoading = false;
+          });
           SnackbarUtil.showSnackbarSuccess(
               context, 'Register profile success!');
           context.go(RouteName.home);
         } else if (state is AuthRegisterFailure) {
+          setState(() {
+            _isLoading = false;
+          });
           SnackbarUtil.showSnackbarError(context, 'Register profile failed!');
+        } else if (state is AuthRegisterInProgress) {
+          setState(() {
+            _isLoading = true;
+          });
         }
       },
       child: Scaffold(
@@ -288,12 +291,14 @@ class _RegisterUserProfileState extends State<RegisterUserProfile> {
                                   width: double.infinity,
                                   height: 65,
                                   child: ElevatedButton(
-                                    onPressed: _submitForm,
-                                    child: Text(
-                                      'Complete Profile',
-                                      style: textTheme.headlineSmall
-                                          ?.copyWith(color: Colors.white),
-                                    ),
+                                    onPressed: _isLoading ? null : _submitForm,
+                                    child: _isLoading
+                                        ? CircularProgressIndicator()
+                                        : Text(
+                                            'Complete Profile',
+                                            style: textTheme.headlineSmall
+                                                ?.copyWith(color: Colors.white),
+                                          ),
                                   ),
                                 )
                               ],

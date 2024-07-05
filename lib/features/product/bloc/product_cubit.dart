@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:f_localbrand/features/product/data/product_repository.dart';
+import 'package:f_localbrand/features/product/dto/product_dto.dart';
 
 part 'product_state.dart';
 
@@ -17,6 +18,26 @@ class ProductCubit extends Cubit<ProductState> {
       emit(ProductLoaded(products));
     } catch (e) {
       emit(const ProductError());
+    }
+  }
+
+  Future<void> fetchProductsNewest() async {
+    emit(ProductLoading());
+    try {
+      final products = await productRepository.getProductsNewest();
+      emit(ProductNewestLoaded(products));
+    } catch (e) {
+      emit(const ProductNewestError());
+    }
+  }
+
+  Future<void> fetchProductsBestseller() async {
+    emit(ProductLoading());
+    try {
+      final products = await productRepository.getProductsBestseller();
+      emit(ProductNewestLoaded(products));
+    } catch (e) {
+      emit(const ProductNewestError());
     }
   }
 }

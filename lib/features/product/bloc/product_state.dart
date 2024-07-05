@@ -30,3 +30,21 @@ class ProductLoaded extends ProductState {
 class ProductError extends ProductState {
   const ProductError() : super(error: true);
 }
+
+class ProductNewestLoaded extends ProductState {
+  const ProductNewestLoaded(this.productsNewest) : super();
+  final List<ProductDto> productsNewest;
+}
+
+class ProductNewestError extends ProductState {
+  const ProductNewestError() : super();
+}
+
+class ProductBestsellerLoaded extends ProductState {
+  const ProductBestsellerLoaded(this.productsBestseller) : super();
+  final List<ProductDto> productsBestseller;
+}
+
+class ProductBestsellerError extends ProductState {
+  const ProductBestsellerError() : super();
+}

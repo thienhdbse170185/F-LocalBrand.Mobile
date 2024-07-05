@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:f_localbrand/features/auth/dto/login_dto.dart';
 
@@ -27,9 +29,12 @@ class AuthApiClient {
 
   Future<void> register(RegisterDto registerDto) async {
     try {
+      FormData formData = FormData.fromMap(registerDto.toJson());
+
       await dio.post(
         '/auth/customer/register-customer',
-        data: registerDto.toJson(),
+        data: formData,
+        options: Options(contentType: 'multipart/form-data'),
       );
     } on DioException catch (e) {
       if (e.response != null) {
