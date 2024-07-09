@@ -1,3 +1,9 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
+
 class RegisterDto {
   final String username;
   final String fullName;
@@ -6,7 +12,7 @@ class RegisterDto {
   final String email;
   final String phone;
   final String address;
-  final String? image;
+  final XFile? image;
 
   const RegisterDto({
     required this.username,
@@ -19,7 +25,7 @@ class RegisterDto {
     this.image,
   });
 
-  Map<String, dynamic> toJson() => {
+  Future<Map<String, dynamic>> toJson() async => {
         'UserName': username,
         'FullName': fullName,
         'Password': password,
@@ -27,6 +33,7 @@ class RegisterDto {
         'Email': email,
         'Phone': phone,
         'Address': address,
-        'Image': image,
+        'ImageUrl': await MultipartFile.fromFile(image!.path,
+            filename: image!.name, contentType: MediaType('image', 'jpeg')),
       };
 }
