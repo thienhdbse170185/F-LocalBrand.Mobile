@@ -40,11 +40,26 @@ class _RegisterUserProfileState extends State<RegisterUserProfile> {
   bool _isLoading = false;
 
   Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _imageFile = pickedFile;
-      });
+    try {
+      final pickedFile = await _picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 50,
+        maxHeight: 500,
+        maxWidth: 500,
+      );
+
+      if (pickedFile != null) {
+        if (pickedFile.path.endsWith('.jpeg') ||
+            pickedFile.path.endsWith('.jpg')) {
+          setState(() {
+            _imageFile = XFile(pickedFile.path);
+          });
+        } else {
+          print('Unsupported file type');
+        }
+      }
+    } catch (e) {
+      print(e); // Handle errors
     }
   }
 
@@ -78,14 +93,6 @@ class _RegisterUserProfileState extends State<RegisterUserProfile> {
       final phone = _phoneController.text.trim();
       final address = _addressController.text.trim();
 
-      String imagePath = '';
-      if (_imageFile != null) {
-        List<int> imageBytes = await _imageFile!.readAsBytes();
-        String base64Image = base64Encode(imageBytes);
-        imagePath = base64Image;
-        print(base64Image);
-      }
-
       final user = RegisterDto(
         username: widget.username,
         password: widget.password,
@@ -94,7 +101,7 @@ class _RegisterUserProfileState extends State<RegisterUserProfile> {
         email: widget.email,
         phone: phone,
         address: address,
-        image: imagePath,
+        image: _imageFile,
       );
 
       try {

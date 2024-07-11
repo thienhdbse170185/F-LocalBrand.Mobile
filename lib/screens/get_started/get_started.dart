@@ -54,7 +54,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                   height: 48,
                   child: ElevatedButton(
                     onPressed: () {
-                      context.go(RouteName.login);
+                      context.push(RouteName.login);
                     },
                     child: Text('CONTINUE WITH USERNAME',
                         style: FTextTheme.light.headlineSmall

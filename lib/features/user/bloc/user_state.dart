@@ -1,25 +1,62 @@
 part of 'user_cubit.dart';
 
-sealed class UserState {}
+sealed class UserState extends Equatable {
+  final UserDto? user;
+  const UserState(this.user);
 
-final class UserInitial extends UserState {}
+  @override
+  List<Object?> get props => [user];
+}
 
-class GetUserInfoProgress extends UserState {}
+final class UserInitial extends UserState {
+  UserInitial(super.user);
+
+  @override
+  List<Object?> get props => [user];
+}
+
+class GetUserInfoProgress extends UserState {
+  GetUserInfoProgress(super.user);
+
+  @override
+  List<Object?> get props => [user];
+}
 
 class GetUserInfoSuccess extends UserState {
   final UserDto user;
 
-  GetUserInfoSuccess({required this.user});
+  GetUserInfoSuccess({required this.user}) : super(user);
+
+  @override
+  List<Object?> get props => [user];
 }
 
-class GetUserInfoFailure extends UserState {}
+class GetUserInfoFailure extends UserState {
+  GetUserInfoFailure(super.user);
 
-class GetUserProfileProgress extends UserState {}
+  @override
+  List<Object?> get props => [user];
+}
+
+class GetUserProfileProgress extends UserState {
+  GetUserProfileProgress(super.user);
+
+  @override
+  List<Object?> get props => [user];
+}
 
 class GetUserProfileSuccess extends UserState {
   final UserDto user;
 
-  GetUserProfileSuccess({required this.user});
+  GetUserProfileSuccess({required this.user}) : super(user);
+
+  @override
+  List<Object?> get props => [user];
 }
 
-class GetUserProfileFailure extends UserState {}
+class GetUserProfileFailure extends UserState {
+  GetUserProfileFailure(super.user);
+
+  @override
+  List<Object?> get props => [user];
+}

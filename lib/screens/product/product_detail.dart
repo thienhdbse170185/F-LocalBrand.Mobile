@@ -3,6 +3,7 @@ import 'package:f_localbrand/screens/home/hot_product.dart';
 import 'package:f_localbrand/screens/home/widgets/product_home.dart';
 import 'package:f_localbrand/screens/product/widgets/sub_section.dart';
 import 'package:f_localbrand/screens/widgets/buttons/back_button.dart';
+import 'package:f_localbrand/screens/widgets/list/horizontal_grid_list.dart';
 import 'package:f_localbrand/screens/widgets/snackbar/snackbar_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -240,34 +241,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             ),
                             SubSection(
                               title: 'Recommended products',
-                              widget: Container(
-                                height: 250,
-                                child: CustomScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  slivers: [
-                                    SliverPadding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      sliver: SliverList(
-                                        delegate: SliverChildBuilderDelegate(
-                                          (context, index) {
-                                            final product = _products[index];
-                                            return ConstrainedBox(
-                                              constraints: BoxConstraints(
-                                                minHeight: 300,
-                                                maxHeight: 500,
-                                                minWidth: 0,
-                                                maxWidth: 200,
-                                              ),
-                                              child:
-                                                  ProductHome(product: product),
-                                            );
-                                          },
-                                          childCount: _products.length,
-                                        ),
+                              widget: HorizontalGridList(
+                                delegate: SliverChildBuilderDelegate(
+                                  (context, index) {
+                                    final product = _products[index];
+                                    return ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        minHeight: 300,
+                                        maxHeight: 500,
+                                        minWidth: 0,
+                                        maxWidth: 200,
                                       ),
-                                    ),
-                                  ],
+                                      child: ProductHome(product: product),
+                                    );
+                                  },
+                                  childCount: _products.length,
                                 ),
                               ),
                             ),
