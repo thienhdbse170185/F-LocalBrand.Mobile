@@ -3,11 +3,16 @@ import 'package:f_localbrand/config/router.dart';
 import 'package:f_localbrand/config/themes/custom_themes/index.dart';
 import 'package:f_localbrand/features/category/cubit/category_cubit.dart';
 import 'package:f_localbrand/features/product/bloc/product_cubit.dart';
+import 'package:f_localbrand/features/product/dto/product_home_dto.dart';
 import 'package:f_localbrand/features/user/bloc/user_cubit.dart';
 import 'package:f_localbrand/screens/home/hot_product.dart';
 import 'package:f_localbrand/screens/home/widgets/category_image.dart';
 import 'package:f_localbrand/screens/home/widgets/hot_product_item.dart';
+import 'package:f_localbrand/screens/home/widgets/product_home.dart';
+import 'package:f_localbrand/screens/home/widgets/sub_section.dart';
 import 'package:f_localbrand/screens/widgets/inputs/expanded_rounded_icon_input.dart';
+import 'package:f_localbrand/screens/widgets/list/horizontal_grid_list.dart';
+import 'package:f_localbrand/screens/widgets/texts/text_pressed.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -42,6 +47,13 @@ class _HomeItemScreenState extends State<HomeItemScreen> {
       'assets/images/banner2.png',
       'assets/images/banner3.png',
       'assets/images/banner4.png',
+    ];
+
+    List<ProductHomeDto> _products = [
+      ProductHomeDto(id: 1, name: "Home Shirt", price: 100),
+      ProductHomeDto(id: 2, name: "Home Shirt", price: 100),
+      ProductHomeDto(id: 3, name: "Home Shirt", price: 100),
+      ProductHomeDto(id: 4, name: "Home Shirt", price: 100),
     ];
 
     return Scaffold(
@@ -174,141 +186,134 @@ class _HomeItemScreenState extends State<HomeItemScreen> {
                       physics: ClampingScrollPhysics(),
                       shrinkWrap: true,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'News',
-                                style: textTheme.headlineMedium,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 25),
-                                child: CarouselSlider(
-                                  carouselController: _controller,
-                                  options: CarouselOptions(
-                                    height: 200,
-                                    aspectRatio: 16 / 9,
-                                    viewportFraction: 0.8,
-                                    enlargeCenterPage: true,
-                                    pauseAutoPlayOnManualNavigate: true,
-                                    autoPlay: true,
-                                    onPageChanged: (index, reason) {
-                                      setState(() {
-                                        _current = index;
-                                      });
-                                    },
-                                  ),
-                                  items: imageList.map((imagePath) {
-                                    return Builder(
-                                      builder: (BuildContext context) {
-                                        return Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          margin: EdgeInsets.symmetric(
-                                              horizontal: 5.0),
-                                          child: Image.asset(
-                                            imagePath,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 50),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Category',
-                                style: textTheme.headlineMedium,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 25),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        CategoryImage(
-                                          image: AssetImage(
-                                              "assets/icon/shirt.png"),
-                                          title: 'Shirt',
-                                          onPressed: () {
-                                            context.push(RouteName.category,
-                                                extra: 'Shirts');
-                                          },
-                                        ),
-                                        const SizedBox(width: 30),
-                                        CategoryImage(
-                                          image: AssetImage(
-                                              "assets/icon/pant.png"),
-                                          title: 'Pant',
-                                          onPressed: () {
-                                            context.push(RouteName.category,
-                                                extra: 'Pants');
-                                          },
-                                        ),
-                                        const SizedBox(width: 30),
-                                        CategoryImage(
-                                          image: AssetImage(
-                                              "assets/icon/sneakers.png"),
-                                          title: 'Sneaker',
-                                          onPressed: () {
-                                            context.push(RouteName.category,
-                                                extra: 'Sneakers');
-                                          },
-                                        ),
-                                      ],
+                        SubSectionHome(
+                            paddingTop: 20,
+                            hasAllText: true,
+                            title: 'Best-seller',
+                            body: HorizontalGridList(
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) {
+                                  final product = _products[index];
+                                  return ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      minHeight: 300,
+                                      maxHeight: 500,
+                                      minWidth: 0,
+                                      maxWidth: 200,
                                     ),
-                                  ],
-                                ),
+                                    child: ProductHome(product: product),
+                                  );
+                                },
+                                childCount: _products.length,
                               ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 50),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Shopping',
-                                    style: textTheme.headlineMedium,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      // Xử lý khi nhấn vào nút "All"
-                                    },
-                                    child: Text(
-                                      'All',
-                                      style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontSize: 12,
-                                        decoration: TextDecoration.underline,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                            ),
+                            textTheme: textTheme),
+                        SubSectionHome(
+                          title: 'News from F-LocalBrand',
+                          body: CarouselSlider(
+                            carouselController: _controller,
+                            options: CarouselOptions(
+                              height: 200,
+                              aspectRatio: 16 / 9,
+                              viewportFraction: 0.8,
+                              enlargeCenterPage: true,
+                              pauseAutoPlayOnManualNavigate: true,
+                              autoPlay: true,
+                              onPageChanged: (index, reason) {
+                                setState(() {
+                                  _current = index;
+                                });
+                              },
+                            ),
+                            items: imageList.map((imagePath) {
+                              return Builder(
+                                builder: (BuildContext context) {
+                                  return Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 5.0),
+                                    child: Image.asset(
+                                      imagePath,
+                                      fit: BoxFit.cover,
                                     ),
-                                  ),
-                                ],
+                                  );
+                                },
+                              );
+                            }).toList(),
+                          ),
+                          textTheme: textTheme,
+                        ),
+                        SubSectionHome(
+                            hasAllText: true,
+                            title: 'Newest',
+                            body: HorizontalGridList(
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) {
+                                  final product = _products[index];
+                                  return ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      minHeight: 300,
+                                      maxHeight: 500,
+                                      minWidth: 0,
+                                      maxWidth: 200,
+                                    ),
+                                    child: ProductHome(product: product),
+                                  );
+                                },
+                                childCount: _products.length,
                               ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 20),
-                                child: HotProduct(),
-                              )
+                            ),
+                            textTheme: textTheme),
+                        SubSectionHome(
+                          title: 'Category',
+                          body: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              CategoryImage(
+                                image: AssetImage("assets/icon/shirt.png"),
+                                title: 'Shirt',
+                                onPressed: () {
+                                  context.push(RouteName.category,
+                                      extra: 'Shirts');
+                                },
+                              ),
+                              const SizedBox(width: 30),
+                              CategoryImage(
+                                image: AssetImage("assets/icon/pant.png"),
+                                title: 'Pant',
+                                onPressed: () {
+                                  context.push(RouteName.category,
+                                      extra: 'Pants');
+                                },
+                              ),
+                              const SizedBox(width: 30),
+                              CategoryImage(
+                                image: AssetImage("assets/icon/sneakers.png"),
+                                title: 'Sneaker',
+                                onPressed: () {
+                                  context.push(RouteName.category,
+                                      extra: 'Sneakers');
+                                },
+                              ),
+                              const SizedBox(width: 30),
+                              CategoryImage(
+                                image: AssetImage("assets/icon/sneakers.png"),
+                                title: 'Sneaker',
+                                onPressed: () {
+                                  context.push(RouteName.category,
+                                      extra: 'Sneakers');
+                                },
+                              ),
                             ],
                           ),
+                          textTheme: textTheme,
+                          hasAllText: true,
+                        ),
+                        SubSectionHome(
+                          title: 'Shopping',
+                          body: HotProduct(),
+                          textTheme: textTheme,
+                          hasAllText: true,
                         )
                       ],
                     ))),

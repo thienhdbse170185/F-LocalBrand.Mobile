@@ -14,7 +14,7 @@ class AuthApiClient {
   Future<LoginSuccessDto> login(LoginDto loginDto) async {
     try {
       final response = await dio.post(
-        '/auth/login',
+        '/auth/customer-login',
         data: loginDto.toJson(),
       );
       return LoginSuccessDto.fromJson(response.data);
@@ -29,13 +29,8 @@ class AuthApiClient {
 
   Future<void> register(RegisterDto registerDto) async {
     try {
-      FormData formData = FormData.fromMap(registerDto.toJson());
-
-      await dio.post(
-        '/auth/customer/register-customer',
-        data: formData,
-        options: Options(contentType: 'multipart/form-data'),
-      );
+      FormData formData = FormData.fromMap(await registerDto.toJson());
+      await dio.post('/auth/customer/register-customer', data: formData);
     } on DioException catch (e) {
       if (e.response != null) {
         throw Exception(e.response!.data['result']['message']);
