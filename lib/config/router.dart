@@ -4,6 +4,7 @@ import 'package:f_localbrand/screens/checkout/checkout.dart';
 import 'package:f_localbrand/screens/filter/filter.dart';
 import 'package:f_localbrand/screens/get_started/get_started.dart';
 import 'package:f_localbrand/screens/product/product_detail.dart';
+import 'package:f_localbrand/screens/profile/screens/profile_details.dart';
 import 'package:f_localbrand/screens/search/search.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -22,6 +23,7 @@ class RouteName {
   static const String verifyOtp = '/verify-otp';
   static const String resetPw = '/reset-pw';
   static const String profile = '/profile';
+  static const String profileDetail = 'detail';
   static const String getStarted = '/get-started';
   static const String productDetail = '/product-detail';
   static const String checkout = '/checkout';
@@ -63,6 +65,14 @@ final router = GoRouter(
     GoRoute(
       path: RouteName.profile,
       builder: (context, state) => ProfileScreen(),
+      routes: [
+        GoRoute(
+          path: RouteName.profileDetail,
+          builder: (context, state) {
+            return ProfileDetailScreen();
+          },
+        ),
+      ],
     ),
     GoRoute(
       path: RouteName.register,
@@ -98,17 +108,23 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-        path: RouteName.checkout,
-        builder: (context, state) => CheckoutScreen()),
+      path: RouteName.checkout,
+      builder: (context, state) => CheckoutScreen(),
+    ),
     GoRoute(
-        path: RouteName.search, builder: (context, state) => SearchScreen()),
+      path: RouteName.search,
+      builder: (context, state) => SearchScreen(),
+    ),
     GoRoute(
-        path: RouteName.category,
-        builder: (context, state) {
-          final category = state.extra as String;
-          return CategoryScreen(category: category);
-        }),
+      path: RouteName.category,
+      builder: (context, state) {
+        final category = state.extra as String;
+        return CategoryScreen(category: category);
+      },
+    ),
     GoRoute(
-        path: RouteName.filter, builder: (context, state) => FilterScreen()),
+      path: RouteName.filter,
+      builder: (context, state) => FilterScreen(),
+    ),
   ],
 );

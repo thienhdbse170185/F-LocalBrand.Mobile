@@ -5,13 +5,13 @@ import 'package:go_router/go_router.dart';
 class ProfileItem extends StatelessWidget {
   const ProfileItem(
       {super.key,
-      required this.route,
       required this.title,
-      required this.icon});
+      required this.icon,
+      required this.onTap});
 
-  final String route;
   final String title;
   final IconData icon;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class ProfileItem extends StatelessWidget {
       ),
       child: ListTile(
         onTap: () {
-          context.go(route);
+          onTap();
         },
         leading: FaIcon(icon),
         title: Text(
