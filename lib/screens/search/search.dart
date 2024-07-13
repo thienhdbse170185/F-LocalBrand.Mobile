@@ -147,14 +147,14 @@ class _SearchScreenState extends State<SearchScreen> {
                           ]))
                     ],
                   ),
-                  VerticalGridList(
-                      delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final product = _productResults[index];
-                      return ProductHome(product: product);
-                    },
-                    childCount: _productResults.length,
-                  ))
+                  // VerticalGridList(
+                  //     delegate: SliverChildBuilderDelegate(
+                  //   (context, index) {
+                  //     final product = _productResults[index];
+                  //     return ProductHome(product: product);
+                  //   },
+                  //   childCount: _productResults.length,
+                  // ))
                 ],
               ),
             )

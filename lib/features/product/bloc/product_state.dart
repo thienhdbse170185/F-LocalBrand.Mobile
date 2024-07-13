@@ -1,7 +1,7 @@
 part of 'product_cubit.dart';
 
 abstract class ProductState extends Equatable {
-  final List<String> products;
+  final List<ProductDto> products;
   final bool loading;
   final bool error;
 
@@ -24,11 +24,15 @@ class ProductLoading extends ProductState {
 }
 
 class ProductLoaded extends ProductState {
-  const ProductLoaded(List<String> products) : super(products: products);
+  const ProductLoaded(List<ProductDto> products) : super(products: products);
 }
 
 class ProductError extends ProductState {
   const ProductError() : super(error: true);
+}
+
+class ProductNewestLoading extends ProductState {
+  const ProductNewestLoading() : super();
 }
 
 class ProductNewestLoaded extends ProductState {
@@ -47,4 +51,21 @@ class ProductBestsellerLoaded extends ProductState {
 
 class ProductBestsellerError extends ProductState {
   const ProductBestsellerError() : super();
+}
+
+class ProductBestsellerLoading extends ProductState {
+  const ProductBestsellerLoading() : super();
+}
+
+class ProductDetailsLoading extends ProductState {
+  const ProductDetailsLoading() : super();
+}
+
+class ProductDetailsLoaded extends ProductState {
+  const ProductDetailsLoaded(this.product) : super();
+  final ProductDto product;
+}
+
+class ProductDetailsError extends ProductState {
+  const ProductDetailsError() : super();
 }

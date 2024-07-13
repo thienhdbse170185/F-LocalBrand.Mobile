@@ -1,10 +1,15 @@
-import 'package:flutter/foundation.dart';
+import 'package:f_localbrand/config/themes/material_theme.dart';
 import 'package:flutter/material.dart';
 
 class TextPressed extends StatelessWidget {
-  const TextPressed({super.key, required this.onTap, required this.text});
+  const TextPressed(
+      {super.key,
+      required this.onTap,
+      required this.text,
+      required this.textTheme});
   final VoidCallback onTap;
   final String text;
+  final TextTheme textTheme;
 
   @override
   Widget build(BuildContext context) {
@@ -12,15 +17,10 @@ class TextPressed extends StatelessWidget {
       onTap: () {
         onTap();
       },
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Theme.of(context).primaryColor,
-          fontSize: 12,
-          decoration: TextDecoration.underline,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
+      child: Text(text,
+          style: textTheme.displayMedium?.copyWith(
+              color: MaterialTheme.lightScheme().primary,
+              decoration: TextDecoration.underline)),
     );
   }
 }

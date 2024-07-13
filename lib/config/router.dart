@@ -3,6 +3,7 @@ import 'package:f_localbrand/screens/category/category.dart';
 import 'package:f_localbrand/screens/checkout/checkout.dart';
 import 'package:f_localbrand/screens/filter/filter.dart';
 import 'package:f_localbrand/screens/get_started/get_started.dart';
+import 'package:f_localbrand/screens/payment/payment.dart';
 import 'package:f_localbrand/screens/product/product_detail.dart';
 import 'package:f_localbrand/screens/profile/screens/profile_details.dart';
 import 'package:f_localbrand/screens/search/search.dart';
@@ -31,6 +32,7 @@ class RouteName {
   static const String registerUserProfile = '/register-user-profile';
   static const String category = '/category';
   static const String filter = '/filter';
+  static const String payment = '/payment';
 
   static const publicRoutes = [
     login,
@@ -126,5 +128,7 @@ final router = GoRouter(
       path: RouteName.filter,
       builder: (context, state) => FilterScreen(),
     ),
+    GoRoute(
+        path: RouteName.payment, builder: (context, state) => PaymentScreen()),
   ],
 );

@@ -22,7 +22,7 @@ class ProductCubit extends Cubit<ProductState> {
   }
 
   Future<void> fetchProductsNewest() async {
-    emit(ProductLoading());
+    emit(ProductNewestLoading());
     try {
       final products = await productRepository.getProductsNewest();
       emit(ProductNewestLoaded(products));
@@ -32,12 +32,26 @@ class ProductCubit extends Cubit<ProductState> {
   }
 
   Future<void> fetchProductsBestseller() async {
-    emit(ProductLoading());
+    emit(ProductBestsellerLoading());
     try {
       final products = await productRepository.getProductsBestseller();
-      emit(ProductNewestLoaded(products));
+      emit(ProductBestsellerLoaded(products));
     } catch (e) {
-      emit(const ProductNewestError());
+      emit(const ProductBestsellerError());
+    }
+  }
+
+  Future<void> getProductDetail(int id) async {
+    emit(ProductDetailsLoading());
+    try {
+      final product = await productRepository.getProductDetail(id);
+      if (product != null) {
+        emit(ProductDetailsLoaded(product));
+        return;
+      }
+      emit(ProductDetailsError());
+    } catch (e) {
+      emit(const ProductDetailsError());
     }
   }
 }

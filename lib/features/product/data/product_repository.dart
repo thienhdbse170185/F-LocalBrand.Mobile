@@ -15,10 +15,9 @@ class ProductRepository {
     }
   }
 
-  Future<dynamic> getProductsNewest() async {
+  Future<List<ProductDto>> getProductsNewest() async {
     try {
-      final result =
-          productApiClient.fetchProductNewest();
+      final result = productApiClient.fetchProductNewest();
       return result;
     } catch (e) {
       print(e);
@@ -28,12 +27,21 @@ class ProductRepository {
 
   Future<List<ProductDto>> getProductsBestseller() async {
     try {
-      List<ProductDto> result =
-          productApiClient.fetchProductBestseller() as List<ProductDto>;
+      final result = productApiClient.fetchProductBestseller();
       return result;
     } catch (e) {
       print(e);
     }
     return [];
+  }
+
+  Future<ProductDto?> getProductDetail(int id) async {
+    try {
+      final result = productApiClient.fetchProductDetail(id);
+      return result;
+    } catch (e) {
+      print(e);
+    }
+    return null;
   }
 }

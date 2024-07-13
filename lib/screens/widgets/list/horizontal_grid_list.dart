@@ -8,12 +8,12 @@ class HorizontalGridList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 250,
+      height: 240,
       child: CustomScrollView(
         scrollDirection: Axis.horizontal,
         slivers: [
           SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.only(right: 32.0),
             sliver: SliverList(
               delegate: delegate,
             ),

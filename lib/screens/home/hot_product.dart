@@ -51,29 +51,29 @@ class _HotProductState extends State<HotProduct> {
               selectedCategory: _selectedCategory,
               onCategoryPressed: _onCategoryPressed),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 30.0),
-          child: Container(
-            height: 500, // Fixed height
-            child: GridView.builder(
-              physics:
-                  NeverScrollableScrollPhysics(), // Disable GridView scrolling
-              itemCount: _products.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-                childAspectRatio: 0.75,
-              ),
-              itemBuilder: (context, index) {
-                final product = _products[index];
-                return ProductHome(
-                  product: product,
-                );
-              },
-            ),
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.only(top: 30.0),
+        //   child: Container(
+        //     height: 500, // Fixed height
+        //     child: GridView.builder(
+        //       physics:
+        //           NeverScrollableScrollPhysics(), // Disable GridView scrolling
+        //       itemCount: _products.length,
+        //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        //         crossAxisCount: 2,
+        //         crossAxisSpacing: 8.0,
+        //         mainAxisSpacing: 8.0,
+        //         childAspectRatio: 0.75,
+        //       ),
+        //       itemBuilder: (context, index) {
+        //         final product = _products[index];
+        //         return ProductHome(
+        //           product: product,
+        //         );
+        //       },
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

@@ -58,15 +58,15 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                   selectedCategory: _selectedCategory,
                   onCategoryPressed: _onCategoryPressed,
                 ),
-                VerticalGridList(
-                    height: 800,
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final product = _productFavourites[index];
-                        return ProductHome(product: product);
-                      },
-                      childCount: _productFavourites.length,
-                    ))
+                // VerticalGridList(
+                //     height: 800,
+                //     delegate: SliverChildBuilderDelegate(
+                //       (context, index) {
+                //         final product = _productFavourites[index];
+                //         return ProductHome(product: product);
+                //       },
+                //       childCount: _productFavourites.length,
+                //     ))
               ] else
                 EmptyScreen(
                   asset: 'assets/images/empty_favourite.png',

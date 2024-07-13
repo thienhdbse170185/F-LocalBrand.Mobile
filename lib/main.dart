@@ -106,6 +106,8 @@ Future<void> main() async {
     }
   });
 
+  PushNotifications.getDeviceToken();
+
   // for handling in terminated state
   final RemoteMessage? message =
       await FirebaseMessaging.instance.getInitialMessage();

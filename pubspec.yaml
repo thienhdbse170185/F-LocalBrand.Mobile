@@ -56,6 +56,8 @@ dependencies:
   flutter_local_notifications: ^17.2.1
   image_picker: ^1.1.2
   http_parser: ^4.0.2
+  intl: ^0.17.0
+  vnpay_flutter: ^1.0.2
 
 dev_dependencies:
   flutter_test:

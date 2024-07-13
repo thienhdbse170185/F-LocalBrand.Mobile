@@ -1,14 +1,17 @@
-import 'package:f_localbrand/config/router.dart';
-import 'package:f_localbrand/screens/widgets/snackbar/snackbar_util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:f_localbrand/features/product/dto/product_home_dto.dart';
+import 'package:f_localbrand/config/router.dart';
+import 'package:f_localbrand/features/product/bloc/product_cubit.dart';
+import 'package:f_localbrand/features/product/dto/product_dto.dart';
+import 'package:f_localbrand/screens/widgets/snackbar/snackbar_util.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 class ProductHome extends StatefulWidget {
   const ProductHome({super.key, required this.product});
 
-  final ProductHomeDto product;
+  final ProductDto product;
 
   @override
   State<ProductHome> createState() => _ProductHomeState();
@@ -16,6 +19,13 @@ class ProductHome extends StatefulWidget {
 
 class _ProductHomeState extends State<ProductHome> {
   bool _isFavorite = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.product.productName);
+  }
 
   void _onFavoritePressed() {
     setState(() {
@@ -28,6 +38,11 @@ class _ProductHomeState extends State<ProductHome> {
     }
   }
 
+  String _formatPrice(int price) {
+    final formatCurrency = NumberFormat.currency(locale: 'vi_VN', symbol: '₫');
+    return formatCurrency.format(price);
+  }
+
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
@@ -35,7 +50,7 @@ class _ProductHomeState extends State<ProductHome> {
 
     return GestureDetector(
       onTap: () {
-        // context.go('${RouteName.productDetail}/${widget.product.id}');
+        context.read<ProductCubit>().getProductDetail(widget.product.id);
         context.push(RouteName.productDetail, extra: widget.product.id);
       },
       child: Card(
@@ -81,7 +96,7 @@ class _ProductHomeState extends State<ProductHome> {
             Padding(
               padding: const EdgeInsets.only(left: 8, top: 8),
               child: Text(
-                widget.product.name,
+                widget.product.productName,
                 style: textTheme.headlineSmall?.copyWith(fontSize: 14),
                 maxLines: 1, // Prevent text overflow
                 overflow: TextOverflow.ellipsis,
@@ -90,7 +105,7 @@ class _ProductHomeState extends State<ProductHome> {
             Padding(
               padding: const EdgeInsets.only(left: 8, top: 8),
               child: Text(
-                '${widget.product.price}\$',
+                _formatPrice(widget.product.price),
                 style: textTheme.headlineMedium
                     ?.copyWith(color: colorScheme.primary),
                 maxLines: 1, // Prevent text overflow
