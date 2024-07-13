@@ -32,15 +32,15 @@ class OrderItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: textTheme.headlineMedium),
+                Text(title, style: textTheme.displayMedium),
                 Text(
                   'Size: $size',
                   style: textTheme.displaySmall
-                      ?.copyWith(fontSize: 12, color: colorScheme.outline),
+                      ?.copyWith(fontSize: 14, color: colorScheme.outline),
                 ),
                 Text(
                   '\$$price',
-                  style: textTheme.titleSmall,
+                  style: textTheme.displayMedium,
                 ),
               ],
             ),

@@ -1,3 +1,4 @@
+import 'package:f_localbrand/screens/widgets/buttons/icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -19,12 +20,9 @@ class CheckoutInformation extends StatelessWidget {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final TextTheme textTheme = Theme.of(context).textTheme;
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(
-        title,
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      ),
+      Text(title, style: textTheme.headlineMedium),
       Padding(
-        padding: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.only(top: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -42,33 +40,23 @@ class CheckoutInformation extends StatelessWidget {
                   children: [
                     Text(
                       headline,
-                      style: textTheme.displaySmall,
+                      style: textTheme.displayMedium,
                     ),
                     SizedBox(
                       width: 240,
                       child: Text(
                         description,
                         style: textTheme.displaySmall?.copyWith(
-                            fontSize: 13, color: colorScheme.outline),
+                            fontSize: 14, color: colorScheme.outline),
                       ),
                     ),
                   ],
                 ),
               ],
             ),
-            OutlinedButton(
-              onPressed: () {
-                onChange?.call();
-              },
-              style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100))),
-              child: Text(
-                'CHANGE',
-                style: textTheme.displaySmall
-                    ?.copyWith(fontSize: 11, color: colorScheme.primary),
-              ),
+            CustomIconButton(
+              onPressed: () {},
+              icon: FontAwesomeIcons.pencil,
             ),
           ],
         ),

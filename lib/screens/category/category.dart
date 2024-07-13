@@ -27,13 +27,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
       ),
       body: Column(
         children: [
-          VerticalGridList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              ProductHomeDto product = _products[index];
-              return ProductHome(product: product);
-            }),
-            key: UniqueKey(),
-          )
+          // VerticalGridList(
+          //   delegate: SliverChildBuilderDelegate((context, index) {
+          //     ProductHomeDto product = _products[index];
+          //     return ProductHome(product: product);
+          //   }),
+          //   key: UniqueKey(),
+          // )
         ],
       ),
     );

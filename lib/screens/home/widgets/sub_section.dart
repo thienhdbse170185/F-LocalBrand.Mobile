@@ -38,6 +38,7 @@ class SubSectionHome extends StatelessWidget {
                         onTapAll?.call();
                       },
                       text: 'All',
+                      textTheme: textTheme,
                     )
                   : Container()
             ],

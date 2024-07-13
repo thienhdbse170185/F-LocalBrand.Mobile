@@ -19,12 +19,10 @@ class ProductApiClient {
     try {
       final response = await dio.get('/products/latest/4');
       if (response.statusCode == 200) {
-        final result = response.data['result'];
-        if (result != null && result.containsKey('products')) {
-          return (result['products'] as List)
-              .map((e) => ProductDto.fromJson(e))
-              .toList();
-        }
+        List<ProductDto> result = (response.data['result']['products'] as List)
+            .map((e) => ProductDto.fromJson(e))
+            .toList();
+        return result;
       }
     } catch (e) {
       print(e);
@@ -34,15 +32,28 @@ class ProductApiClient {
 
   Future<List<ProductDto>> fetchProductBestseller() async {
     try {
-      final campaigns = await dio.get('/products/best-seller/4');
-      if (campaigns.statusCode == 200) {
-        return (campaigns.data as List)
+      final response = await dio.get('/products/best-seller/4');
+      if (response.statusCode == 200) {
+        List<ProductDto> result = (response.data['result']['products'] as List)
             .map((e) => ProductDto.fromJson(e))
             .toList();
+        return result;
       }
     } catch (e) {
       print(e);
     }
     return [];
+  }
+
+  Future<ProductDto?> fetchProductDetail(int id) async {
+    try {
+      final response = await dio.get('/products/$id');
+      if (response.statusCode == 200) {
+        return ProductDto.fromJson(response.data['result']);
+      }
+    } catch (e) {
+      print(e);
+    }
+    return null;
   }
 }

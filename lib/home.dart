@@ -1,4 +1,5 @@
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
+import 'package:f_localbrand/features/product/bloc/product_cubit.dart';
 import 'package:f_localbrand/features/user/bloc/user_cubit.dart';
 import 'package:f_localbrand/screens/cart/cart.dart';
 import 'package:f_localbrand/screens/favourite/favourite.dart';
@@ -23,6 +24,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     context.read<UserCubit>().getUserInfo();
+    context.read<ProductCubit>().fetchProductsBestseller();
+    context.read<ProductCubit>().fetchProductsNewest();
   }
 
   @override

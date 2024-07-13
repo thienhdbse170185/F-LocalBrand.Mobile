@@ -4,14 +4,13 @@ class ProductDto {
   final int categoryId;
   final int campaignId;
   final String gender;
-  final double price;
+  final int price;
   final String description;
   final int stockQuantity;
   final String imageUrl;
   final int size;
   final String color;
   final String status;
-  final DateTime createDate;
 
   ProductDto({
     required this.id,
@@ -26,7 +25,6 @@ class ProductDto {
     required this.size,
     required this.color,
     required this.status,
-    required this.createDate,
   });
 
   factory ProductDto.fromJson(Map<String, dynamic> json) {
@@ -43,7 +41,6 @@ class ProductDto {
       size: json['size'],
       color: json['color'],
       status: json['status'],
-      createDate: DateTime.parse(json['createDate']),
     );
   }
 
@@ -61,7 +58,6 @@ class ProductDto {
       'size': size,
       'color': color,
       'status': status,
-      'createDate': createDate.toIso8601String(),
     };
   }
 }
