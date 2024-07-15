@@ -25,9 +25,10 @@ class OrderCubit extends Cubit<OrderState> {
     OrderDto order = OrderDto(items: simplifiedItems);
 
     try {
-      bool result = await orderRepository.addOrder(order);
-      if (result) {
-        emit(AddProductCartToOrderSuccess());
+      String result = await orderRepository.addOrder(order);
+      if (result.isNotEmpty) {
+        print('Payment URL: $result');
+        emit(AddProductCartToOrderSuccess(result));
       } else {
         emit(AddProductCartToOrderFail('Error! Cannot add order'));
       }

@@ -5,16 +5,16 @@ class OrderApiClient {
   final Dio dio;
   OrderApiClient(this.dio);
 
-  Future<bool> addOrder(OrderDto order) async {
+  Future<String> addOrder(OrderDto order) async {
     try {
       final request = order.toJson();
       final response = await dio.post('/order', data: request);
       if (response.statusCode == 200) {
-        return true;
+        return response.data['result'] as String;
       }
     } catch (e) {
       rethrow;
     }
-    return false;
+    return "";
   }
 }

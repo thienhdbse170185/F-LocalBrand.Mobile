@@ -50,11 +50,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
       },
       {
-        'route': '/profile-orders',
         'title': 'My Orders',
         'icon': FontAwesomeIcons.boxesStacked,
         'onTap': () {
-          context.push('$userID');
+          context.push('${RouteName.profile}/${RouteName.myOrders}');
         }
       },
       {

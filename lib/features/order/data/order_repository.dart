@@ -5,7 +5,7 @@ class OrderRepository {
   final OrderApiClient orderApiClient;
   OrderRepository({required this.orderApiClient});
 
-  Future<bool> addOrder(OrderDto order) async {
+  Future<String> addOrder(OrderDto order) async {
     try {
       return await orderApiClient.addOrder(order);
     } catch (e) {
