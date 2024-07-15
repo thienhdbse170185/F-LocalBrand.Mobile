@@ -20,13 +20,6 @@ class ProductHome extends StatefulWidget {
 class _ProductHomeState extends State<ProductHome> {
   bool _isFavorite = false;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    print(widget.product.productName);
-  }
-
   void _onFavoritePressed() {
     setState(() {
       _isFavorite = !_isFavorite;
@@ -105,7 +98,7 @@ class _ProductHomeState extends State<ProductHome> {
             Padding(
               padding: const EdgeInsets.only(left: 8, top: 8),
               child: Text(
-                _formatPrice(widget.product.price),
+                _formatPrice(widget.product.price.toInt()),
                 style: textTheme.headlineMedium
                     ?.copyWith(color: colorScheme.primary),
                 maxLines: 1, // Prevent text overflow

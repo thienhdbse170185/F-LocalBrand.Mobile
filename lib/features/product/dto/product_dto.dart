@@ -4,13 +4,14 @@ class ProductDto {
   final int categoryId;
   final int campaignId;
   final String gender;
-  final int price;
+  final double price;
   final String description;
   final int stockQuantity;
   final String imageUrl;
   final int size;
   final String color;
   final String status;
+  final List<ProductDto>? recommendations;
 
   ProductDto({
     required this.id,
@@ -25,9 +26,15 @@ class ProductDto {
     required this.size,
     required this.color,
     required this.status,
+    this.recommendations,
   });
 
   factory ProductDto.fromJson(Map<String, dynamic> json) {
+    var recommendList = json['recommendations'] as List<dynamic>?;
+    List<ProductDto>? recommend = recommendList
+        ?.map((product) => ProductDto.fromJson(product as Map<String, dynamic>))
+        .toList();
+
     return ProductDto(
       id: json['id'],
       productName: json['productName'],
@@ -41,6 +48,7 @@ class ProductDto {
       size: json['size'],
       color: json['color'],
       status: json['status'],
+      recommendations: recommend,
     );
   }
 
@@ -58,6 +66,7 @@ class ProductDto {
       'size': size,
       'color': color,
       'status': status,
+      'recommend': recommendations?.map((product) => product.toJson()).toList(),
     };
   }
 }

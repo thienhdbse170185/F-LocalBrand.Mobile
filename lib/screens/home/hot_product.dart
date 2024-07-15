@@ -24,14 +24,12 @@ class _HotProductState extends State<HotProduct> {
   void _onCategoryPressed(String category) {
     setState(() {
       _selectedCategory = category;
-      context.read<ProductCubit>().fetchProducts(category);
     });
   }
 
   @override
   void initState() {
     super.initState();
-    context.read<ProductCubit>().fetchProducts(_selectedCategory);
   }
 
   @override

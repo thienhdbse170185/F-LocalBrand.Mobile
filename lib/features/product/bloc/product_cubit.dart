@@ -9,18 +9,6 @@ class ProductCubit extends Cubit<ProductState> {
   ProductCubit({required this.productRepository}) : super(ProductInitial());
   final ProductRepository productRepository;
 
-  Future<void> fetchProducts(String filter) async {
-    emit(ProductLoading());
-    try {
-      // Call the API or any async operation here
-      filter = filter.toLowerCase();
-      final products = await productRepository.getProductsByFilter(filter);
-      emit(ProductLoaded(products));
-    } catch (e) {
-      emit(const ProductError());
-    }
-  }
-
   Future<void> fetchProductsNewest() async {
     emit(ProductNewestLoading());
     try {

@@ -21,3 +21,16 @@ class GetCategoriesSuccess extends CategoryState {
 }
 
 class GetCategoriesFailure extends CategoryState {}
+
+class GetCategoriesProductsLoading extends CategoryState {}
+
+class GetCategoriesProductsSuccess extends CategoryState {
+  final List<CategoryDto> categories;
+
+  GetCategoriesProductsSuccess({required this.categories});
+
+  @override
+  List<Object> get props => [categories];
+}
+
+class GetCategoriesProductsFailure extends CategoryState {}

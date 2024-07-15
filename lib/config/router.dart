@@ -7,6 +7,7 @@ import 'package:f_localbrand/screens/payment/payment.dart';
 import 'package:f_localbrand/screens/product/product_detail.dart';
 import 'package:f_localbrand/screens/profile/screens/profile_details.dart';
 import 'package:f_localbrand/screens/search/search.dart';
+import 'package:f_localbrand/screens/view_all/view_all.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -33,6 +34,7 @@ class RouteName {
   static const String category = '/category';
   static const String filter = '/filter';
   static const String payment = '/payment';
+  static const String viewAll = '/view-all';
 
   static const publicRoutes = [
     login,
@@ -130,5 +132,13 @@ final router = GoRouter(
     ),
     GoRoute(
         path: RouteName.payment, builder: (context, state) => PaymentScreen()),
+    GoRoute(
+        path: RouteName.viewAll,
+        builder: (context, state) {
+          String title = state.extra as String;
+          return ViewAllScreen(
+            title: title,
+          );
+        }),
   ],
 );

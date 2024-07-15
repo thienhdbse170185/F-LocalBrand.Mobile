@@ -1,11 +1,14 @@
+import 'package:f_localbrand/features/cart/cubit/cart_cubit.dart';
 import 'package:f_localbrand/features/product/bloc/product_cubit.dart';
+import 'package:f_localbrand/features/product/dto/product_dto.dart';
 import 'package:f_localbrand/features/product/dto/product_home_dto.dart';
-import 'package:f_localbrand/screens/home/hot_product.dart';
 import 'package:f_localbrand/screens/home/widgets/product_home.dart';
 import 'package:f_localbrand/screens/product/widgets/sub_section.dart';
 import 'package:f_localbrand/screens/widgets/buttons/back_button.dart';
+import 'package:f_localbrand/screens/widgets/inputs/quantity_input.dart';
 import 'package:f_localbrand/screens/widgets/list/horizontal_grid_list.dart';
 import 'package:f_localbrand/screens/widgets/snackbar/snackbar_util.dart';
+import 'package:f_localbrand/util/price_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,9 +24,12 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  ProductDto? _product;
+
   bool _isFavourite = false;
   String _selectedSize = 'S';
   Color? _selectedColor = Colors.brown;
+  int quantity = 1;
 
   final ScrollController _scrollController = ScrollController();
   double _imageHeight = 400;
@@ -66,16 +72,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   void _addToCart() {
-    setState(() {
-      _showSuccessSnackbar = true;
-    });
-    SnackbarUtil.showSnackbarSuccess(
-        context, 'Added to your cart! Thank you ^^');
-    Future.delayed(Duration(seconds: 2), () {
-      setState(() {
-        _showSuccessSnackbar = false;
-      });
-    });
+    if (_product != null) {
+      context.read<CartCubit>().addToCart(_product!.id, quantity);
+    }
   }
 
   @override
@@ -83,16 +82,34 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    return BlocListener<ProductCubit, ProductState>(
-      listener: (context, state) {
-        if (state is ProductDetailsLoading) {
-          print('loading product detail');
-        } else if (state is ProductDetailsLoaded) {
-          print('loaded product detail');
-        } else if (state is ProductDetailsError) {
-          print('error loading product detail');
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<ProductCubit, ProductState>(
+          listener: (context, state) {
+            if (state is ProductDetailsLoading) {
+              print('loading product detail');
+            } else if (state is ProductDetailsLoaded) {
+              print('product detail loaded');
+              setState(() {
+                _product = state.product;
+              });
+            } else if (state is ProductDetailsError) {
+              print('error loading product detail');
+            }
+          },
+        ),
+        BlocListener<CartCubit, CartState>(
+          listener: (context, state) {
+            if (state is AddToCartInprogress) {
+              print('adding to cart');
+            } else if (state is AddToCartSuccess) {
+              print('added to cart');
+            } else if (state is AddToCartError) {
+              print('error adding to cart');
+            }
+          },
+        ),
+      ],
       child: Scaffold(
         body: Stack(
           children: [
@@ -149,12 +166,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'Home Shirt', // Replace with product name
+                                    _product?.productName ??
+                                        '', // Replace with product name
                                     style: textTheme.headlineMedium,
                                   ),
                                   Row(
                                     children: [
-                                      Text('\$100.0',
+                                      Text(
+                                          PriceUtil.formatPrice(
+                                              _product?.price.toInt() ?? 0),
                                           style: textTheme.displayMedium),
                                       const SizedBox(width: 8),
                                       FaIcon(
@@ -166,20 +186,39 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ],
                               ),
                               Padding(
-                                padding: EdgeInsets.only(top: 8),
-                                child: Text('Female\'s Style',
-                                    style: textTheme.displaySmall),
+                                padding: EdgeInsets.only(top: 16),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Female\'s Style',
+                                        style: textTheme.displaySmall),
+                                    QuantityInput(
+                                        quantity: quantity,
+                                        onIncrease: () {
+                                          setState(() {
+                                            quantity++;
+                                          });
+                                        },
+                                        onDecrease: () {
+                                          setState(() {
+                                            quantity--;
+                                          });
+                                        })
+                                  ],
+                                ),
                               ),
                               SubSection(
                                 title: 'Description',
                                 widget: Text(
-                                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                                  _product?.description ?? '',
                                   style: textTheme.displaySmall
                                       ?.copyWith(color: colorScheme.outline),
                                 ),
                               ),
                               SubSection(
-                                title: 'Select Size',
+                                title: 'Size',
                                 widget: Wrap(
                                   spacing: 8.0,
                                   children: ['S', 'M', 'L', 'XL', 'XXL'].map(
@@ -209,7 +248,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ),
                               ),
                               SubSection(
-                                title: 'Select Color: Brown',
+                                title: 'Color: Brown',
                                 widget: Wrap(
                                   spacing: 16.0,
                                   children: [
@@ -255,26 +294,35 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   }).toList(),
                                 ),
                               ),
-                              // SubSection(
-                              //   title: 'Recommended products',
-                              //   widget: HorizontalGridList(
-                              //     delegate: SliverChildBuilderDelegate(
-                              //       (context, index) {
-                              //         final product = _products[index];
-                              //         return ConstrainedBox(
-                              //           constraints: BoxConstraints(
-                              //             minHeight: 300,
-                              //             maxHeight: 500,
-                              //             minWidth: 0,
-                              //             maxWidth: 200,
-                              //           ),
-                              //           child: ProductHome(product: product),
-                              //         );
-                              //       },
-                              //       childCount: _products.length,
-                              //     ),
-                              //   ),
-                              // ),
+                              SubSection(
+                                title: 'Recommended products',
+                                widget: _product != null &&
+                                        _product!.recommendations != null &&
+                                        _product!.recommendations!.isNotEmpty
+                                    ? HorizontalGridList(
+                                        delegate: SliverChildBuilderDelegate(
+                                          (context, index) {
+                                            final product = _product!
+                                                .recommendations![index];
+                                            return ConstrainedBox(
+                                              constraints: BoxConstraints(
+                                                minHeight: 300,
+                                                maxHeight: 500,
+                                                minWidth: 0,
+                                                maxWidth: 200,
+                                              ),
+                                              child:
+                                                  ProductHome(product: product),
+                                            );
+                                          },
+                                          childCount:
+                                              _product!.recommendations!.length,
+                                        ),
+                                      )
+                                    : Center(
+                                        child: Text(
+                                            'No recommended products available')),
+                              ),
                             ],
                           ),
                         ),

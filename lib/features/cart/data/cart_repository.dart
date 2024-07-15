@@ -1,18 +1,27 @@
 import 'package:f_localbrand/features/cart/data/cart_api_client.dart';
-import 'package:f_localbrand/features/cart/dto/cart_product.dart';
+import 'package:f_localbrand/features/cart/dto/cart_dto.dart';
+import 'package:f_localbrand/features/cart/dto/cart_product_dto.dart';
 
 class CartRepository {
   final CartApiClient cartApiClient;
   CartRepository({required this.cartApiClient});
-  List<ProductCartDto> cart = [];
-  Future<bool> addToCart(ProductCartDto product) async {
-    // Call the API or any async operation here
-    cart.add(product);
-    return true;
+  // List<ProductCartDto> cart = [];
+
+  Future<bool> addToCart(int productID, int quantity) async {
+    try {
+      await cartApiClient.addToCart(productID, quantity);
+      return true;
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 
-  Future<List<ProductCartDto>> getCart() async {
-    // Call the API or any async operation here
-    return cart;
+  Future<CartDto?> getCart() async {
+    try {
+      CartDto? cart = await cartApiClient.getCart();
+      return cart;
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }

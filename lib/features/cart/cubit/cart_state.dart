@@ -12,21 +12,15 @@ final class CartInitial extends CartState {}
 class CartLoading extends CartState {}
 
 class CartLoaded extends CartState {
-  final List<ProductCartDto> cart;
+  final CartDto? cart;
 
   const CartLoaded(this.cart);
-
-  @override
-  List<Object> get props => [cart];
 }
 
 class CartError extends CartState {
-  final String message;
+  final String? message;
 
-  const CartError(this.message);
-
-  @override
-  List<Object> get props => [message];
+  CartError(this.message);
 }
 
 class CartAdded extends CartState {
@@ -39,3 +33,9 @@ class CartAdded extends CartState {
 }
 
 class CartIsEmpty extends CartState {}
+
+class AddToCartInprogress extends CartState {}
+
+class AddToCartSuccess extends CartState {}
+
+class AddToCartError extends CartState {}

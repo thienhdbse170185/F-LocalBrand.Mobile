@@ -16,4 +16,15 @@ class CategoryRepository {
     }
     return [];
   }
+
+  Future<List<CategoryDto>> getCategoriesProducts() async {
+    try {
+      List<CategoryDto> result =
+          categoryApiClient.getCategoriesProducts() as List<CategoryDto>;
+      return result;
+    } catch (e) {
+      print(e);
+    }
+    return [];
+  }
 }

@@ -47,9 +47,9 @@ class ProductApiClient {
 
   Future<ProductDto?> fetchProductDetail(int id) async {
     try {
-      final response = await dio.get('/products/$id');
+      final response = await dio.get('/product/$id/product-recommendations');
       if (response.statusCode == 200) {
-        return ProductDto.fromJson(response.data['result']);
+        return ProductDto.fromJson(response.data['result']['product']);
       }
     } catch (e) {
       print(e);
