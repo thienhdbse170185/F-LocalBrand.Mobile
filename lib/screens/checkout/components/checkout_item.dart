@@ -4,7 +4,7 @@ class OrderItem extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String size;
-  final double price;
+  final String price;
 
   const OrderItem({
     required this.imageUrl,
@@ -33,13 +33,19 @@ class OrderItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title, style: textTheme.displayMedium),
+                const SizedBox(
+                  height: 5,
+                ),
                 Text(
                   'Size: $size',
                   style: textTheme.displaySmall
                       ?.copyWith(fontSize: 14, color: colorScheme.outline),
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
                 Text(
-                  '\$$price',
+                  'Price: $price',
                   style: textTheme.displayMedium,
                 ),
               ],

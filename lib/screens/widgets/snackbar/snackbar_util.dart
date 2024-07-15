@@ -6,7 +6,8 @@ class SnackbarUtil {
 
   final String message;
 
-  static void showSnackbarSuccess(BuildContext context, String message) {
+  static void showSnackbarSuccess(BuildContext context, String message,
+      {double? paddingBottom}) {
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -20,13 +21,15 @@ class SnackbarUtil {
         duration: Duration(seconds: 5),
         showCloseIcon: true,
         behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.only(left: 16, right: 16),
+        margin:
+            EdgeInsets.only(left: 16, right: 16, bottom: paddingBottom ?? 0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );
   }
 
-  static void showSnackbarError(BuildContext context, String message) {
+  static void showSnackbarError(BuildContext context, String message,
+      {double? paddingBottom}) {
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -39,7 +42,8 @@ class SnackbarUtil {
           duration: Duration(seconds: 5),
           showCloseIcon: true,
           behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.only(left: 16, right: 16),
+          margin:
+              EdgeInsets.only(left: 16, right: 16, bottom: paddingBottom ?? 0),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
     );

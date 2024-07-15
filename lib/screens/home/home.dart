@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:f_localbrand/config/router.dart';
 import 'package:f_localbrand/config/themes/custom_themes/index.dart';
+import 'package:f_localbrand/features/category/cubit/category_cubit.dart';
+import 'package:f_localbrand/features/category/dto/category_dto.dart';
 import 'package:f_localbrand/features/product/bloc/product_cubit.dart';
 import 'package:f_localbrand/features/product/dto/product_dto.dart';
 import 'package:f_localbrand/features/user/bloc/user_cubit.dart';
@@ -23,8 +25,8 @@ class HomeItemScreen extends StatefulWidget {
 }
 
 class _HomeItemScreenState extends State<HomeItemScreen> {
-  List<ProductDto> _productBestsellers = [];
-  List<ProductDto> _productNewest = [];
+  List<ProductDto> _productBestsellers = [], _productNewest = [];
+  List<CategoryDto> _categories = [];
   bool _isBestsellerLoading = false, _isNewestLoading = false;
 
   @override
@@ -42,40 +44,67 @@ class _HomeItemScreenState extends State<HomeItemScreen> {
       'assets/images/banner4.png',
     ];
 
-    return BlocListener<ProductCubit, ProductState>(
-      listener: (context, state) {
-        if (state is ProductBestsellerLoading) {
-          setState(() {
-            _isBestsellerLoading = true;
-          });
-        } else if (state is ProductNewestLoading) {
-          setState(() {
-            _isNewestLoading = true;
-          });
-        } else if (state is ProductBestsellerLoaded) {
-          setState(() {
-            _isBestsellerLoading = false;
-            _productBestsellers = state.productsBestseller;
-          });
-          print('best-seller loaded');
-        } else if (state is ProductNewestLoaded) {
-          setState(() {
-            _isNewestLoading = false;
-            _productNewest = state.productsNewest;
-          });
-          print('newest loaded');
-        } else if (state is ProductBestsellerError) {
-          print('get best-seller error');
-          setState(() {
-            _isBestsellerLoading = false;
-          });
-        } else if (state is ProductNewestError) {
-          print('get newest error');
-          setState(() {
-            _isNewestLoading = false;
-          });
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<ProductCubit, ProductState>(
+          listener: (context, state) {
+            if (state is ProductBestsellerLoading) {
+              setState(() {
+                _isBestsellerLoading = true;
+              });
+            } else if (state is ProductNewestLoading) {
+              setState(() {
+                _isNewestLoading = true;
+              });
+            } else if (state is ProductBestsellerLoaded) {
+              setState(() {
+                _isBestsellerLoading = false;
+                _productBestsellers = state.productsBestseller;
+              });
+              print('best-seller loaded');
+            } else if (state is ProductNewestLoaded) {
+              setState(() {
+                _isNewestLoading = false;
+                _productNewest = state.productsNewest;
+              });
+              print('newest loaded');
+            } else if (state is ProductBestsellerError) {
+              print('get best-seller error');
+              setState(() {
+                _isBestsellerLoading = false;
+              });
+            } else if (state is ProductNewestError) {
+              print('get newest error');
+              setState(() {
+                _isNewestLoading = false;
+              });
+            }
+          },
+        ),
+        BlocListener<CategoryCubit, CategoryState>(
+          listener: (context, state) {
+            if (state is GetCategoriesProductsLoading) {
+              print('get categories products loading');
+            } else if (state is GetCategoriesProductsSuccess) {
+              print('get categories products loaded');
+              setState(() {
+                _categories = state.categories;
+              });
+            } else if (state is GetCategoriesProductsFailure) {
+              print('get categories products error');
+            } else if (state is GetCategoriesLoading) {
+              print('get categories loading');
+            } else if (state is GetCategoriesSuccess) {
+              print('get categories loaded');
+              setState(() {
+                _categories = state.categories;
+              });
+            } else if (state is GetCategoriesFailure) {
+              print('get categories error');
+            }
+          },
+        ),
+      ],
       child: Scaffold(
         body: Padding(
           padding: EdgeInsets.only(top: 40, left: 20, right: 20),

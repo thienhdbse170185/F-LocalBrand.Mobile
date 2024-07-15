@@ -1,6 +1,8 @@
+import 'package:f_localbrand/config/router.dart';
 import 'package:f_localbrand/screens/widgets/texts/text_pressed.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SubSectionHome extends StatelessWidget {
   const SubSectionHome(
@@ -35,7 +37,7 @@ class SubSectionHome extends StatelessWidget {
               hasAllText
                   ? TextPressed(
                       onTap: () {
-                        onTapAll?.call();
+                        context.push(RouteName.viewAll, extra: title);
                       },
                       text: 'All',
                       textTheme: textTheme,

@@ -1,5 +1,7 @@
 import 'package:f_localbrand/config/themes/custom_themes/index.dart';
 import 'package:f_localbrand/screens/widgets/buttons/icon_button.dart';
+import 'package:f_localbrand/screens/widgets/inputs/quantity_input.dart';
+import 'package:f_localbrand/util/price_util.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -108,39 +110,25 @@ class _CartItemState extends State<CartItem> {
                     Text(widget.title,
                         style: TextStyle(
                             fontSize: 16.0, fontWeight: FontWeight.bold)),
-                    Text('Size: ${widget.size}'),
-                    Text('\$${widget.price}'),
+                    Text('Size: XL'),
+                    Text(
+                      PriceUtil.formatPrice(widget.price.toInt()),
+                    ),
                   ],
                 ),
               ),
-              Row(
-                children: [
-                  CustomIconButton(
-                    icon: FontAwesomeIcons.minus,
-                    onPressed: () {
-                      setState(() {
-                        if (widget.quantity > 1) {
-                          widget.quantity--;
-                        }
-                      });
-                    },
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 12),
-                    child: Text('${widget.quantity}'),
-                  ),
-                  CustomIconButton(
-                    icon: FontAwesomeIcons.plus,
-                    backgroundColor: colorScheme.primary,
-                    iconColor: Colors.white,
-                    onPressed: () {
-                      setState(() {
-                        widget.quantity++;
-                      });
-                    },
-                  ),
-                ],
-              ),
+              QuantityInput(
+                  quantity: widget.quantity,
+                  onIncrease: () {
+                    setState(() {
+                      widget.quantity++;
+                    });
+                  },
+                  onDecrease: () {
+                    setState(() {
+                      widget.quantity--;
+                    });
+                  })
             ],
           ),
         ),

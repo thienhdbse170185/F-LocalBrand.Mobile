@@ -1,8 +1,16 @@
 import 'package:f_localbrand/config/router.dart';
+import 'package:f_localbrand/util/price_util.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class CartSummary extends StatelessWidget {
+class CartSummary extends StatefulWidget {
+  double priceTotal;
+  CartSummary({required this.priceTotal});
+  @override
+  State<CartSummary> createState() => _CartSummaryState();
+}
+
+class _CartSummaryState extends State<CartSummary> {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
@@ -22,28 +30,30 @@ class CartSummary extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Sub-Total'),
-              Text('\$407.94'),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Delivery Fee'),
-              Text('\$25.00'),
-            ],
-          ),
-          Divider(),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Text('Sub-Total'),
+          //     Text('\$407.94'),
+          //   ],
+          // ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Text('Delivery Fee'),
+          //     Text('\$25.00'),
+          //   ],
+          // ),
+          // Divider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Total Cost', style: TextStyle(fontWeight: FontWeight.bold)),
-              Text('\$397.94', style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(PriceUtil.formatPrice(widget.priceTotal.toInt()),
+                  style: TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
+          Divider(),
           Padding(
             padding: EdgeInsets.only(top: 16.0),
             child: ElevatedButton(

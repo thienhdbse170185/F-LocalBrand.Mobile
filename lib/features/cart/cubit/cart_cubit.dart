@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:f_localbrand/features/cart/data/cart_repository.dart';
-import 'package:f_localbrand/features/cart/dto/cart_product.dart';
+import 'package:f_localbrand/features/cart/dto/cart_dto.dart';
+import 'package:f_localbrand/features/cart/dto/cart_product_dto.dart';
 
 part 'cart_state.dart';
 
@@ -10,13 +11,24 @@ class CartCubit extends Cubit<CartState> {
 
   final CartRepository cartRepository;
 
-  Future<void> getCart() async {
-    emit(CartLoading());
-    List<ProductCartDto> cart = await cartRepository.getCart();
-    if (cart.isEmpty) {
-      emit(CartIsEmpty());
-      return;
+  Future<void> addToCart(int productID, int quantity) async {
+    emit(AddToCartInprogress());
+    try {
+      await cartRepository.addToCart(productID, quantity);
+      emit(AddToCartSuccess());
+      fetchCart();
+    } catch (e) {
+      emit(AddToCartError());
     }
-    emit(CartLoaded(cart));
+  }
+
+  Future<void> fetchCart() async {
+    emit(CartLoading());
+    try {
+      final cart = await cartRepository.getCart();
+      emit(CartLoaded(cart));
+    } catch (e) {
+      emit(CartError(e.toString()));
+    }
   }
 }
