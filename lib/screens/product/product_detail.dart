@@ -37,13 +37,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   bool _showSuccessSnackbar = false;
 
-  List<ProductHomeDto> _products = [
-    ProductHomeDto(id: 1, name: "Home Shirt", price: 100),
-    ProductHomeDto(id: 2, name: "Home Shirt", price: 100),
-    ProductHomeDto(id: 3, name: "Home Shirt", price: 100),
-    ProductHomeDto(id: 4, name: "Home Shirt", price: 100),
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -65,9 +58,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       _isFavourite = !_isFavourite;
     });
     if (_isFavourite) {
-      SnackbarUtil.showSnackbarSuccess(context, 'Added to your favourites!');
+      SnackbarUtil.showSnackbarSuccess(context, 'Added to your favourites!',
+          paddingBottom: 100);
     } else {
-      SnackbarUtil.showSnackbarError(context, 'Removed from your favourites!');
+      SnackbarUtil.showSnackbarError(context, 'Removed from your favourites!',
+          paddingBottom: 100);
     }
   }
 
@@ -99,11 +94,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           },
         ),
         BlocListener<CartCubit, CartState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state is AddToCartInprogress) {
               print('adding to cart');
             } else if (state is AddToCartSuccess) {
               print('added to cart');
+              setState(() {
+                _showSuccessSnackbar = true;
+              });
+              SnackbarUtil.showSnackbarSuccess(
+                  context, 'Added to your cart! Thank you ^^',
+                  paddingBottom: 100);
+              await Future.delayed(Duration(milliseconds: 2000));
+              setState(() {
+                _showSuccessSnackbar = false;
+              });
             } else if (state is AddToCartError) {
               print('error adding to cart');
             }
@@ -116,7 +121,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             Column(
               children: [
                 AnimatedContainer(
-                  duration: Duration(milliseconds: 600),
+                  duration: Duration(milliseconds: 300),
                   height: _imageHeight,
                   curve: Curves.easeInOut,
                   child: Stack(
@@ -175,7 +180,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       Text(
                                           PriceUtil.formatPrice(
                                               _product?.price.toInt() ?? 0),
-                                          style: textTheme.displayMedium),
+                                          style: textTheme.headlineMedium),
                                       const SizedBox(width: 8),
                                       FaIcon(
                                           FontAwesomeIcons.circleDollarToSlot,

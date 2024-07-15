@@ -21,7 +21,7 @@ class ProductCartDto {
       name: json['productName'],
       price: json['productPrice'],
       quantity: json['quantity'],
-      image: json['productImage'],
+      image: json['productImage'] ?? "https://via.placeholder.com/150",
       totalPrice: json['totalPrice'],
     );
   }

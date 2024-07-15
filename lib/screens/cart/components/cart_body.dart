@@ -24,7 +24,7 @@ class _CartBodyState extends State<CartBody> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 480,
+      height: 530,
       child: CustomScrollView(
         controller: _scrollController,
         slivers: [

@@ -1,9 +1,14 @@
+import 'package:f_localbrand/features/cart/cubit/cart_cubit.dart';
+import 'package:f_localbrand/features/cart/dto/cart_product_dto.dart';
+import 'package:f_localbrand/features/order/bloc/cubit/order_cubit.dart';
 import 'package:f_localbrand/screens/checkout/components/checkout_info.dart';
 import 'package:f_localbrand/screens/checkout/components/checkout_item.dart';
 import 'package:f_localbrand/screens/widgets/appbars/custom_appbar.dart';
 import 'package:f_localbrand/screens/widgets/buttons/back_button.dart';
 import 'package:f_localbrand/screens/widgets/list/vertical_sliver_list.dart';
+import 'package:f_localbrand/util/price_util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,7 +23,25 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class CheckoutScreen extends StatelessWidget {
+class CheckoutScreen extends StatefulWidget {
+  @override
+  _CheckoutScreenState createState() => _CheckoutScreenState();
+}
+
+class _CheckoutScreenState extends State<CheckoutScreen> {
+  List<ProductCartDto> _cartItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Load the cart items when the screen is initialized
+    context.read<CartCubit>().fetchCart();
+  }
+
+  void _onPressedPayment() {
+    context.read<OrderCubit>().addOrder(_cartItems);
+  }
+
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
@@ -38,53 +61,46 @@ class CheckoutScreen extends StatelessWidget {
                     headline: 'Home',
                     description: '1901 Thornridge Cir. Shiloh, Hawaii 81063'),
                 Divider(height: 48.0),
-                // CheckoutInformation(
-                //     title: 'Choose Shipping Type',
-                //     headline: 'Economy',
-                //     description: 'Estimated Arrival 25 Auguest 2023'),
-                // Divider(height: 48.0),
                 Text(
                   'Order List',
                   style: textTheme.headlineMedium,
                 ),
-                VerticalSliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                    return Column(
-                      children: [
-                        OrderItem(
-                          imageUrl: 'assets/images/shirt_demo.png',
-                          title: 'Brown Jacket',
-                          size: 'XL',
-                          price: 83.97,
+                BlocListener<CartCubit, CartState>(
+                  listener: (context, state) {
+                    if (state is CartLoaded) {
+                      setState(() {
+                        _cartItems = state.cart?.items ?? [];
+                      });
+                    }
+                  },
+                  child: _cartItems.isEmpty
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : VerticalSliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              final item = _cartItems[index];
+                              return Column(
+                                children: [
+                                  OrderItem(
+                                    imageUrl: 'assets/images/shirt_demo.png',
+                                    title: item.name,
+                                    size: 'XL',
+                                    price: PriceUtil.formatPrice(
+                                        item.price.toInt()),
+                                  ),
+                                  Divider(
+                                    height: 20,
+                                    thickness: 1,
+                                  ),
+                                ],
+                              );
+                            },
+                            childCount: _cartItems.length,
+                          ),
+                          height: 700,
                         ),
-                        Divider(
-                          height: 20,
-                          thickness: 1,
-                        ),
-                        OrderItem(
-                          imageUrl: 'assets/images/shirt_demo.png',
-                          title: 'Brown Suite',
-                          size: 'XL',
-                          price: 120.0,
-                        ),
-                        Divider(
-                          height: 20,
-                          thickness: 1,
-                        ),
-                        OrderItem(
-                          imageUrl: 'assets/images/shirt_demo.png',
-                          title: 'Brown Jacket',
-                          size: 'XL',
-                          price: 83.97,
-                        ),
-                        Divider(
-                          height: 20,
-                          thickness: 1,
-                        ),
-                      ],
-                    );
-                  }),
-                  height: 700,
                 )
               ],
             ),
@@ -95,7 +111,7 @@ class CheckoutScreen extends StatelessWidget {
         padding: EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {
-            // Handle continue to payment action
+            _onPressedPayment();
           },
           style: ElevatedButton.styleFrom(
             padding: EdgeInsets.symmetric(vertical: 16.0),

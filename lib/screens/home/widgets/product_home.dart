@@ -25,9 +25,11 @@ class _ProductHomeState extends State<ProductHome> {
       _isFavorite = !_isFavorite;
     });
     if (_isFavorite) {
-      SnackbarUtil.showSnackbarSuccess(context, 'Added to your favourites');
+      SnackbarUtil.showSnackbarSuccess(context, 'Added to your favourites',
+          paddingBottom: 100);
     } else {
-      SnackbarUtil.showSnackbarError(context, 'Removed from your favourites');
+      SnackbarUtil.showSnackbarError(context, 'Removed from your favourites',
+          paddingBottom: 100);
     }
   }
 

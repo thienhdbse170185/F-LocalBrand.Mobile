@@ -53,6 +53,7 @@ class _CartSummaryState extends State<CartSummary> {
                   style: TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
+          Divider(),
           Padding(
             padding: EdgeInsets.only(top: 16.0),
             child: ElevatedButton(

@@ -16,11 +16,6 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
@@ -39,7 +34,11 @@ class _CartScreenState extends State<CartScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomAppbar(title: 'My cart', textTheme: textTheme),
+                  CustomAppbar(
+                    title: 'My cart',
+                    textTheme: textTheme,
+                    hasBack: false,
+                  ),
                   Padding(
                     padding: EdgeInsets.only(left: 20, bottom: 10),
                     child: Text(

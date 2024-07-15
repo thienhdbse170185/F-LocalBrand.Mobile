@@ -21,7 +21,9 @@ class QuantityInput extends StatelessWidget {
         CustomIconButton(
           icon: FontAwesomeIcons.minus,
           onPressed: () {
-            onIncrease();
+            if (quantity > 1) {
+              onDecrease();
+            }
           },
         ),
         Container(
@@ -33,7 +35,7 @@ class QuantityInput extends StatelessWidget {
           backgroundColor: colorScheme.primary,
           iconColor: Colors.white,
           onPressed: () {
-            onDecrease();
+            onIncrease();
           },
         ),
       ],
