@@ -23,8 +23,7 @@ final class AddProductCartToOrderInprogress extends OrderState {}
 
 final class AddProductCartToOrderSuccess extends OrderState {
   final String paymentUrl;
-
-  AddProductCartToOrderSuccess(this.paymentUrl);
+  const AddProductCartToOrderSuccess(this.paymentUrl);
 }
 
 final class AddProductCartToOrderFail extends OrderState {

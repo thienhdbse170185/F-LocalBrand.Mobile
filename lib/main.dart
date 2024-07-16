@@ -9,6 +9,9 @@ import 'package:f_localbrand/features/category/data/category_repository.dart';
 import 'package:f_localbrand/features/order/bloc/cubit/order_cubit.dart';
 import 'package:f_localbrand/features/order/data/order_api_client.dart';
 import 'package:f_localbrand/features/order/data/order_repository.dart';
+import 'package:f_localbrand/features/payment/cubit/payment_cubit.dart';
+import 'package:f_localbrand/features/payment/data/payment_api_client.dart';
+import 'package:f_localbrand/features/payment/data/payment_repository.dart';
 import 'package:f_localbrand/service/notification_service.dart';
 import 'package:f_localbrand/config/http_client.dart';
 import 'package:f_localbrand/config/router.dart';
@@ -161,7 +164,10 @@ class MyApp extends StatelessWidget {
                 CampaignRepository(campaignApiClient: CampaignApiClient(dio))),
         RepositoryProvider(
             create: (context) =>
-                OrderRepository(orderApiClient: OrderApiClient(dio)))
+                OrderRepository(orderApiClient: OrderApiClient(dio))),
+        RepositoryProvider(
+            create: (context) =>
+                PaymentRepository(paymentApiClient: PaymentApiClient(dio)))
       ],
       child: MultiBlocProvider(
         providers: [
@@ -183,7 +189,10 @@ class MyApp extends StatelessWidget {
                   campaignRepository: context.read<CampaignRepository>())),
           BlocProvider(
               create: (context) =>
-                  OrderCubit(orderRepository: context.read<OrderRepository>()))
+                  OrderCubit(orderRepository: context.read<OrderRepository>())),
+          BlocProvider(
+              create: (context) => PaymentCubit(
+                  paymentRepository: context.read<PaymentRepository>())),
         ],
         child: AppContent(),
       ),

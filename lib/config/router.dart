@@ -147,7 +147,13 @@ final router = GoRouter(
       builder: (context, state) => FilterScreen(),
     ),
     GoRoute(
-        path: RouteName.payment, builder: (context, state) => PaymentScreen()),
+        path: RouteName.payment,
+        builder: (context, state) {
+          Uri url = state.extra as Uri;
+          return PaymentScreen(
+            url: url,
+          );
+        }),
     GoRoute(
         path: RouteName.viewAll,
         builder: (context, state) {
