@@ -11,11 +11,11 @@ class OrderCubit extends Cubit<OrderState> {
   OrderCubit({required this.orderRepository}) : super(OrderInitial());
   final OrderRepository orderRepository;
 
-  Future<void> addOrder(List<ProductCartDto> items) async {
+  Future<void> addOrder(List<ProductCartDto> orderList) async {
     emit(AddProductCartToOrderInprogress());
 
     // Convert the list of ProductCartDto to a list of SimplifiedProductCartDto
-    List<SimplifiedProductCartDto> simplifiedItems = items.map((item) {
+    List<SimplifiedProductCartDto> simplifiedItems = orderList.map((item) {
       return SimplifiedProductCartDto(
         id: item.id,
         quantity: item.quantity,
@@ -37,4 +37,16 @@ class OrderCubit extends Cubit<OrderState> {
       emit(AddProductCartToOrderFail(e.toString()));
     }
   }
+
+  bool addToOrderList(List<ProductCartDto> cartList) {
+    orderRepository.addToOrderList(cartList);
+    return true;
+  }
+
+  List<ProductCartDto> getOrderList() {
+    List<ProductCartDto> result = orderRepository.orderList;
+    return result;
+  }
+
+  List<ProductCartDto> get orderList => orderRepository.orderList;
 }

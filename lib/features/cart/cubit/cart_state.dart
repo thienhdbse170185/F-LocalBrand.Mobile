@@ -39,3 +39,9 @@ class AddToCartInprogress extends CartState {}
 class AddToCartSuccess extends CartState {}
 
 class AddToCartError extends CartState {}
+
+class UpdateCartInprogress extends CartState {}
+
+class UpdateCartSuccess extends CartState {}
+
+class UpdateCartError extends CartState {}

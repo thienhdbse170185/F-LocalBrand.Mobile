@@ -1,3 +1,4 @@
+import 'package:f_localbrand/util/price_util.dart';
 import 'package:flutter/material.dart';
 
 class OrderItem extends StatelessWidget {
@@ -5,20 +6,23 @@ class OrderItem extends StatelessWidget {
   final String title;
   final String size;
   final String price;
+  final int quantity;
+  final double totalPrice;
 
-  const OrderItem({
-    required this.imageUrl,
-    required this.title,
-    required this.size,
-    required this.price,
-  });
+  const OrderItem(
+      {required this.imageUrl,
+      required this.title,
+      required this.size,
+      required this.price,
+      required this.quantity,
+      required this.totalPrice});
 
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, right: 16),
       child: Row(
         children: [
           Image.asset(
@@ -32,20 +36,32 @@ class OrderItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: textTheme.displayMedium),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(title, style: textTheme.headlineSmall),
+                    Text('Qty: $quantity')
+                  ],
+                ),
                 const SizedBox(
                   height: 5,
                 ),
-                Text(
-                  'Size: $size',
-                  style: textTheme.displaySmall
-                      ?.copyWith(fontSize: 14, color: colorScheme.outline),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Size: $size',
+                      style: textTheme.displaySmall
+                          ?.copyWith(fontSize: 14, color: colorScheme.outline),
+                    ),
+                    Text('Price: $price')
+                  ],
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 Text(
-                  'Price: $price',
+                  'Total: ${PriceUtil.formatPrice(totalPrice.toInt())}',
                   style: textTheme.displayMedium,
                 ),
               ],

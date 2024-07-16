@@ -33,3 +33,21 @@ final class AddProductCartToOrderFail extends OrderState {
   @override
   List<Object> get props => [message];
 }
+
+final class GetOrderListInprogress extends OrderState {}
+
+final class GetOrderListSuccess extends OrderState {
+  final List<ProductCartDto> orderList;
+  const GetOrderListSuccess(this.orderList);
+
+  @override
+  List<Object> get props => [orderList];
+}
+
+final class GetOrderListFail extends OrderState {
+  final String message;
+  const GetOrderListFail(this.message);
+
+  @override
+  List<Object> get props => [message];
+}

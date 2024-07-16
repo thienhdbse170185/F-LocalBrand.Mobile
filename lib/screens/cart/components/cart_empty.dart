@@ -1,4 +1,6 @@
+import 'package:f_localbrand/config/router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CartEmpty extends StatelessWidget {
   const CartEmpty({super.key});
@@ -22,14 +24,16 @@ class CartEmpty extends StatelessWidget {
                 style: Theme.of(context).textTheme.displayMedium),
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              context.push(RouteName.home);
+            },
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(horizontal: 70, vertical: 16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(90),
               ),
             ),
-            child: Text('Shop now',
+            child: Text('SHOP NOW',
                 style: Theme.of(context)
                     .textTheme
                     .headlineSmall

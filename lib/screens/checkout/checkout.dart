@@ -20,13 +20,18 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  List<ProductCartDto> _cartItems = [];
+  List<ProductCartDto> _orderList = [];
+  double _totalPrice = 0.0;
   InAppWebViewController? webView;
 
   @override
   void initState() {
     super.initState();
-    context.read<CartCubit>().fetchCart();
+    // context.read<CartCubit>().fetchCart();
+    setState(() {
+      _orderList = context.read<OrderCubit>().getOrderList();
+      _calculateTotalPrice();
+    });
   }
 
   void _handlePaymentCallback(Uri uri) {
@@ -41,7 +46,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   void _onPressedPayment() {
-    context.read<OrderCubit>().addOrder(_cartItems);
+    context.read<OrderCubit>().addOrder(_orderList);
   }
 
   Future<void> _launchPaymentUrl(String url) async {
@@ -56,6 +61,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
+  void _calculateTotalPrice() {
+    double total = 0.0;
+    for (var item in _orderList) {
+      total += item.price * item.quantity;
+    }
+    setState(() {
+      _totalPrice = total;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
@@ -66,10 +81,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         BlocListener<OrderCubit, OrderState>(
           listener: (context, state) {
             if (state is AddProductCartToOrderSuccess) {
+              context.read<CartCubit>().updateCart(_orderList);
               context.read<PaymentCubit>().initPayment(state.paymentUrl);
             } else if (state is AddProductCartToOrderFail) {
               SnackbarUtil.showSnackbarError(context, state.message,
                   paddingBottom: 100);
+            } else if (state is GetOrderListSuccess) {
+              setState(() {
+                _orderList = state.orderList;
+                _calculateTotalPrice();
+              });
             }
           },
         ),
@@ -97,37 +118,33 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                   Divider(height: 48.0),
                   Text('Order List', style: textTheme.headlineMedium),
-                  BlocListener<CartCubit, CartState>(
-                    listener: (context, state) {
-                      if (state is CartLoaded) {
-                        setState(() {
-                          _cartItems = state.cart?.items ?? [];
-                        });
-                      }
-                    },
-                    child: _cartItems.isEmpty
-                        ? Center(child: CircularProgressIndicator())
-                        : VerticalSliverList(
-                            delegate: SliverChildBuilderDelegate(
-                              (context, index) {
-                                final item = _cartItems[index];
-                                return Column(
-                                  children: [
-                                    OrderItem(
-                                      imageUrl: 'assets/images/shirt_demo.png',
-                                      title: item.name,
-                                      size: 'XL',
-                                      price: PriceUtil.formatPrice(
-                                          item.price.toInt()),
-                                    ),
-                                    Divider(height: 20, thickness: 1),
-                                  ],
-                                );
-                              },
-                              childCount: _cartItems.length,
+                  VerticalSliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final item = _orderList[index];
+                        return Column(
+                          children: [
+                            OrderItem(
+                              imageUrl: 'assets/images/shirt_demo.png',
+                              title: item.name,
+                              size: 'XL',
+                              price: PriceUtil.formatPrice(item.price.toInt()),
+                              quantity: item.quantity,
+                              totalPrice: item.price * item.quantity,
                             ),
-                            height: 700,
-                          ),
+                            Divider(height: 20, thickness: 1),
+                          ],
+                        );
+                      },
+                      childCount: _orderList.length,
+                    ),
+                    height: 500,
+                  ),
+                  Text(
+                    'Total: ${PriceUtil.formatPrice(_totalPrice.toInt())}',
+                    style: textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
