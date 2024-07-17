@@ -1,8 +1,12 @@
+import 'package:f_localbrand/features/cart/cubit/cart_cubit.dart';
 import 'package:f_localbrand/screens/widgets/inputs/quantity_input.dart';
 import 'package:f_localbrand/util/price_util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class CartItem extends StatefulWidget {
+  final int id;
   final String imageUrl;
   final String title;
   final String size;
@@ -19,6 +23,7 @@ class CartItem extends StatefulWidget {
     required this.quantity,
     this.onQuantityChanged,
     this.onCheckedChanged,
+    required this.id,
   });
 
   @override
@@ -30,6 +35,9 @@ class _CartItemState extends State<CartItem> {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       margin: EdgeInsets.only(bottom: 5),
       child: Dismissible(
@@ -54,12 +62,22 @@ class _CartItemState extends State<CartItem> {
                 content: Text('Are you sure?'),
                 actions: <Widget>[
                   TextButton(
-                    onPressed: () => Navigator.of(context).pop(false),
-                    child: Text("Cancel"),
+                    onPressed: () => context.pop(false),
+                    child: Text(
+                      "Cancel",
+                      style: textTheme.bodyMedium,
+                    ),
                   ),
                   ElevatedButton(
-                    onPressed: () => Navigator.of(context).pop(true),
-                    child: Text("Yes, Remove"),
+                    onPressed: () {
+                      context.read<CartCubit>().deleteCartItem(widget.id);
+                      context.pop(false);
+                    },
+                    child: Text(
+                      "Yes, Remove",
+                      style:
+                          textTheme.bodyMedium?.copyWith(color: Colors.white),
+                    ),
                   ),
                 ],
               );

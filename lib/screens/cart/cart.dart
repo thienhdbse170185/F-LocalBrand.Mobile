@@ -65,22 +65,33 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return Scaffold(
-      body: BlocBuilder<CartCubit, CartState>(
-        builder: (context, state) {
-          if (state is CartLoading) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is CartLoaded) {
-            _cart = state.cart!;
-            return _buildCartView(state.cart!, textTheme);
-          } else if (state is CartIsEmpty) {
-            return _buildEmptyCartView(textTheme);
-          } else {
-            return Text('Something error in here...Oops!');
-          }
-        },
+    return BlocListener<CartCubit, CartState>(
+      listener: (context, state) {
+        if (state is DeleteCartItemSuccess) {
+          SnackbarUtil.showSnackbarSuccess(context, 'Delete item cart success!',
+              paddingBottom: 60);
+        } else if (state is DeleteCartItemError) {
+          SnackbarUtil.showSnackbarError(context, 'Delete item cart error!',
+              paddingBottom: 60);
+        }
+      },
+      child: Scaffold(
+        body: BlocBuilder<CartCubit, CartState>(
+          builder: (context, state) {
+            if (state is CartLoading) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (state is CartLoaded) {
+              _cart = state.cart!;
+              return _buildCartView(state.cart!, textTheme);
+            } else if (state is CartIsEmpty) {
+              return _buildEmptyCartView(textTheme);
+            } else {
+              return Text('Something error in here...Oops!');
+            }
+          },
+        ),
       ),
     );
   }
@@ -118,6 +129,7 @@ class _CartScreenState extends State<CartScreen> {
                       final item = cart.items[index];
                       return Column(children: [
                         CartItem(
+                          id: item.id,
                           imageUrl: 'assets/images/shirt_demo.png',
                           title: item.name,
                           size: 'XL',

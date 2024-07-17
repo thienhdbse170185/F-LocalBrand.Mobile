@@ -39,4 +39,14 @@ class CartRepository {
   setCart(CartDto? cart) {
     this.cart = cart;
   }
+
+  Future<bool> deleteCartItem(int id) async {
+    try {
+      cart!.items.removeWhere((item) => item.id == id);
+      await cartApiClient.deleteCartItem(id);
+      return true;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }

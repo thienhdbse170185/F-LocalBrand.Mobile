@@ -48,4 +48,17 @@ class CartCubit extends Cubit<CartState> {
       return false;
     }
   }
+
+  Future<bool> deleteCartItem(int id) async {
+    emit(DeleteCartItemInprogress());
+    try {
+      await cartRepository.deleteCartItem(id);
+      fetchCart();
+      emit(DeleteCartItemSuccess());
+      return true;
+    } catch (e) {
+      emit(DeleteCartItemError());
+      return false;
+    }
+  }
 }

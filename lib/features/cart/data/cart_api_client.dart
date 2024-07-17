@@ -53,4 +53,18 @@ class CartApiClient {
     }
     return false;
   }
+
+  Future<bool> deleteCartItem(int id) async {
+    try {
+      final response = await dio.delete('/cart/delete-cart-item', data: {
+        'productId': id,
+      });
+      if (response.statusCode == 200) {
+        return true;
+      }
+    } catch (e) {
+      rethrow;
+    }
+    return false;
+  }
 }

@@ -97,7 +97,7 @@ class _TrackingOrderScreenState extends State<TrackingOrderScreen> {
                         return Padding(
                             padding: const EdgeInsets.only(left: 24.0),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,7 +112,12 @@ class _TrackingOrderScreenState extends State<TrackingOrderScreen> {
                                             ?.copyWith(color: Colors.grey)),
                                   ],
                                 ),
-                                FaIcon(status['icon'] as IconData, size: 20.0),
+                                Spacer(),
+                                FaIcon(
+                                  status['icon'] as IconData,
+                                  size: 28.0,
+                                  color: colorScheme.primary,
+                                ),
                               ],
                             ));
                       },
@@ -150,7 +155,7 @@ class _TrackingOrderScreenState extends State<TrackingOrderScreen> {
       'title': 'Order Placed',
       'subtitle': '23 Aug 2023, 04:25 PM',
       'isCompleted': true,
-      'icon': FontAwesomeIcons.listCheck
+      'icon': FontAwesomeIcons.checkToSlot
     },
     {
       'title': 'In Progress',
@@ -162,7 +167,7 @@ class _TrackingOrderScreenState extends State<TrackingOrderScreen> {
       'title': 'Shipped',
       'subtitle': 'Expected 02 Sep 2023',
       'isCompleted': false,
-      'icon': FontAwesomeIcons.truckDroplet
+      'icon': FontAwesomeIcons.truck
     },
     {
       'title': 'Delivered',
