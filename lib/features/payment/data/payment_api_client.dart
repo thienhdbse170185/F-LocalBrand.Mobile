@@ -7,7 +7,8 @@ class PaymentApiClient {
 
   Future<String> checkPayment(VnpayResponse vnpayResponse) async {
     try {
-      final requestUrl = '/order/check-payment?${vnpayResponse.toString()}';
+      String requestUrl = '/order/check-payment?${vnpayResponse.toString()}';
+      print('Request: $requestUrl');
       final response = await dio.get(requestUrl);
       if (response.statusCode == 200) {
         return response.data['result'] as String;

@@ -50,6 +50,29 @@ class VnpayResponse {
     }
   }
 
+  factory VnpayResponse.fromQuery(String queryString) {
+    try {
+      final queryParams = Uri.splitQueryString(queryString);
+
+      return VnpayResponse(
+        amount: int.parse(queryParams['vnp_Amount']!),
+        bankCode: queryParams['vnp_BankCode']!,
+        bankTranNo: queryParams['vnp_BankTranNo']!,
+        cardType: queryParams['vnp_CardType']!,
+        orderInfo: queryParams['vnp_OrderInfo']!,
+        payDate: queryParams['vnp_PayDate']!,
+        responseCode: queryParams['vnp_ResponseCode']!,
+        tmnCode: queryParams['vnp_TmnCode']!,
+        transactionNo: queryParams['vnp_TransactionNo']!,
+        transactionStatus: queryParams['vnp_TransactionStatus']!,
+        txnRef: queryParams['vnp_TxnRef']!,
+        secureHash: queryParams['vnp_SecureHash']!,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'amount': amount,
@@ -69,6 +92,6 @@ class VnpayResponse {
 
   @override
   String toString() {
-    return 'vnp_Amount=$amount&vnp_BankCode=$bankCode&vnp_BankTranNo=$bankTranNo&vnp_CardType=$cardType&vnp_OrderInfo=$orderInfo&vnp_PayDate=$payDate&vnp_ResponseCode=$responseCode&vnp_TmnCode=$tmnCode&vnp_TransactionNo=$transactionNo&vnp_TransactionStatus=$transactionStatus&vnp_TxnRef=$txnRef&vnp_SecureHash=$secureHash)';
+    return 'vnp_Amount=$amount&vnp_BankCode=$bankCode&vnp_BankTranNo=$bankTranNo&vnp_CardType=$cardType&vnp_OrderInfo=$orderInfo&vnp_PayDate=$payDate&vnp_ResponseCode=$responseCode&vnp_TmnCode=$tmnCode&vnp_TransactionNo=$transactionNo&vnp_TransactionStatus=$transactionStatus&vnp_TxnRef=$txnRef&vnp_SecureHash=$secureHash';
   }
 }

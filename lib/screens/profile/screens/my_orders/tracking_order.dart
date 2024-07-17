@@ -76,7 +76,7 @@ class _TrackingOrderScreenState extends State<TrackingOrderScreen> {
                   Divider(),
                   SizedBox(height: 16.0),
                   Text('Order Status', style: textTheme.headlineMedium),
-                  SizedBox(height: 24.0),
+                  SizedBox(height: 32.0),
                   FixedTimeline.tileBuilder(
                     theme: TimelineThemeData(
                       nodePosition: 0,

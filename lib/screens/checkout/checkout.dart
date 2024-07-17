@@ -195,7 +195,6 @@ class _PaymentWebViewScreenState extends State<PaymentWebViewScreen> {
         initialUrlRequest: URLRequest(url: WebUri(widget.url)),
         onLoadStop: (controller, url) {
           if (url != null && url.toString().contains('vnpay-return')) {
-            widget.onPaymentSuccess(url);
             print(url);
             context.go(RouteName.payment, extra: url);
           }
