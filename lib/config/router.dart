@@ -1,3 +1,4 @@
+import 'package:f_localbrand/features/order/dto/order_tracking_dto.dart';
 import 'package:f_localbrand/screens/auth/register/register_user_profile.dart';
 import 'package:f_localbrand/screens/category/category.dart';
 import 'package:f_localbrand/screens/checkout/checkout.dart';
@@ -89,7 +90,10 @@ final router = GoRouter(
               GoRoute(
                   path: RouteName.trackingOrder,
                   builder: (context, state) {
-                    return TrackingOrderScreen();
+                    final orderTracking = state.extra as OrderTrackingDTO;
+                    return TrackingOrderScreen(
+                      orderTrackingDTO: orderTracking,
+                    );
                   })
             ])
       ],
@@ -147,7 +151,13 @@ final router = GoRouter(
       builder: (context, state) => FilterScreen(),
     ),
     GoRoute(
-        path: RouteName.payment, builder: (context, state) => PaymentScreen()),
+        path: RouteName.payment,
+        builder: (context, state) {
+          Uri url = state.extra as Uri;
+          return PaymentScreen(
+            url: url,
+          );
+        }),
     GoRoute(
         path: RouteName.viewAll,
         builder: (context, state) {

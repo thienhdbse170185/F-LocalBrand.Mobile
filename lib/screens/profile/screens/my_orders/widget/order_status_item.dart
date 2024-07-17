@@ -1,11 +1,13 @@
 import 'package:f_localbrand/config/router.dart';
+import 'package:f_localbrand/features/order/dto/order_tracking_dto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
 class OrderStatusItem extends StatefulWidget {
-  const OrderStatusItem({super.key});
+  const OrderStatusItem({super.key, required this.orderTracking});
+  final OrderTrackingDTO orderTracking;
 
   @override
   State<OrderStatusItem> createState() => _OrderStatusItemState();
@@ -24,7 +26,7 @@ class _OrderStatusItemState extends State<OrderStatusItem> {
         children: [
           FaIcon(
             FontAwesomeIcons.box,
-            size: 88,
+            size: 80,
             color: colorScheme.primary,
           ),
           Padding(
@@ -34,24 +36,25 @@ class _OrderStatusItemState extends State<OrderStatusItem> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Order #1',
+                  'Order #${widget.orderTracking.orderId}',
                   style: textTheme.headlineMedium,
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                Text('Order Date: 01/01/2022'),
-                Text('Quantity: 4')
+                Text('Order Date: ${widget.orderTracking.orderDate}'),
+                Text('Quantity: ${widget.orderTracking.totalItem}')
               ],
             )),
           ),
           Container(
-            width: 90,
+            width: 110,
             alignment: Alignment.centerRight,
             child: ElevatedButton(
               onPressed: () {
                 context.push(
-                    '${RouteName.profile}/${RouteName.myOrders}/${RouteName.trackingOrder}');
+                    '${RouteName.profile}/${RouteName.myOrders}/${RouteName.trackingOrder}',
+                    extra: widget.orderTracking);
               },
               style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(

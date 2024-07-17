@@ -2,9 +2,10 @@ class ProductCartDto {
   final int id;
   final String name;
   final double price;
-  final int quantity;
+  int quantity;
   final String image;
   final double totalPrice;
+  bool isChecked = false;
 
   ProductCartDto({
     required this.id,

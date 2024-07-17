@@ -8,12 +8,14 @@ class CustomAppbar extends StatelessWidget {
     this.trailing,
     required this.textTheme,
     this.hasBack = true,
+    this.onPressed,
   });
 
   final String title;
   final TextTheme textTheme;
   final Widget? trailing;
   final bool hasBack;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,11 @@ class CustomAppbar extends StatelessWidget {
               bottom: 0,
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: CustomBackButton(),
+                child: CustomBackButton(
+                  onPressed: () {
+                    onPressed?.call();
+                  },
+                ),
               ),
             ),
           Positioned(

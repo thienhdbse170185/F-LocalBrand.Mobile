@@ -358,15 +358,6 @@ class _HomeItemScreenState extends State<HomeItemScreen> {
                                         extra: 'Sneakers');
                                   },
                                 ),
-                                const SizedBox(width: 30),
-                                CategoryImage(
-                                  image: AssetImage("assets/icon/sneakers.png"),
-                                  title: 'Sneaker',
-                                  onPressed: () {
-                                    context.push(RouteName.category,
-                                        extra: 'Sneakers');
-                                  },
-                                ),
                               ],
                             ),
                             textTheme: textTheme,

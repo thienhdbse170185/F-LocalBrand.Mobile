@@ -23,6 +23,9 @@ class CartApiClient {
     try {
       final response = await dio.get('/cart/get-customer-cart');
       if (response.statusCode == 200) {
+        if (response.data['result'] is String) {
+          return null;
+        }
         CartDto result = CartDto.fromJson(response.data['result']);
         return result;
       }
@@ -30,5 +33,38 @@ class CartApiClient {
       throw Exception(e);
     }
     return null;
+  }
+
+  Future<bool> updateCart(List<ProductCartDto> orderList) async {
+    try {
+      final response = await dio.put('/cart/update-cart', data: {
+        'products': orderList
+            .map((item) => {
+                  'productId': item.id,
+                  'quantity': item.quantity,
+                })
+            .toList()
+      });
+      if (response.statusCode == 200) {
+        return true;
+      }
+    } catch (e) {
+      rethrow;
+    }
+    return false;
+  }
+
+  Future<bool> deleteCartItem(int id) async {
+    try {
+      final response = await dio.delete('/cart/delete-cart-item', data: {
+        'productId': id,
+      });
+      if (response.statusCode == 200) {
+        return true;
+      }
+    } catch (e) {
+      rethrow;
+    }
+    return false;
   }
 }

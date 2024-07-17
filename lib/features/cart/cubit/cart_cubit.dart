@@ -26,9 +26,39 @@ class CartCubit extends Cubit<CartState> {
     emit(CartLoading());
     try {
       final cart = await cartRepository.getCart();
-      emit(CartLoaded(cart));
+      if (cart != null) {
+        cartRepository.setCart(cart);
+        emit(CartLoaded(cart));
+      } else {
+        emit(CartIsEmpty());
+      }
     } catch (e) {
       emit(CartError(e.toString()));
+    }
+  }
+
+  Future<bool> updateCart(List<ProductCartDto> selectedCartItems) async {
+    emit(UpdateCartInprogress());
+    try {
+      await cartRepository.updateCart(selectedCartItems);
+      emit(UpdateCartSuccess());
+      return true;
+    } catch (e) {
+      emit(UpdateCartError());
+      return false;
+    }
+  }
+
+  Future<bool> deleteCartItem(int id) async {
+    emit(DeleteCartItemInprogress());
+    try {
+      await cartRepository.deleteCartItem(id);
+      fetchCart();
+      emit(DeleteCartItemSuccess());
+      return true;
+    } catch (e) {
+      emit(DeleteCartItemError());
+      return false;
     }
   }
 }
