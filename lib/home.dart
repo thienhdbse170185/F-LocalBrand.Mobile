@@ -34,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     context.read<CategoryCubit>().fetchCategories();
     context.read<CategoryCubit>().fetchCategoriesProducts();
     context.read<CartCubit>().fetchCart();
+    context.read<ProductCubit>().fetchCustomerProductRecommendations(7);
   }
 
   @override

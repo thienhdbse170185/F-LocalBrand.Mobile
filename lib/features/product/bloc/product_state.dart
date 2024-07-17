@@ -69,3 +69,36 @@ class ProductDetailsLoaded extends ProductState {
 class ProductDetailsError extends ProductState {
   const ProductDetailsError() : super();
 }
+
+class GetCustomerProductInprogress extends ProductState {
+  const GetCustomerProductInprogress() : super();
+}
+
+class GetCustomerProductSuccess extends ProductState {
+  const GetCustomerProductSuccess(this.customerProducts) : super();
+  final List<CustomerProductDto> customerProducts;
+}
+
+class GetCustomerProductError extends ProductState {
+  const GetCustomerProductError(this.message) : super();
+  final String message;
+}
+
+class GetCustomerProductRecommendationsInprogress extends ProductState {
+  const GetCustomerProductRecommendationsInprogress() : super();
+}
+
+class GetCustomerProductRecommendationsSuccess extends ProductState {
+  const GetCustomerProductRecommendationsSuccess(this.customerProducts)
+      : super();
+  final List<CustomerProductDto> customerProducts;
+}
+
+class GetCustomerProductRecommendationsError extends ProductState {
+  const GetCustomerProductRecommendationsError(this.message) : super();
+  final String message;
+}
+
+class CustomerProductRecommendationsEmpty extends ProductState {
+  const CustomerProductRecommendationsEmpty() : super();
+}

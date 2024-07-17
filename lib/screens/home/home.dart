@@ -4,6 +4,7 @@ import 'package:f_localbrand/config/themes/custom_themes/index.dart';
 import 'package:f_localbrand/features/category/cubit/category_cubit.dart';
 import 'package:f_localbrand/features/category/dto/category_dto.dart';
 import 'package:f_localbrand/features/product/bloc/product_cubit.dart';
+import 'package:f_localbrand/features/product/dto/customer_product_dto.dart';
 import 'package:f_localbrand/features/product/dto/product_dto.dart';
 import 'package:f_localbrand/features/user/bloc/user_cubit.dart';
 import 'package:f_localbrand/screens/home/hot_product.dart';
@@ -26,8 +27,11 @@ class HomeItemScreen extends StatefulWidget {
 
 class _HomeItemScreenState extends State<HomeItemScreen> {
   List<ProductDto> _productBestsellers = [], _productNewest = [];
+  List<CustomerProductDto> _productRecommendations = [];
   List<CategoryDto> _categories = [];
-  bool _isBestsellerLoading = false, _isNewestLoading = false;
+  bool _isBestsellerLoading = false,
+      _isNewestLoading = false,
+      _isRecommendationsLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +81,21 @@ class _HomeItemScreenState extends State<HomeItemScreen> {
               print('get newest error');
               setState(() {
                 _isNewestLoading = false;
+              });
+            } else if (state is GetCustomerProductRecommendationsInprogress) {
+              setState(() {
+                _isRecommendationsLoading = true;
+              });
+            } else if (state is GetCustomerProductRecommendationsSuccess) {
+              print('get customer product recommendations success');
+              setState(() {
+                _isRecommendationsLoading = false;
+                _productRecommendations = state.customerProducts;
+              });
+            } else if (state is GetCustomerProductRecommendationsError) {
+              print('get customer product recommendations error');
+              setState(() {
+                _isRecommendationsLoading = false;
               });
             }
           },
@@ -226,151 +245,178 @@ class _HomeItemScreenState extends State<HomeItemScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
               Expanded(
-                  child: MediaQuery.removePadding(
-                      context: context,
-                      removeTop: true,
-                      child: ListView(
-                        physics: ClampingScrollPhysics(),
-                        shrinkWrap: true,
-                        children: [
-                          SubSectionHome(
-                              paddingTop: 20,
-                              hasAllText: true,
-                              title: 'BEST-SELLERS',
-                              body: _isBestsellerLoading
-                                  ? Center(child: CircularProgressIndicator())
-                                  : _productBestsellers.isEmpty
-                                      ? Text("No best-sellers available")
-                                      : HorizontalGridList(
-                                          delegate: SliverChildBuilderDelegate(
-                                            (context, index) {
-                                              final product =
-                                                  _productBestsellers[index];
-                                              return ConstrainedBox(
-                                                constraints: BoxConstraints(
-                                                  minHeight: 300,
-                                                  maxHeight: 500,
-                                                  minWidth: 0,
-                                                  maxWidth: 200,
-                                                ),
-                                                child: ProductHome(
-                                                    product: product),
-                                              );
-                                            },
-                                            childCount:
-                                                _productBestsellers.length,
+                child: MediaQuery.removePadding(
+                  context: context,
+                  removeTop: true,
+                  child: ListView(
+                    physics: ClampingScrollPhysics(),
+                    shrinkWrap: true,
+                    children: [
+                      _isRecommendationsLoading
+                          ? CircularProgressIndicator()
+                          : _productRecommendations.isEmpty
+                              ? Container()
+                              : SubSectionHome(
+                                  title: 'TOP PICKS FOR YOU',
+                                  paddingTop: 30,
+                                  hasAllText: true,
+                                  textTheme: textTheme,
+                                  body: HorizontalGridList(
+                                    delegate: SliverChildBuilderDelegate(
+                                      (context, index) {
+                                        final customerProduct =
+                                            _productRecommendations[index];
+                                        return ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            minHeight: 300,
+                                            maxHeight: 500,
+                                            minWidth: 0,
+                                            maxWidth: 200,
                                           ),
-                                        ),
-                              textTheme: textTheme),
-                          SubSectionHome(
-                            title: 'NEWS FROM F-LocalBrand',
-                            body: CarouselSlider(
-                              carouselController: _controller,
-                              options: CarouselOptions(
-                                height: 200,
-                                aspectRatio: 16 / 9,
-                                viewportFraction: 0.8,
-                                enlargeCenterPage: true,
-                                pauseAutoPlayOnManualNavigate: true,
-                                autoPlay: true,
-                                onPageChanged: (index, reason) {
-                                  setState(() {
-                                    _current = index;
-                                  });
-                                },
-                              ),
-                              items: imageList.map((imagePath) {
-                                return Builder(
-                                  builder: (BuildContext context) {
-                                    return Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 5.0),
-                                      child: Image.asset(
-                                        imagePath,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    );
-                                  },
+                                          child: ProductHome(
+                                            product: customerProduct.product,
+                                          ),
+                                        );
+                                      },
+                                      childCount:
+                                          _productRecommendations.length,
+                                    ),
+                                  )),
+                      SubSectionHome(
+                        paddingTop: 40,
+                        hasAllText: true,
+                        title: 'BEST-SELLERS',
+                        body: _isBestsellerLoading
+                            ? Center(child: CircularProgressIndicator())
+                            : _productBestsellers.isEmpty
+                                ? Text("No best-sellers available")
+                                : HorizontalGridList(
+                                    delegate: SliverChildBuilderDelegate(
+                                      (context, index) {
+                                        final product =
+                                            _productBestsellers[index];
+                                        return ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            minHeight: 300,
+                                            maxHeight: 500,
+                                            minWidth: 0,
+                                            maxWidth: 200,
+                                          ),
+                                          child: ProductHome(product: product),
+                                        );
+                                      },
+                                      childCount: _productBestsellers.length,
+                                    ),
+                                  ),
+                        textTheme: textTheme,
+                      ),
+                      SubSectionHome(
+                        title: 'NEWS FROM F-LocalBrand',
+                        body: CarouselSlider(
+                          carouselController: _controller,
+                          options: CarouselOptions(
+                            height: 200,
+                            aspectRatio: 16 / 9,
+                            viewportFraction: 0.8,
+                            enlargeCenterPage: true,
+                            pauseAutoPlayOnManualNavigate: true,
+                            autoPlay: true,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                _current = index;
+                              });
+                            },
+                          ),
+                          items: imageList.map((imagePath) {
+                            return Builder(
+                              builder: (BuildContext context) {
+                                return Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                  child: Image.asset(
+                                    imagePath,
+                                    fit: BoxFit.cover,
+                                  ),
                                 );
-                              }).toList(),
-                            ),
-                            textTheme: textTheme,
-                          ),
-                          SubSectionHome(
-                              hasAllText: true,
-                              title: 'NEWEST',
-                              body: _isNewestLoading
-                                  ? Center(child: CircularProgressIndicator())
-                                  : _productNewest.isEmpty
-                                      ? Text("No newest products available")
-                                      : HorizontalGridList(
-                                          delegate: SliverChildBuilderDelegate(
-                                            (context, index) {
-                                              // final product = _productNewest[index];
-                                              final product =
-                                                  _productNewest[index];
-                                              return ConstrainedBox(
-                                                constraints: BoxConstraints(
-                                                  minHeight: 300,
-                                                  maxHeight: 500,
-                                                  minWidth: 0,
-                                                  maxWidth: 200,
-                                                ),
-                                                child: ProductHome(
-                                                    product: product),
-                                              );
-                                            },
-                                            childCount: _productNewest.length,
+                              },
+                            );
+                          }).toList(),
+                        ),
+                        textTheme: textTheme,
+                      ),
+                      SubSectionHome(
+                        hasAllText: true,
+                        title: 'NEWEST',
+                        body: _isNewestLoading
+                            ? Center(child: CircularProgressIndicator())
+                            : _productNewest.isEmpty
+                                ? Text("No newest products available")
+                                : HorizontalGridList(
+                                    delegate: SliverChildBuilderDelegate(
+                                      (context, index) {
+                                        final product = _productNewest[index];
+                                        return ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            minHeight: 300,
+                                            maxHeight: 500,
+                                            minWidth: 0,
+                                            maxWidth: 200,
                                           ),
-                                        ),
-                              textTheme: textTheme),
-                          SubSectionHome(
-                            title: 'CATEGORY',
-                            body: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                CategoryImage(
-                                  image: AssetImage("assets/icon/shirt.png"),
-                                  title: 'Shirt',
-                                  onPressed: () {
-                                    context.push(RouteName.category,
-                                        extra: 'Shirts');
-                                  },
-                                ),
-                                const SizedBox(width: 30),
-                                CategoryImage(
-                                  image: AssetImage("assets/icon/pant.png"),
-                                  title: 'Pant',
-                                  onPressed: () {
-                                    context.push(RouteName.category,
-                                        extra: 'Pants');
-                                  },
-                                ),
-                                const SizedBox(width: 30),
-                                CategoryImage(
-                                  image: AssetImage("assets/icon/sneakers.png"),
-                                  title: 'Sneaker',
-                                  onPressed: () {
-                                    context.push(RouteName.category,
-                                        extra: 'Sneakers');
-                                  },
-                                ),
-                              ],
+                                          child: ProductHome(product: product),
+                                        );
+                                      },
+                                      childCount: _productNewest.length,
+                                    ),
+                                  ),
+                        textTheme: textTheme,
+                      ),
+                      SubSectionHome(
+                        title: 'CATEGORY',
+                        body: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            CategoryImage(
+                              image: AssetImage("assets/icon/shirt.png"),
+                              title: 'Shirt',
+                              onPressed: () {
+                                context.push(RouteName.category,
+                                    extra: 'Shirts');
+                              },
                             ),
-                            textTheme: textTheme,
-                            hasAllText: true,
-                          ),
-                          SubSectionHome(
-                            title: 'SHOPPING NOW',
-                            body: HotProduct(),
-                            textTheme: textTheme,
-                            hasAllText: true,
-                          )
-                        ],
-                      ))),
+                            const SizedBox(width: 30),
+                            CategoryImage(
+                              image: AssetImage("assets/icon/pant.png"),
+                              title: 'Pant',
+                              onPressed: () {
+                                context.push(RouteName.category,
+                                    extra: 'Pants');
+                              },
+                            ),
+                            const SizedBox(width: 30),
+                            CategoryImage(
+                              image: AssetImage("assets/icon/sneakers.png"),
+                              title: 'Sneaker',
+                              onPressed: () {
+                                context.push(RouteName.category,
+                                    extra: 'Sneakers');
+                              },
+                            ),
+                          ],
+                        ),
+                        textTheme: textTheme,
+                        hasAllText: true,
+                      ),
+                      SubSectionHome(
+                        title: 'SHOPPING NOW',
+                        body: HotProduct(),
+                        textTheme: textTheme,
+                        hasAllText: true,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),

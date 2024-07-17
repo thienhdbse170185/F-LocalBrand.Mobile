@@ -57,6 +57,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
       },
       {
+        'title': 'My Products',
+        'icon': FontAwesomeIcons.productHunt,
+        'onTap': () {
+          context.push('${RouteName.profile}/${RouteName.myProducts}');
+        }
+      },
+      {
         'route': '/settings',
         'title': 'Settings',
         'icon': FontAwesomeIcons.gear,

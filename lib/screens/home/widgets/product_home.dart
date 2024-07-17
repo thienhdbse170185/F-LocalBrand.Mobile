@@ -45,7 +45,7 @@ class _ProductHomeState extends State<ProductHome> {
 
     return GestureDetector(
       onTap: () {
-        context.read<ProductCubit>().getProductDetail(widget.product.id);
+        context.read<ProductCubit>().fetchProductDetail(widget.product.id);
         context.push(RouteName.productDetail, extra: widget.product.id);
       },
       child: Card(

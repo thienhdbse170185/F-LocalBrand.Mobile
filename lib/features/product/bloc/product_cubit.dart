@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:f_localbrand/features/product/data/product_repository.dart';
+import 'package:f_localbrand/features/product/dto/customer_product_dto.dart';
 import 'package:f_localbrand/features/product/dto/product_dto.dart';
 
 part 'product_state.dart';
@@ -29,7 +30,7 @@ class ProductCubit extends Cubit<ProductState> {
     }
   }
 
-  Future<void> getProductDetail(int id) async {
+  Future<void> fetchProductDetail(int id) async {
     emit(ProductDetailsLoading());
     try {
       final product = await productRepository.getProductDetail(id);
@@ -40,6 +41,27 @@ class ProductCubit extends Cubit<ProductState> {
       emit(ProductDetailsError());
     } catch (e) {
       emit(const ProductDetailsError());
+    }
+  }
+
+  Future<void> getCustomerProduct(int id) async {
+    emit(GetCustomerProductInprogress());
+    try {
+      final products = await productRepository.getCustomerProduct(id);
+      emit(GetCustomerProductSuccess(products));
+    } catch (e) {
+      emit(GetCustomerProductError(e.toString()));
+    }
+  }
+
+  Future<void> fetchCustomerProductRecommendations(int id) async {
+    emit(GetCustomerProductRecommendationsInprogress());
+    try {
+      final products =
+          await productRepository.getCustomerProductRecommendations(id);
+      emit(GetCustomerProductRecommendationsSuccess(products));
+    } catch (e) {
+      emit(GetCustomerProductRecommendationsError(e.toString()));
     }
   }
 }

@@ -8,6 +8,7 @@ import 'package:f_localbrand/screens/payment/payment.dart';
 import 'package:f_localbrand/screens/product/product_detail.dart';
 import 'package:f_localbrand/screens/profile/screens/my_orders/my_orders.dart';
 import 'package:f_localbrand/screens/profile/screens/my_orders/tracking_order.dart';
+import 'package:f_localbrand/screens/profile/screens/my_products/my_products.dart';
 import 'package:f_localbrand/screens/profile/screens/profile_details.dart';
 import 'package:f_localbrand/screens/search/search.dart';
 import 'package:f_localbrand/screens/view_all/view_all.dart';
@@ -40,6 +41,7 @@ class RouteName {
   static const String viewAll = '/view-all';
   static const String myOrders = 'orders';
   static const String trackingOrder = 'tracking';
+  static const String myProducts = 'products';
 
   static const publicRoutes = [
     login,
@@ -95,7 +97,12 @@ final router = GoRouter(
                       orderTrackingDTO: orderTracking,
                     );
                   })
-            ])
+            ]),
+        GoRoute(
+            path: RouteName.myProducts,
+            builder: (context, state) {
+              return MyProductsScreen();
+            })
       ],
     ),
     GoRoute(

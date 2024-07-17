@@ -1,4 +1,5 @@
 import 'package:f_localbrand/features/product/data/product_api_client.dart';
+import 'package:f_localbrand/features/product/dto/customer_product_dto.dart';
 import 'package:f_localbrand/features/product/dto/product_dto.dart';
 
 class ProductRepository {
@@ -43,5 +44,26 @@ class ProductRepository {
       print(e);
     }
     return null;
+  }
+
+  Future<List<CustomerProductDto>> getCustomerProduct(int id) async {
+    try {
+      final result = productApiClient.fetchCustomerProduct(id);
+      return result;
+    } catch (e) {
+      print(e);
+    }
+    return [];
+  }
+
+  Future<List<CustomerProductDto>> getCustomerProductRecommendations(
+      int id) async {
+    try {
+      final result = productApiClient.fetchRecommendCustomerProduct(id);
+      return result;
+    } catch (e) {
+      print(e);
+    }
+    return [];
   }
 }
