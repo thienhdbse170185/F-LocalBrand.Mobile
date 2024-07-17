@@ -1,3 +1,4 @@
+import 'package:f_localbrand/features/order/dto/order_tracking_dto.dart';
 import 'package:f_localbrand/screens/auth/register/register_user_profile.dart';
 import 'package:f_localbrand/screens/category/category.dart';
 import 'package:f_localbrand/screens/checkout/checkout.dart';
@@ -89,7 +90,10 @@ final router = GoRouter(
               GoRoute(
                   path: RouteName.trackingOrder,
                   builder: (context, state) {
-                    return TrackingOrderScreen();
+                    final orderTracking = state.extra as OrderTrackingDTO;
+                    return TrackingOrderScreen(
+                      orderTrackingDTO: orderTracking,
+                    );
                   })
             ])
       ],

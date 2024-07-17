@@ -47,7 +47,7 @@ class ProductDto {
       imageUrl: json['imageUrl'] ?? 'https://example.com/image1.jpg',
       size: json['size'],
       color: json['color'],
-      status: json['status'],
+      status: json['status'] ?? '',
       recommendations: recommend,
     );
   }

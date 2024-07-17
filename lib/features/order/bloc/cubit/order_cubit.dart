@@ -2,8 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:f_localbrand/features/cart/dto/cart_product_dto.dart';
 import 'package:f_localbrand/features/order/data/order_repository.dart';
+import 'package:f_localbrand/features/order/dto/order_details.dart';
 import 'package:f_localbrand/features/order/dto/order_dto.dart';
-import 'package:f_localbrand/features/payment/cubit/payment_cubit.dart';
+import 'package:f_localbrand/features/order/dto/order_tracking_dto.dart';
+import 'package:f_localbrand/features/product/dto/product_dto.dart';
 
 part 'order_state.dart';
 
@@ -46,6 +48,28 @@ class OrderCubit extends Cubit<OrderState> {
   List<ProductCartDto> getOrderList() {
     List<ProductCartDto> result = orderRepository.orderList;
     return result;
+  }
+
+  Future<void> fetchInprogressOrderTracking() async {
+    emit(FetchInprogressOrderTrackingInprogress());
+    try {
+      List<OrderTrackingDTO> result =
+          await orderRepository.getInprogressOrderTracking();
+      emit(FetchInprogressOrderTrackingSuccess(result));
+    } catch (e) {
+      emit(FetchInprogressOrderTrackingFail(e.toString()));
+    }
+  }
+
+  Future<void> fetchProductByOrderId(int orderId) async {
+    emit(FetchOrderDetailsInprogress());
+    try {
+      List<OrderDetailsDTO> result =
+          await orderRepository.getOrderDetails(orderId);
+      emit(FetchOrderDetailsSuccess(result));
+    } catch (e) {
+      emit(FetchOrderDetailsFail(e.toString()));
+    }
   }
 
   List<ProductCartDto> get orderList => orderRepository.orderList;

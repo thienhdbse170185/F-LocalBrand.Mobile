@@ -1,3 +1,4 @@
+import 'package:f_localbrand/features/order/bloc/cubit/order_cubit.dart';
 import 'package:f_localbrand/screens/profile/screens/my_orders/tabs/active_tab.dart';
 import 'package:f_localbrand/screens/profile/screens/my_orders/tabs/cancelled_tab.dart';
 import 'package:f_localbrand/screens/profile/screens/my_orders/tabs/completed_tab.dart';
@@ -5,6 +6,7 @@ import 'package:f_localbrand/screens/widgets/appbars/custom_appbar.dart';
 import 'package:f_localbrand/screens/widgets/buttons/back_button.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyOrdersScreen extends StatefulWidget {
   const MyOrdersScreen({super.key});
@@ -14,6 +16,12 @@ class MyOrdersScreen extends StatefulWidget {
 }
 
 class _MyOrdersScreenState extends State<MyOrdersScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<OrderCubit>().fetchInprogressOrderTracking();
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;

@@ -6,16 +6,16 @@ class OrderItem extends StatelessWidget {
   final String title;
   final String size;
   final String price;
-  final int quantity;
-  final double totalPrice;
+  final int? quantity;
+  final double? totalPrice;
 
   const OrderItem(
       {required this.imageUrl,
       required this.title,
       required this.size,
       required this.price,
-      required this.quantity,
-      required this.totalPrice});
+      this.quantity,
+      this.totalPrice});
 
   @override
   Widget build(BuildContext context) {
@@ -60,10 +60,11 @@ class OrderItem extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                Text(
-                  'Total: ${PriceUtil.formatPrice(totalPrice.toInt())}',
-                  style: textTheme.displayMedium,
-                ),
+                if (totalPrice != null)
+                  Text(
+                    PriceUtil.formatPrice(totalPrice!.toInt()),
+                    style: textTheme.headlineSmall,
+                  ),
               ],
             ),
           ),
