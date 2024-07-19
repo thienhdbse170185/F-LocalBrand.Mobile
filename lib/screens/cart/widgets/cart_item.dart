@@ -103,7 +103,7 @@ class _CartItemState extends State<CartItem> {
                   });
                 },
               ),
-              Image.asset(
+              Image.network(
                 widget.imageUrl,
                 width: 80,
                 height: 120,

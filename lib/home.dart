@@ -1,8 +1,10 @@
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:f_localbrand/config/router.dart';
 import 'package:f_localbrand/features/auth/bloc/auth_bloc.dart';
+import 'package:f_localbrand/features/campaign/cubit/campaign_cubit.dart';
 import 'package:f_localbrand/features/cart/cubit/cart_cubit.dart';
 import 'package:f_localbrand/features/category/cubit/category_cubit.dart';
+import 'package:f_localbrand/features/collection/cubit/collection_cubit.dart';
 import 'package:f_localbrand/features/product/bloc/product_cubit.dart';
 import 'package:f_localbrand/features/user/bloc/user_cubit.dart';
 import 'package:f_localbrand/screens/cart/cart.dart';
@@ -35,6 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
     context.read<CategoryCubit>().fetchCategoriesProducts();
     context.read<CartCubit>().fetchCart();
     context.read<ProductCubit>().fetchCustomerProductRecommendations(7);
+    context.read<CollectionCubit>().getCollectionList();
+    context.read<CampaignCubit>().fetchCampaigns();
   }
 
   @override

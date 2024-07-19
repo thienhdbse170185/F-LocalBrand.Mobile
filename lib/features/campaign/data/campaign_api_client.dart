@@ -10,7 +10,7 @@ class CampaignApiClient {
     try {
       final campaigns = await dio.get('/campaigns/filter');
       if (campaigns.statusCode == 200) {
-        return (campaigns.data as List)
+        return (campaigns.data['result']['campaigns'] as List)
             .map((e) => CampaignDto.fromJson(e))
             .toList();
       }

@@ -17,9 +17,9 @@ class CampaignDto {
 
   factory CampaignDto.fromJson(Map<String, dynamic> json) {
     return CampaignDto(
-      json['campaign']['id'] ?? 0,
-      json['campaign']['name'] ?? "",
-      json['campaign']['status'] ?? "",
+      json['id'] ?? 0,
+      json['name'] ?? "",
+      json['status'] ?? "",
     );
   }
 }

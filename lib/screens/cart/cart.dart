@@ -130,7 +130,7 @@ class _CartScreenState extends State<CartScreen> {
                       return Column(children: [
                         CartItem(
                           id: item.id,
-                          imageUrl: 'assets/images/shirt_demo.png',
+                          imageUrl: item.image,
                           title: item.name,
                           size: 'XL',
                           price: item.price,

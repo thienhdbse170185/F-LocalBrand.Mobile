@@ -23,11 +23,11 @@ class UserApiClient {
     }
   }
 
-  Future<void> updateDeviceId(String deviceId) async {
+  Future<void> updateDeviceId(String deviceId, String jwtToken) async {
     try {
-      await dio.put(
-        '/user/update/deviceid/$deviceId',
-      );
+      await dio.put('/customer/deviceid/$deviceId',
+          options:
+              Options(headers: {HttpHeaders.authorizationHeader: '$jwtToken'}));
     } catch (e) {
       rethrow;
     }

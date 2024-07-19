@@ -61,21 +61,31 @@ class _ProductHomeState extends State<ProductHome> {
                 ClipRRect(
                   borderRadius:
                       BorderRadius.vertical(top: Radius.circular(10.0)),
-                  // Adjust the image height
-                  child: Image.asset(
-                    'assets/images/shirt_demo.png',
+                  child: Image.network(
+                    widget.product.imageUrl,
                     height: 160, // Adjust height to fit the card
                     width: double.infinity,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        height: 160,
+                        color: Colors.grey.shade200,
+                        child: Center(
+                          child: Icon(
+                            Icons.broken_image,
+                            color: Colors.grey,
+                            size: 50,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 Positioned(
                   top: 10,
                   right: 10,
                   child: GestureDetector(
-                    onTap: () {
-                      _onFavoritePressed();
-                    },
+                    onTap: _onFavoritePressed,
                     child: CircleAvatar(
                       backgroundColor: Colors.white,
                       child: FaIcon(

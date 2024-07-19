@@ -38,7 +38,7 @@ class AuthRepository {
       );
       await authLocalDataSource.saveToken(loginSuccessDto.accessToken);
       String token = await PushNotifications.getDeviceToken();
-      await userApiClient.updateDeviceId(token);
+      await userApiClient.updateDeviceId(token, loginSuccessDto.accessToken);
     } catch (e) {
       log('$e');
       return Failure('$e');
@@ -103,7 +103,7 @@ class AuthRepository {
           .loginGoogle(userCredential.credential?.accessToken);
       print(response.accessToken);
       String token = await PushNotifications.getDeviceToken();
-      await userApiClient.updateDeviceId(token);
+      await userApiClient.updateDeviceId(token, response.accessToken);
       await authLocalDataSource.saveToken(response.accessToken);
       return Success(null);
     } on firebase_auth.FirebaseAuthException catch (e) {

@@ -205,11 +205,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   child: Stack(
                     children: [
                       Center(
-                        child: Image.asset(
-                          'assets/images/shirt_demo.png',
-                          height: 400,
-                          fit: BoxFit.cover,
-                        ),
+                        child: _product?.imageUrl != null
+                            ? Image.network(
+                                _product!.imageUrl!,
+                                height: 400,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Icon(Icons.error,
+                                      size:
+                                          100); // Hiển thị biểu tượng lỗi nếu không tải được hình ảnh
+                                },
+                              )
+                            : CircularProgressIndicator(), // Hiển thị biểu tượng hình ảnh nếu không có URL
                       ),
                       Positioned(
                         top: 40,
@@ -383,21 +390,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               bottom: 10,
               left: 0,
               right: 0,
-              child: AnimatedOpacity(
-                opacity: _cartOpacity,
-                duration: Duration(milliseconds: 300),
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: ElevatedButton(
-                    onPressed: _addToCart,
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 14),
-                    ),
-                    child: Text(
-                      'Add to Cart',
-                      style: textTheme.headlineMedium?.copyWith(
-                        color: Colors.white,
-                      ),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: ElevatedButton(
+                  onPressed: _addToCart,
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 14),
+                  ),
+                  child: Text(
+                    'Add to Cart',
+                    style: textTheme.headlineMedium?.copyWith(
+                      color: Colors.white,
                     ),
                   ),
                 ),

@@ -125,7 +125,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         return Column(
                           children: [
                             OrderItem(
-                              imageUrl: 'assets/images/shirt_demo.png',
+                              imageUrl: item.image,
                               title: item.name,
                               size: 'XL',
                               price: PriceUtil.formatPrice(item.price.toInt()),
@@ -138,7 +138,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       },
                       childCount: _orderList.length,
                     ),
-                    height: 500,
+                    height: 530,
                   ),
                   Text(
                     'Total: ${PriceUtil.formatPrice(_totalPrice.toInt())}',

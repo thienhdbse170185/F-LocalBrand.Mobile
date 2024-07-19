@@ -1,8 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:f_localbrand/config/router.dart';
 import 'package:f_localbrand/config/themes/custom_themes/index.dart';
+import 'package:f_localbrand/features/campaign/cubit/campaign_cubit.dart';
+import 'package:f_localbrand/features/campaign/dto/campaign_dto.dart';
+import 'package:f_localbrand/features/cart/cubit/cart_cubit.dart';
 import 'package:f_localbrand/features/category/cubit/category_cubit.dart';
 import 'package:f_localbrand/features/category/dto/category_dto.dart';
+import 'package:f_localbrand/features/collection/cubit/collection_cubit.dart';
+import 'package:f_localbrand/features/collection/dto/collection_dto.dart';
 import 'package:f_localbrand/features/product/bloc/product_cubit.dart';
 import 'package:f_localbrand/features/product/dto/customer_product_dto.dart';
 import 'package:f_localbrand/features/product/dto/product_dto.dart';
@@ -28,6 +33,8 @@ class HomeItemScreen extends StatefulWidget {
 class _HomeItemScreenState extends State<HomeItemScreen> {
   List<ProductDto> _productBestsellers = [], _productNewest = [];
   List<CustomerProductDto> _productRecommendations = [];
+  List<CollectionDto> _collections = [];
+  List<CampaignDto> _campaigns = [];
   List<CategoryDto> _categories = [];
   bool _isBestsellerLoading = false,
       _isNewestLoading = false,
@@ -123,6 +130,33 @@ class _HomeItemScreenState extends State<HomeItemScreen> {
             }
           },
         ),
+        BlocListener<CollectionCubit, CollectionState>(
+            listener: (context, state) {
+          if (state is GetAllCollectionInprogress) {
+            print('get all collection loading');
+          } else if (state is GetAllCollectionSuccess) {
+            setState(() {
+              _collections = state.collections;
+            });
+            print('get all collection loaded');
+          } else if (state is GetAllCollectionError) {
+            print('get all collection error');
+          }
+        }),
+        BlocListener<CampaignCubit, CampaignState>(
+          listener: (context, state) {
+            if (state is GetCampaignsLoading) {
+              print('get campaigns loading');
+            } else if (state is GetCampaignsSuccess) {
+              setState(() {
+                _campaigns = state.campaigns;
+              });
+              print('get campaigns loaded');
+            } else if (state is GetCampaignsFailure) {
+              print('get campaigns error');
+            }
+          },
+        )
       ],
       child: Scaffold(
         body: Padding(
@@ -284,34 +318,6 @@ class _HomeItemScreenState extends State<HomeItemScreen> {
                                     ),
                                   )),
                       SubSectionHome(
-                        paddingTop: 40,
-                        hasAllText: true,
-                        title: 'BEST-SELLERS',
-                        body: _isBestsellerLoading
-                            ? Center(child: CircularProgressIndicator())
-                            : _productBestsellers.isEmpty
-                                ? Text("No best-sellers available")
-                                : HorizontalGridList(
-                                    delegate: SliverChildBuilderDelegate(
-                                      (context, index) {
-                                        final product =
-                                            _productBestsellers[index];
-                                        return ConstrainedBox(
-                                          constraints: BoxConstraints(
-                                            minHeight: 300,
-                                            maxHeight: 500,
-                                            minWidth: 0,
-                                            maxWidth: 200,
-                                          ),
-                                          child: ProductHome(product: product),
-                                        );
-                                      },
-                                      childCount: _productBestsellers.length,
-                                    ),
-                                  ),
-                        textTheme: textTheme,
-                      ),
-                      SubSectionHome(
                         title: 'NEWS FROM F-LocalBrand',
                         body: CarouselSlider(
                           carouselController: _controller,
@@ -343,6 +349,34 @@ class _HomeItemScreenState extends State<HomeItemScreen> {
                             );
                           }).toList(),
                         ),
+                        textTheme: textTheme,
+                      ),
+                      SubSectionHome(
+                        paddingTop: 40,
+                        hasAllText: true,
+                        title: 'BEST-SELLERS',
+                        body: _isBestsellerLoading
+                            ? Center(child: CircularProgressIndicator())
+                            : _productBestsellers.isEmpty
+                                ? Text("No best-sellers available")
+                                : HorizontalGridList(
+                                    delegate: SliverChildBuilderDelegate(
+                                      (context, index) {
+                                        final product =
+                                            _productBestsellers[index];
+                                        return ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            minHeight: 300,
+                                            maxHeight: 500,
+                                            minWidth: 0,
+                                            maxWidth: 200,
+                                          ),
+                                          child: ProductHome(product: product),
+                                        );
+                                      },
+                                      childCount: _productBestsellers.length,
+                                    ),
+                                  ),
                         textTheme: textTheme,
                       ),
                       SubSectionHome(
@@ -408,10 +442,20 @@ class _HomeItemScreenState extends State<HomeItemScreen> {
                         hasAllText: true,
                       ),
                       SubSectionHome(
-                        title: 'SHOPPING NOW',
+                        title: 'COLLECTION',
                         body: HotProduct(),
                         textTheme: textTheme,
                         hasAllText: true,
+                      ),
+                      const SizedBox(height: 40),
+                      Text(
+                        'Thank you for being with us.',
+                        style: textTheme.displayMedium,
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Copyright © 2022 F-LocalBrand. All rights reserved.',
+                        style: textTheme.bodySmall,
                       ),
                     ],
                   ),

@@ -1,11 +1,15 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:f_localbrand/features/campaign/cubit/campaign_cubit.dart';
 import 'package:f_localbrand/features/campaign/data/campaign_api_client.dart';
 import 'package:f_localbrand/features/campaign/data/campaign_repository.dart';
 import 'package:f_localbrand/features/category/cubit/category_cubit.dart';
 import 'package:f_localbrand/features/category/data/category_api_client.dart';
 import 'package:f_localbrand/features/category/data/category_repository.dart';
+import 'package:f_localbrand/features/collection/cubit/collection_cubit.dart';
+import 'package:f_localbrand/features/collection/data/collection_api_client.dart';
+import 'package:f_localbrand/features/collection/data/collection_repository.dart';
 import 'package:f_localbrand/features/order/bloc/cubit/order_cubit.dart';
 import 'package:f_localbrand/features/order/data/order_api_client.dart';
 import 'package:f_localbrand/features/order/data/order_repository.dart';
@@ -168,7 +172,11 @@ class MyApp extends StatelessWidget {
                 OrderRepository(orderApiClient: OrderApiClient(dio))),
         RepositoryProvider(
             create: (context) =>
-                PaymentRepository(paymentApiClient: PaymentApiClient(dio)))
+                PaymentRepository(paymentApiClient: PaymentApiClient(dio))),
+        RepositoryProvider(
+          create: (context) => CollectionRepository(
+              collectionApiClient: CollectionApiClient(dio)),
+        )
       ],
       child: MultiBlocProvider(
         providers: [
@@ -194,6 +202,9 @@ class MyApp extends StatelessWidget {
           BlocProvider(
               create: (context) => PaymentCubit(
                   paymentRepository: context.read<PaymentRepository>())),
+          BlocProvider(
+              create: (context) => CollectionCubit(
+                  collectionRepository: context.read<CollectionRepository>()))
         ],
         child: AppContent(),
       ),
