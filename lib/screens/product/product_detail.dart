@@ -1,5 +1,6 @@
 import 'package:f_localbrand/features/cart/cubit/cart_cubit.dart';
 import 'package:f_localbrand/features/product/bloc/product_cubit.dart';
+import 'package:f_localbrand/features/product/dto/product_details.dart';
 import 'package:f_localbrand/features/product/dto/product_dto.dart';
 import 'package:f_localbrand/features/product/dto/product_home_dto.dart';
 import 'package:f_localbrand/screens/home/widgets/product_home.dart';
@@ -25,11 +26,15 @@ class ProductDetailScreen extends StatefulWidget {
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   ProductDto? _product;
+  List<ProductDetailsDTO>? _productDetails;
 
   bool _isFavourite = false;
-  String _selectedSize = 'S';
-  Color? _selectedColor = Colors.brown;
+  String _selectedSize = '';
+  Color? _selectedColor;
   int quantity = 1;
+
+  List<String> _availableSizes = [];
+  List<Color> _availableColors = [];
 
   final ScrollController _scrollController = ScrollController();
   double _imageHeight = 400;
@@ -72,6 +77,70 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     }
   }
 
+  void _updateAvailableSizesAndColors() {
+    if (_productDetails != null) {
+      Set<String> sizes = {};
+      Set<Color> colors = {};
+
+      for (var detail in _productDetails!) {
+        sizes.add(detail.size.toString());
+        colors.add(_parseColor(detail.color));
+      }
+
+      setState(() {
+        _availableSizes = sizes.toList();
+        _availableColors = colors.toList();
+      });
+    }
+  }
+
+  void _updateAvailableSizes() {
+    if (_productDetails != null && _selectedColor != null) {
+      Set<String> sizes = {};
+
+      for (var detail in _productDetails!) {
+        if (_parseColor(detail.color) == _selectedColor) {
+          sizes.add(detail.size.toString());
+        }
+      }
+
+      setState(() {
+        _availableSizes = sizes.toList();
+      });
+    }
+  }
+
+  void _updateAvailableColors() {
+    if (_productDetails != null && _selectedSize.isNotEmpty) {
+      Set<Color> colors = {};
+
+      for (var detail in _productDetails!) {
+        if (detail.size == _selectedSize) {
+          colors.add(_parseColor(detail.color));
+        }
+      }
+
+      setState(() {
+        _availableColors = colors.toList();
+      });
+    }
+  }
+
+  Color _parseColor(String colorStr) {
+    switch (colorStr.toLowerCase()) {
+      case 'brown':
+        return Colors.brown;
+      case 'black':
+        return Colors.black;
+      case 'grey':
+        return Colors.grey;
+      case 'white':
+        return Colors.white;
+      default:
+        return Colors.transparent;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
@@ -87,9 +156,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               print('product detail loaded');
               setState(() {
                 _product = state.product;
+                _updateAvailableSizesAndColors();
               });
+              context
+                  .read<ProductCubit>()
+                  .fetchProductDetailsByName(_product!.productName);
             } else if (state is ProductDetailsError) {
               print('error loading product detail');
+            } else if (state is GetProductDetailsByNameSuccess) {
+              setState(() {
+                _productDetails = state.productDetails;
+                _updateAvailableSizesAndColors();
+              });
             }
           },
         ),
@@ -171,8 +249,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    _product?.productName ??
-                                        '', // Replace with product name
+                                    _product?.productName ?? '',
                                     style: textTheme.headlineMedium,
                                   ),
                                   Row(
@@ -226,46 +303,40 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 title: 'Size',
                                 widget: Wrap(
                                   spacing: 8.0,
-                                  children: ['S', 'M', 'L', 'XL', 'XXL'].map(
-                                    (size) {
-                                      return ChoiceChip(
-                                        label: Text(size),
-                                        padding: EdgeInsets.all(8),
-                                        showCheckmark: false,
-                                        selected: _selectedSize == size,
-                                        labelStyle:
-                                            textTheme.displaySmall?.copyWith(
-                                          color: _selectedSize == size
-                                              ? Colors.white
-                                              : Colors.black,
-                                        ),
-                                        onSelected: (bool selected) {
-                                          setState(() {
-                                            _selectedSize =
-                                                selected ? size : '';
-                                          });
-                                        },
-                                        selectedColor:
-                                            Theme.of(context).primaryColor,
-                                      );
-                                    },
-                                  ).toList(),
+                                  children: _availableSizes.map((size) {
+                                    return ChoiceChip(
+                                      label: Text(size),
+                                      padding: EdgeInsets.all(8),
+                                      showCheckmark: false,
+                                      selected: _selectedSize == size,
+                                      labelStyle:
+                                          textTheme.displaySmall?.copyWith(
+                                        color: _selectedSize == size
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                      onSelected: (bool selected) {
+                                        setState(() {
+                                          _selectedSize = selected ? size : '';
+                                          _updateAvailableColors();
+                                        });
+                                      },
+                                      selectedColor:
+                                          Theme.of(context).primaryColor,
+                                    );
+                                  }).toList(),
                                 ),
                               ),
                               SubSection(
-                                title: 'Color: Brown',
+                                title: 'Color',
                                 widget: Wrap(
                                   spacing: 16.0,
-                                  children: [
-                                    Colors.brown,
-                                    Colors.black,
-                                    Colors.grey,
-                                    Colors.white,
-                                  ].map((color) {
+                                  children: _availableColors.map((color) {
                                     return GestureDetector(
                                       onTap: () {
                                         setState(() {
                                           _selectedColor = color;
+                                          _updateAvailableSizes();
                                         });
                                       },
                                       child: Container(
@@ -299,35 +370,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   }).toList(),
                                 ),
                               ),
-                              SubSection(
-                                title: 'Recommended products',
-                                widget: _product != null &&
-                                        _product!.recommendations != null &&
-                                        _product!.recommendations!.isNotEmpty
-                                    ? HorizontalGridList(
-                                        delegate: SliverChildBuilderDelegate(
-                                          (context, index) {
-                                            final product = _product!
-                                                .recommendations![index];
-                                            return ConstrainedBox(
-                                              constraints: BoxConstraints(
-                                                minHeight: 300,
-                                                maxHeight: 500,
-                                                minWidth: 0,
-                                                maxWidth: 200,
-                                              ),
-                                              child:
-                                                  ProductHome(product: product),
-                                            );
-                                          },
-                                          childCount:
-                                              _product!.recommendations!.length,
-                                        ),
-                                      )
-                                    : Center(
-                                        child: Text(
-                                            'No recommended products available')),
-                              ),
                             ],
                           ),
                         ),
@@ -338,86 +380,24 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ],
             ),
             Positioned(
+              bottom: 10,
               left: 0,
               right: 0,
-              bottom: 0,
               child: AnimatedOpacity(
                 opacity: _cartOpacity,
                 duration: Duration(milliseconds: 300),
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  child: Container(
-                    padding: EdgeInsets.all(20),
-                    decoration: BoxDecoration(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: ElevatedButton(
+                    onPressed: _addToCart,
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: Text(
+                      'Add to Cart',
+                      style: textTheme.headlineMedium?.copyWith(
                         color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 1,
-                            blurRadius: 8,
-                            offset: Offset(0, -2),
-                          ),
-                        ],
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(28),
-                            topRight: Radius.circular(28))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Total price', // Replace with actual total
-                                style: textTheme.headlineSmall?.copyWith(
-                                  color: colorScheme.outline,
-                                  fontSize: 13,
-                                ),
-                              ),
-                              Text(
-                                '\$0.0', // Replace with actual total
-                                style: textTheme.headlineSmall?.copyWith(
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            _addToCart();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: _showSuccessSnackbar
-                                ? Colors.grey
-                                : Theme.of(context).primaryColor,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 32, vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            elevation: 4,
-                            shadowColor: Colors.grey,
-                          ),
-                          child: Row(
-                            children: [
-                              FaIcon(
-                                FontAwesomeIcons.bagShopping,
-                                color: Colors.white,
-                              ),
-                              SizedBox(width: 12),
-                              Text(
-                                _showSuccessSnackbar ? 'Added!' : 'Add to Cart',
-                                style: textTheme.headlineSmall
-                                    ?.copyWith(color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
+                      ),
                     ),
                   ),
                 ),

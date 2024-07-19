@@ -1,6 +1,7 @@
 import 'package:f_localbrand/config/router.dart';
 import 'package:f_localbrand/config/themes/custom_themes/index.dart';
 import 'package:f_localbrand/screens/widgets/buttons/google_login.dart';
+import 'package:f_localbrand/screens/widgets/buttons/rounded_outlined_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -73,7 +74,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 36),
+              padding: EdgeInsets.only(top: 24),
               child: GestureDetector(
                 onTap: () {
                   context.push(RouteName.register);
@@ -82,7 +83,10 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                     style: FTextTheme.light.headlineSmall
                         ?.copyWith(color: Theme.of(context).primaryColor)),
               ),
-            )
+            ),
+            Padding(
+                padding: EdgeInsets.only(top: 36),
+                child: Text('© 2024 F-LocalBrand'))
           ],
         ),
       ),

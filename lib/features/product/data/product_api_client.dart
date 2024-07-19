@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:f_localbrand/features/product/dto/customer_product_dto.dart';
+import 'package:f_localbrand/features/product/dto/product_details.dart';
 import 'package:f_localbrand/features/product/dto/product_dto.dart';
 
 class ProductApiClient {
@@ -82,6 +83,22 @@ class ProductApiClient {
         List<CustomerProductDto> result =
             (response.data['result']['customerProducts'] as List)
                 .map((e) => CustomerProductDto.fromJson(e))
+                .toList();
+        return result;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return [];
+  }
+
+  Future<List<ProductDetailsDTO>> fetchProductDetailsByName(String name) async {
+    try {
+      final response = await dio.get('/products/filter?ProductName=$name');
+      if (response.statusCode == 200) {
+        List<ProductDetailsDTO> result =
+            (response.data['result']['products'] as List)
+                .map((e) => ProductDetailsDTO.fromJson(e))
                 .toList();
         return result;
       }

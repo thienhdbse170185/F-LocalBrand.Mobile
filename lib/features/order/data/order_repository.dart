@@ -32,9 +32,18 @@ class OrderRepository {
     }
   }
 
-  Future<List<OrderDetailsDTO>> getOrderDetails(int orderId) async {
+  Future<OrderDetailsDto> getOrderDetails(int orderId) async {
     try {
       return orderApiClient.getOrderDetails(orderId);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<OrderTrackingDTO>> getOrderTrackingByOrderHistory(
+      int customerId, String status) async {
+    try {
+      return orderApiClient.getOrderTrackingByOrderHistory(customerId, status);
     } catch (e) {
       rethrow;
     }

@@ -1,5 +1,6 @@
 import 'package:f_localbrand/features/product/data/product_api_client.dart';
 import 'package:f_localbrand/features/product/dto/customer_product_dto.dart';
+import 'package:f_localbrand/features/product/dto/product_details.dart';
 import 'package:f_localbrand/features/product/dto/product_dto.dart';
 
 class ProductRepository {
@@ -60,6 +61,16 @@ class ProductRepository {
       int id) async {
     try {
       final result = productApiClient.fetchRecommendCustomerProduct(id);
+      return result;
+    } catch (e) {
+      print(e);
+    }
+    return [];
+  }
+
+  Future<List<ProductDetailsDTO>> fetchProductDetailsByName(String name) async {
+    try {
+      final result = productApiClient.fetchProductDetailsByName(name);
       return result;
     } catch (e) {
       print(e);

@@ -102,3 +102,17 @@ class GetCustomerProductRecommendationsError extends ProductState {
 class CustomerProductRecommendationsEmpty extends ProductState {
   const CustomerProductRecommendationsEmpty() : super();
 }
+
+class GetProductDetailsByNameInprogress extends ProductState {
+  const GetProductDetailsByNameInprogress() : super();
+}
+
+class GetProductDetailsByNameSuccess extends ProductState {
+  const GetProductDetailsByNameSuccess(this.productDetails) : super();
+  final List<ProductDetailsDTO> productDetails;
+}
+
+class GetProductDetailsByNameError extends ProductState {
+  const GetProductDetailsByNameError(this.message) : super();
+  final String message;
+}

@@ -18,13 +18,13 @@ class OrderTrackingDTO {
 
   factory OrderTrackingDTO.fromJson(Map<String, dynamic> json) {
     return OrderTrackingDTO(
-        orderId: json['orderId'],
+        orderId: json['orderId'] ?? json['id'],
         totalAmount: json['totalAmount'],
         orderDate: json['orderDate'],
         orderStatus: json['orderStatus'],
-        currentStatus: json['currentStatus'],
-        changeTime: json['changeTime'],
-        totalItem: json['totalItem']);
+        currentStatus: json['currentStatus'] ?? '',
+        changeTime: json['changeTime'] ?? '',
+        totalItem: json['totalItem'] ?? 0);
   }
 
   Map<String, dynamic> toJson() {

@@ -22,4 +22,14 @@ class UserApiClient {
       }
     }
   }
+
+  Future<void> updateDeviceId(String deviceId) async {
+    try {
+      await dio.put(
+        '/user/update/deviceid/$deviceId',
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

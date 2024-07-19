@@ -25,7 +25,7 @@ class OrderItem extends StatelessWidget {
       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, right: 16),
       child: Row(
         children: [
-          Image.asset(
+          Image.network(
             imageUrl,
             width: 100,
             height: 100,

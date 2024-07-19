@@ -17,12 +17,6 @@ class MyOrdersScreen extends StatefulWidget {
 
 class _MyOrdersScreenState extends State<MyOrdersScreen> {
   @override
-  void initState() {
-    super.initState();
-    context.read<OrderCubit>().fetchInprogressOrderTracking();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     final ColorScheme colorScheme = Theme.of(context).colorScheme;

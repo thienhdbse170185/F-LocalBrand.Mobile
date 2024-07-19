@@ -22,10 +22,11 @@ class RoundedOutlinedButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(100),
           ),
+          side: BorderSide(color: Theme.of(context).primaryColor, width: 1),
         ),
         child: Text(
           title,
-          style: textTheme.displaySmall
+          style: textTheme.displayMedium
               ?.copyWith(color: Theme.of(context).primaryColor),
         ));
   }

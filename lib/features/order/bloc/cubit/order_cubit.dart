@@ -64,11 +64,38 @@ class OrderCubit extends Cubit<OrderState> {
   Future<void> fetchProductByOrderId(int orderId) async {
     emit(FetchOrderDetailsInprogress());
     try {
-      List<OrderDetailsDTO> result =
-          await orderRepository.getOrderDetails(orderId);
+      OrderDetailsDto result = await orderRepository.getOrderDetails(orderId);
       emit(FetchOrderDetailsSuccess(result));
     } catch (e) {
       emit(FetchOrderDetailsFail(e.toString()));
+    }
+  }
+
+  Future<List<OrderTrackingDTO>> fetchCompletedOrderHistory(
+      int customerId) async {
+    emit(FetchCompletedOrderHistoryInprogress());
+    try {
+      List<OrderTrackingDTO> result = await orderRepository
+          .getOrderTrackingByOrderHistory(customerId, 'Delivered');
+      emit(FetchCompletedOrderHistorySuccess(result));
+      return result;
+    } catch (e) {
+      emit(FetchCompletedOrderHistoryFail(e.toString()));
+      return [];
+    }
+  }
+
+  Future<List<OrderTrackingDTO>> fetchCancelledOrderHistory(
+      int customerId) async {
+    emit(FetchCancelledOrderHistoryInprogress());
+    try {
+      List<OrderTrackingDTO> result = await orderRepository
+          .getOrderTrackingByOrderHistory(customerId, 'Cancelled');
+      emit(FetchCancelledOrderHistorySuccess(result));
+      return result;
+    } catch (e) {
+      emit(FetchCancelledOrderHistoryFail(e.toString()));
+      return [];
     }
   }
 

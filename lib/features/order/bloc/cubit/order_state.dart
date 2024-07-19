@@ -70,10 +70,46 @@ final class FetchInprogressOrderTrackingFail extends OrderState {
   List<Object> get props => [message];
 }
 
+final class FetchCompletedOrderHistoryInprogress extends OrderState {}
+
+final class FetchCompletedOrderHistorySuccess extends OrderState {
+  final List<OrderTrackingDTO> orderTrackingList;
+  const FetchCompletedOrderHistorySuccess(this.orderTrackingList);
+
+  @override
+  List<Object> get props => [orderTrackingList];
+}
+
+final class FetchCompletedOrderHistoryFail extends OrderState {
+  final String message;
+  const FetchCompletedOrderHistoryFail(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+final class FetchCancelledOrderHistoryInprogress extends OrderState {}
+
+final class FetchCancelledOrderHistorySuccess extends OrderState {
+  final List<OrderTrackingDTO> orderTrackingList;
+  const FetchCancelledOrderHistorySuccess(this.orderTrackingList);
+
+  @override
+  List<Object> get props => [orderTrackingList];
+}
+
+final class FetchCancelledOrderHistoryFail extends OrderState {
+  final String message;
+  const FetchCancelledOrderHistoryFail(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
 final class FetchOrderDetailsInprogress extends OrderState {}
 
 final class FetchOrderDetailsSuccess extends OrderState {
-  final List<OrderDetailsDTO> orderDetails;
+  final OrderDetailsDto orderDetails;
   const FetchOrderDetailsSuccess(this.orderDetails);
 
   @override

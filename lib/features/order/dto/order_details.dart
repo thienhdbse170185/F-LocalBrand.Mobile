@@ -1,42 +1,56 @@
-import 'package:f_localbrand/features/product/dto/product_dto.dart';
+import 'package:f_localbrand/features/order/dto/product_order_dto.dart';
 
-class OrderDetailsDTO {
+class OrderDetailsDto {
   final int orderId;
-  final int productId;
-  final int quantity;
-  final double price;
-  final ProductDto product;
+  final int customerId;
+  final DateTime orderDate;
+  final double totalAmount;
+  final String currentStatus;
+  final String statusHistory;
+  final List<ProductOrderDto> details;
 
-  OrderDetailsDTO({
+  OrderDetailsDto({
     required this.orderId,
-    required this.productId,
-    required this.quantity,
-    required this.price,
-    required this.product,
+    required this.customerId,
+    required this.orderDate,
+    required this.totalAmount,
+    required this.currentStatus,
+    required this.statusHistory,
+    required this.details,
   });
 
-  factory OrderDetailsDTO.fromJson(Map<String, dynamic> json) {
-    return OrderDetailsDTO(
+  factory OrderDetailsDto.fromJson(Map<String, dynamic> json) {
+    return OrderDetailsDto(
       orderId: json['orderId'],
-      productId: json['productId'],
-      quantity: json['quantity'],
-      price: json['price'].toDouble(),
-      product: ProductDto.fromJson(json['product']),
+      customerId: json['customerId'],
+      orderDate: DateTime.parse(json['orderDate']),
+      totalAmount: json['totalAmount'].toDouble(),
+      currentStatus: json['currentStatus'],
+      statusHistory: json['statusHistory'],
+      details: (json['details'] as List)
+          .map((detail) => ProductOrderDto.fromJson(detail))
+          .toList(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'orderId': orderId,
-      'productId': productId,
-      'quantity': quantity,
-      'price': price,
-      'product': product.toJson(),
+      'customerId': customerId,
+      'orderDate': orderDate.toIso8601String(),
+      'totalAmount': totalAmount,
+      'currentStatus': currentStatus,
+      'statusHistory': statusHistory,
+      'details': details.map((detail) => detail.toJson()).toList(),
     };
   }
 
-  @override
-  String toString() {
-    return 'OrderDetailsDTO{orderId: $orderId, productId: $productId, quantity: $quantity, price: $price, product: ${product.toString()}}';
+  Map<String, String> getParsedStatusHistory() {
+    return Map.fromEntries(
+      statusHistory.split(',').map((e) {
+        final split = e.split(':');
+        return MapEntry(split[0], split[1]);
+      }),
+    );
   }
 }

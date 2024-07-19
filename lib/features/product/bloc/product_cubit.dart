@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:f_localbrand/features/product/data/product_repository.dart';
 import 'package:f_localbrand/features/product/dto/customer_product_dto.dart';
+import 'package:f_localbrand/features/product/dto/product_details.dart';
 import 'package:f_localbrand/features/product/dto/product_dto.dart';
 
 part 'product_state.dart';
@@ -62,6 +63,17 @@ class ProductCubit extends Cubit<ProductState> {
       emit(GetCustomerProductRecommendationsSuccess(products));
     } catch (e) {
       emit(GetCustomerProductRecommendationsError(e.toString()));
+    }
+  }
+
+  Future<void> fetchProductDetailsByName(String name) async {
+    emit(GetProductDetailsByNameInprogress());
+    try {
+      final products =
+          await productRepository.fetchProductDetailsByName(name);
+      emit(GetProductDetailsByNameSuccess(products));
+    } catch (e) {
+      emit(GetProductDetailsByNameError(e.toString()));
     }
   }
 }

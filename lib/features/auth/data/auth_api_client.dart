@@ -53,4 +53,20 @@ class AuthApiClient {
       }
     }
   }
+
+  Future<LoginSuccessDto> loginShipper(LoginDto loginDto) async {
+    try {
+      final response = await dio.post(
+        '/auth/user',
+        data: loginDto.toJson(),
+      );
+      return LoginSuccessDto.fromJson(response.data);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw Exception(e.response!.data['result']['message']);
+      } else {
+        throw Exception(e.message);
+      }
+    }
+  }
 }

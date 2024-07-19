@@ -15,8 +15,12 @@ class OrderApiClient {
       if (response.statusCode == 200) {
         return response.data['result'] as String;
       }
-    } catch (e) {
-      rethrow;
+    } on DioException catch (e) {
+      if (e.response != null) {
+        throw Exception(e.response!.data['result'] as String);
+      } else {
+        throw Exception(e.message);
+      }
     }
     return "";
   }
@@ -35,12 +39,33 @@ class OrderApiClient {
     return [];
   }
 
-  Future<List<OrderDetailsDTO>> getOrderDetails(int orderId) async {
+  Future<OrderDetailsDto> getOrderDetails(int orderId) async {
     try {
       final response = await dio.get('/order/$orderId/details');
       if (response.statusCode == 200) {
-        return (response.data['result']['details'] as List)
-            .map((e) => OrderDetailsDTO.fromJson(e))
+        return OrderDetailsDto.fromJson(response.data['result']);
+      }
+    } catch (e) {
+      rethrow;
+    }
+    return OrderDetailsDto(
+        orderId: 0,
+        customerId: 0,
+        orderDate: DateTime.now(),
+        totalAmount: 0,
+        currentStatus: '',
+        statusHistory: '',
+        details: []);
+  }
+
+  Future<List<OrderTrackingDTO>> getOrderTrackingByOrderHistory(
+      int customerId, String status) async {
+    try {
+      final response = await dio.get(
+          '/order/order-history-status?CustomerId=$customerId&Status=$status');
+      if (response.statusCode == 200) {
+        return (response.data['result']['orders'] as List)
+            .map((e) => OrderTrackingDTO.fromJson(e))
             .toList();
       }
     } catch (e) {

@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:f_localbrand/features/auth/data/auth_api_client.dart';
+import 'package:f_localbrand/features/user/data/user_api_client.dart';
+import 'package:f_localbrand/service/notification_service.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -15,10 +17,12 @@ class AuthRepository {
   final AuthLocalDataSource authLocalDataSource;
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
+  final UserApiClient userApiClient;
 
   AuthRepository(
       {required this.authApiClient,
       required this.authLocalDataSource,
+      required this.userApiClient,
       firebase_auth.FirebaseAuth? firebaseAuth,
       GoogleSignIn? googleSignIn})
       : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
@@ -33,6 +37,8 @@ class AuthRepository {
         LoginDto(username: username, password: password),
       );
       await authLocalDataSource.saveToken(loginSuccessDto.accessToken);
+      String token = await PushNotifications.getDeviceToken();
+      await userApiClient.updateDeviceId(token);
     } catch (e) {
       log('$e');
       return Failure('$e');
@@ -96,6 +102,8 @@ class AuthRepository {
       final response = await authApiClient
           .loginGoogle(userCredential.credential?.accessToken);
       print(response.accessToken);
+      String token = await PushNotifications.getDeviceToken();
+      await userApiClient.updateDeviceId(token);
       await authLocalDataSource.saveToken(response.accessToken);
       return Success(null);
     } on firebase_auth.FirebaseAuthException catch (e) {
@@ -103,5 +111,21 @@ class AuthRepository {
     } catch (_) {
       throw const LogInWithGoogleFailure();
     }
+  }
+
+  Future<Result<void>> loginShipper({
+    required String username,
+    required String password,
+  }) async {
+    try {
+      final loginSuccessDto = await authApiClient.loginShipper(
+        LoginDto(username: username, password: password),
+      );
+      await authLocalDataSource.saveToken(loginSuccessDto.accessToken);
+    } catch (e) {
+      log('$e');
+      return Failure('$e');
+    }
+    return Success(null);
   }
 }
