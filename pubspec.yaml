@@ -38,7 +38,7 @@ dependencies:
   ionicons: ^0.2.2
   http: ^1.2.1
   flutter_dotenv: ^5.1.0
-  firebase_core: ^3.2.0
+  firebase_core: ^3.3.0
   firebase_auth: ^5.1.2
   google_sign_in: ^6.2.1
   email_validator: ^3.0.0
